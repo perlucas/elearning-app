@@ -1,0 +1,8 @@
+services:
+
+  eduport:
+    build:
+      dockerfile: ./docker/eduport.Dockerfile
+    ports:
+      - "9000:80"
+      - "9001:81"
