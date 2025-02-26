@@ -1,9 +1,17 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { reactRouter } from "@react-router/dev/vite";
+import { resolve } from 'path';
+
+const __dirname = import.meta.dirname;
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [reactRouter()],
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src'),
+    }
+  },
   server: {
     host: '0.0.0.0',
     port: 3000,

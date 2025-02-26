@@ -1,5 +1,4 @@
 services:
-
   eduport:
     build:
       dockerfile: ./docker/eduport.Dockerfile
