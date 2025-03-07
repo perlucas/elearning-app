@@ -1,0 +1,10 @@
+configure FE:
+
+    - install react-router
+    - install routing using file extensions
+    - create a dummy page using the template files
+
+configure BE:
+    - install NestJS + TS + Sequelize
+    - configure linter and prettier
+    - create a dummy endpoint

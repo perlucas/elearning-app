@@ -13,7 +13,7 @@ services:
       - "3000:3000"
     volumes:
       - ./frontend:/usr/src/app
-      - frontend_node_modules:/usr/src/app/node_modules
+      - frontend_node_modules:/usr/src/app/node_modules:rw
 
 volumes:
   frontend_node_modules:
