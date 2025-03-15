@@ -1,6 +1,9 @@
 import { Links, Meta, Outlet, Scripts } from 'react-router';
 import BaseLayout from '@/components/layout/app';
 
+import '@/plugins/i18n';
+import '@/assets/scss/style.scss';
+
 export default function Layout() {
     return (
         <html lang="en">

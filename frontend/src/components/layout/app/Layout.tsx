@@ -8,8 +8,6 @@ import Preloader from '@/components/Preloader';
 import Footer from './Footer';
 import useViewPort from '@/hooks/useViewPort';
 
-import '@/assets/scss/style.scss';
-
 export default function Layout({ children }: { children: ReactNode }) {
     const { width } = useViewPort();
     const { isTrue: isOffCanvasMenuOpen, toggle: toggleOffCanvasMenu } = useToggle();
