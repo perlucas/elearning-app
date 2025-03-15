@@ -3,8 +3,8 @@ services:
     build:
       dockerfile: ./docker/eduport.Dockerfile
     ports:
-      - "9000:80"
-      - "9001:81"
+      - "9000:80" # live template
+      - "9001:81" # template docs
 
   frontend:
     build:
@@ -15,5 +15,28 @@ services:
       - ./frontend:/usr/src/app
       - frontend_node_modules:/usr/src/app/node_modules:rw
 
+  backend:
+    build:
+      dockerfile: ./docker/backend.Dockerfile
+    env_file:
+      - ./backend/.env # Use backend env file
+    ports:
+      - "80:80"
+    volumes:
+      - ./backend:/usr/src/app
+      - backend_node_modules:/usr/src/app/node_modules:rw
+
+  postgres:
+    image: postgres:17.4
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=app
+    volumes:
+      - postgres_data:/var/lib/postgresql/data:rw # Persist data in volume
+
 volumes:
   frontend_node_modules:
+  backend_node_modules:
+  postgres_data:

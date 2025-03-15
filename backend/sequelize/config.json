@@ -1,0 +1,9 @@
+{
+    "production": {
+        "username": "postgres",
+        "password": "postgres",
+        "database": "app",
+        "host": "postgres",
+        "dialect": "postgres"
+    }
+}
