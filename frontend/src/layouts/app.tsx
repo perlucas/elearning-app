@@ -1,4 +1,5 @@
 import { Links, Meta, Outlet, Scripts } from 'react-router';
+import BaseLayout from '@/components/layout/app';
 
 export default function Layout() {
     return (
@@ -10,7 +11,9 @@ export default function Layout() {
                 <Links />
             </head>
             <body>
-                <Outlet />
+                <BaseLayout>
+                    <Outlet />
+                </BaseLayout>
                 <Scripts />
             </body>
         </html>

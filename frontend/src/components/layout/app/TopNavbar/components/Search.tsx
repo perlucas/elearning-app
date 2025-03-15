@@ -2,7 +2,7 @@ import { FaSearch } from 'react-icons/fa';
 
 export default function Search() {
     return (
-        <div className="nav my-3 my-xl-0 px-4 flex-nowrap align-items-center">
+        <div className="nav my-3 my-xl-0 px-4 flex-nowrap align-items-center w-50">
             <div className="nav-item w-100">
                 <form className="position-relative">
                     <input

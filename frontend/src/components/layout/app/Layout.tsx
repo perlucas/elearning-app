@@ -4,9 +4,11 @@ import TopNavigationBar from './TopNavigationBar';
 import Banner from './Banner';
 import VerticalMenu from './VerticalMenu';
 import useToggle from '@/hooks/useToggle';
-import Preloader from '@/components//Preloader';
+import Preloader from '@/components/Preloader';
 import Footer from './Footer';
 import useViewPort from '@/hooks/useViewPort';
+
+import '@/assets/scss/style.scss';
 
 export default function Layout({ children }: { children: ReactNode }) {
     const { width } = useViewPort();

@@ -1,9 +1,3 @@
 {
-    "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
-    "compilerOptions": {
-        "paths": {
-            "@/*": ["./src/*"]
-        }
-    },
-    "include": ["**/*.tsx", "**/*.ts"]
+    "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }]
 }

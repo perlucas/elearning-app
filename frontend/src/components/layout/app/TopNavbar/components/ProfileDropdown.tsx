@@ -2,10 +2,11 @@ import { Dropdown, DropdownDivider, DropdownItem, DropdownMenu, DropdownToggle }
 import { BsGear, BsInfoCircle, BsPerson, BsPower } from 'react-icons/bs';
 import { Link } from 'react-router';
 import avatar from '@/assets/images/avatar-01.jpg';
-import { useAuthContext } from '@/context/useAuthContext';
 
 const ProfileDropdown = ({ className }: { className: string }) => {
-    const { removeSession } = useAuthContext();
+    const removeSession = () => {
+        // dummy placeholder
+    };
 
     return (
         <Dropdown drop="start" className={className}>

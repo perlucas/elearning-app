@@ -1,5 +1,4 @@
 import { useLocation, Link } from 'react-router';
-import { useAuthContext } from '@/context/useAuthContext';
 import { HTMLAttributeAnchorTarget } from 'react';
 import { IconType } from 'react-icons';
 import {
@@ -116,7 +115,10 @@ const INSTRUCTOR_MENU_ITEMS: MenuItemType[] = [
 export default function VerticalMenu() {
     const { pathname } = useLocation();
 
-    const { removeSession } = useAuthContext();
+    const removeSession = () => {
+        //dummy placeholder
+    };
+
     return (
         <div className="bg-dark border rounded-3 pb-0 p-3 w-100">
             <div className="list-group list-group-dark list-group-borderless">
