@@ -13,6 +13,14 @@ export class Env {
         return (process.env.PORT && parseInt(process.env.PORT)) || 80;
     }
 
+    dbHost(): string {
+        return process.env.DB_HOST || 'postgres';
+    }
+
+    dbPort(): number {
+        return process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432;
+    }
+
     dbName(): string {
         return process.env.DB_NAME || 'app';
     }

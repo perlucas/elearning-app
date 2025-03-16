@@ -25,6 +25,8 @@ services:
     volumes:
       - ./backend:/usr/src/app
       - backend_node_modules:/usr/src/app/node_modules:rw
+    depends_on:
+      - postgres
 
   postgres:
     image: postgres:17.4
@@ -33,6 +35,8 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_DB=app
+    ports:
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data:rw # Persist data in volume
 

@@ -1,24 +1,17 @@
 'use strict';
 
-import { QueryInterface } from 'sequelize';
-type SequelizePackage = typeof import('sequelize');
-
-/** @type {import('sequelize-cli').Migration} */
+/**
+ * @param {import('sequelize').QueryInterface} queryInterface
+ * @param {import('sequelize').Sequelize} Sequelize
+ * @returns {Promise<any>}
+ */
 module.exports = {
-    async up(queryInterface: QueryInterface, Sequelize: SequelizePackage) {
+    async up(queryInterface, Sequelize) {
         await queryInterface.createTable('users', {
             id: {
                 primaryKey: true,
                 type: Sequelize.INTEGER,
                 autoIncrement: true,
-                allowNull: false,
-            },
-            first_name: {
-                type: Sequelize.STRING,
-                allowNull: false,
-            },
-            last_name: {
-                type: Sequelize.STRING,
                 allowNull: false,
             },
             email: {
@@ -27,6 +20,14 @@ module.exports = {
                 allowNull: false,
             },
             password: {
+                type: Sequelize.STRING,
+                allowNull: false,
+            },
+            first_name: {
+                type: Sequelize.STRING,
+                allowNull: false,
+            },
+            last_name: {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
@@ -42,15 +43,37 @@ module.exports = {
                 allowNull: false,
                 defaultValue: {},
             },
-            stats_feedback: {
+            stats: {
                 type: Sequelize.JSONB,
                 allowNull: false,
                 defaultValue: {},
             },
+            created_at: {
+                type: Sequelize.DATE,
+                allowNull: false,
+            },
+            updated_at: {
+                type: Sequelize.DATE,
+                allowNull: false,
+            },
+            deleted_at: {
+                type: Sequelize.DATE,
+            },
         });
 
-        // await queryInterface.addIndex todo: add index
+        await queryInterface.addIndex('users', {
+            name: 'email_unique_index',
+            fields: ['email'],
+            unique: true,
+        });
     },
 
-    async down(queryInterface, Sequelize) {},
+    /**
+     * @param {import('sequelize').QueryInterface} queryInterface
+     * @param {import('sequelize').Sequelize} Sequelize
+     * @returns {Promise<any>}
+     */
+    async down(queryInterface, _Sequelize) {
+        await queryInterface.dropTable('users', { cascade: true });
+    },
 };
