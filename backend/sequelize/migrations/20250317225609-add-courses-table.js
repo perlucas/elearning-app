@@ -1,5 +1,6 @@
 'use strict';
 
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
     /**
      * @param {import('sequelize').QueryInterface} queryInterface
@@ -7,46 +8,31 @@ module.exports = {
      * @returns {Promise<any>}
      */
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('users', {
+        await queryInterface.createTable('courses', {
             id: {
                 primaryKey: true,
                 type: Sequelize.INTEGER,
                 autoIncrement: true,
                 allowNull: false,
             },
-            email: {
-                unique: true,
+            title: {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
-            password: {
-                type: Sequelize.STRING,
+            instructor_id: {
+                type: Sequelize.INTEGER,
                 allowNull: false,
-            },
-            first_name: {
-                type: Sequelize.STRING,
-                allowNull: false,
-            },
-            last_name: {
-                type: Sequelize.STRING,
-                allowNull: false,
-            },
-            birth_date: {
-                type: Sequelize.DATE,
-                allowNull: false,
-            },
-            avatar_url: {
-                type: Sequelize.STRING,
-            },
-            config: {
-                type: Sequelize.JSONB,
-                allowNull: false,
-                defaultValue: {},
+                references: {
+                    model: 'users',
+                    key: 'id',
+                },
             },
             stats: {
                 type: Sequelize.JSONB,
                 allowNull: false,
                 defaultValue: {},
+                comment:
+                    'Used to save usage metrics and useful statistics (e.g. to prevent deleting a course already purchased)',
             },
             created_at: {
                 type: Sequelize.DATE,
@@ -60,12 +46,6 @@ module.exports = {
                 type: Sequelize.DATE,
             },
         });
-
-        await queryInterface.addIndex('users', {
-            name: 'email_unique_index',
-            fields: ['email'],
-            unique: true,
-        });
     },
 
     /**
@@ -74,6 +54,6 @@ module.exports = {
      * @returns {Promise<any>}
      */
     async down(queryInterface, _Sequelize) {
-        await queryInterface.dropTable('users', { cascade: true });
+        await queryInterface.dropTable('courses', { cascade: true });
     },
 };

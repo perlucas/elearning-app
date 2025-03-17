@@ -1,0 +1,11 @@
+// sequelize commands configs
+
+const path = require('path');
+
+module.exports = {
+    env: 'production',
+    config: path.resolve('sequelize', 'config.json'),
+    'models-path': path.resolve('sequelize', 'models'), // note: create models manually
+    'seeders-path': path.resolve('sequelize', 'seeders'),
+    'migrations-path': path.resolve('sequelize', 'migrations'),
+};

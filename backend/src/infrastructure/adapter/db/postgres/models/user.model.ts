@@ -1,4 +1,5 @@
-import { Column, Table, DataType, Model } from 'sequelize-typescript';
+import { Column, Table, DataType, Model, HasMany } from 'sequelize-typescript';
+import { Course } from './course.model';
 
 type AccountConfig = {
     language?: 'en' | 'es';
@@ -75,4 +76,7 @@ export class User extends Model {
         defaultValue: {},
     })
     declare stats: UserStats;
+
+    @HasMany(() => Course)
+    declare courses: Course[];
 }

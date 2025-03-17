@@ -1,5 +1,6 @@
 'use strict';
 
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
     /**
      * @param {import('sequelize').QueryInterface} queryInterface
@@ -7,46 +8,43 @@ module.exports = {
      * @returns {Promise<any>}
      */
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('users', {
+        await queryInterface.createTable('lectures', {
             id: {
                 primaryKey: true,
                 type: Sequelize.INTEGER,
                 autoIncrement: true,
                 allowNull: false,
             },
-            email: {
-                unique: true,
+            title: {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
-            password: {
-                type: Sequelize.STRING,
+            order: {
+                type: Sequelize.INTEGER,
                 allowNull: false,
+                comment: 'Used to order lectures in a module',
             },
-            first_name: {
-                type: Sequelize.STRING,
+            module_id: {
+                type: Sequelize.INTEGER,
                 allowNull: false,
+                references: {
+                    model: 'modules',
+                    key: 'id',
+                },
             },
-            last_name: {
-                type: Sequelize.STRING,
-                allowNull: false,
-            },
-            birth_date: {
-                type: Sequelize.DATE,
-                allowNull: false,
-            },
-            avatar_url: {
-                type: Sequelize.STRING,
-            },
-            config: {
+            resources: {
                 type: Sequelize.JSONB,
                 allowNull: false,
                 defaultValue: {},
+                comment:
+                    'Store metadata and information about the resources linked to this lecture (e.g. videos, attachments)',
             },
             stats: {
                 type: Sequelize.JSONB,
                 allowNull: false,
                 defaultValue: {},
+                comment:
+                    'Used to save usage metrics and useful statistics (e.g. to prevent deleting a lecture already purchased)',
             },
             created_at: {
                 type: Sequelize.DATE,
@@ -61,10 +59,9 @@ module.exports = {
             },
         });
 
-        await queryInterface.addIndex('users', {
-            name: 'email_unique_index',
-            fields: ['email'],
-            unique: true,
+        await queryInterface.addIndex('lectures', {
+            fields: ['module_id'],
+            name: 'lectures_module_id_index',
         });
     },
 
@@ -74,6 +71,6 @@ module.exports = {
      * @returns {Promise<any>}
      */
     async down(queryInterface, _Sequelize) {
-        await queryInterface.dropTable('users', { cascade: true });
+        await queryInterface.dropTable('lectures', { cascade: true });
     },
 };
