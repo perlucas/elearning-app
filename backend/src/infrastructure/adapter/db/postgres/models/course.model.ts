@@ -1,6 +1,7 @@
-import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, ForeignKey, HasMany, HasOne, Model, Table } from 'sequelize-typescript';
 import { User } from './user.model';
 import { Module } from './module.model';
+import { Purchasable } from './purchasable.model';
 
 type CourseStats = {
     sells?: number;
@@ -35,4 +36,7 @@ export class Course extends Model {
 
     @HasMany(() => Module)
     declare modules: Module[];
+
+    @HasOne(() => Purchasable)
+    declare purchasable?: Purchasable;
 }
