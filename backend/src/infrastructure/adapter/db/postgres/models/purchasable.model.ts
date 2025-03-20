@@ -3,6 +3,7 @@ import { Course } from './course.model';
 import { Module } from './module.model';
 import { Lecture } from './lecture.model';
 import { User } from './user.model';
+import { Promotion } from './promotion.model';
 
 enum PurchasableType {
     COURSE = 'course',
@@ -85,4 +86,13 @@ export class Purchasable extends Model {
 
     @Column
     declare averageRank?: number;
+
+    @ForeignKey(() => Promotion)
+    @Column({
+        type: DataType.UUID,
+    })
+    declare promotion_id?: string;
+
+    @BelongsTo(() => Promotion)
+    declare purchasable?: Promotion;
 }

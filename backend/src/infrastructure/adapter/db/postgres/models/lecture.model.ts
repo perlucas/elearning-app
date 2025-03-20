@@ -1,5 +1,4 @@
 import { BelongsTo, Column, DataType, ForeignKey, HasOne, Model, Table } from 'sequelize-typescript';
-import { Course } from './course.model';
 import { Module } from './module.model';
 import { Purchasable } from './purchasable.model';
 

@@ -1,6 +1,7 @@
 import { Column, Table, DataType, Model, HasMany } from 'sequelize-typescript';
 import { Course } from './course.model';
 import { Purchasable } from './purchasable.model';
+import { Promotion } from './promotion.model';
 
 type AccountConfig = {
     language?: 'en' | 'es';
@@ -83,4 +84,7 @@ export class User extends Model {
 
     @HasMany(() => Purchasable)
     declare purchasables: Purchasable[];
+
+    @HasMany(() => Promotion)
+    declare promotions: Promotion[];
 }
