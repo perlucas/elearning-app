@@ -3,7 +3,7 @@ import { Cart } from './cart.model';
 
 enum PaymentStatus {
     PENDING = 'pending',
-    CONFIRMED = 'confirmed',
+    SUCCESS = 'success',
     ERROR = 'error',
 }
 

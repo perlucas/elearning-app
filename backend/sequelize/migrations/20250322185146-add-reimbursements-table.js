@@ -8,7 +8,7 @@ module.exports = {
      * @returns {Promise<any>}
      */
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('payments', {
+        await queryInterface.createTable('reimbursements', {
             id: {
                 primaryKey: true,
                 type: Sequelize.UUID,
@@ -16,21 +16,17 @@ module.exports = {
                 comment: 'sensitive entity, protect using uuid as pk',
             },
             status: {
-                type: Sequelize.ENUM('pending', 'success', 'error'),
+                type: Sequelize.ENUM('pending', 'confirmed'),
                 allowNull: false,
-            },
-            due_amount: {
-                type: Sequelize.FLOAT,
-                allowNull: false,
-                comment: 'the amount the student has to pay',
-            },
-            confirmed_at: {
-                type: Sequelize.DATE,
             },
             details: {
                 type: Sequelize.JSONB,
+                allowNull: false,
                 defaultValue: {},
-                comment: 'used to store payment gateway metadata as well as payment attempts',
+            },
+            completed_at: {
+                type: Sequelize.DATE,
+                comment: 'the moment when the reimbursement was processed',
             },
             created_at: {
                 type: Sequelize.DATE,
@@ -45,11 +41,10 @@ module.exports = {
             },
         });
 
-        await queryInterface.addColumn('carts', 'payment_id', {
+        await queryInterface.addColumn('enrollments', 'reimbursement_id', {
             type: Sequelize.UUID,
-            allowNull: true,
             references: {
-                model: 'payments',
+                model: 'reimbursements',
                 key: 'id',
             },
         });
@@ -61,8 +56,8 @@ module.exports = {
      * @returns {Promise<any>}
      */
     async down(queryInterface, _Sequelize) {
-        await queryInterface.removeColumn('carts', 'payment_id');
+        await queryInterface.removeColumn('enrollments', 'reimbursement_id');
 
-        await queryInterface.dropTable('payments', { cascade: true });
+        await queryInterface.dropTable('reimbursements', { cascade: true });
     },
 };

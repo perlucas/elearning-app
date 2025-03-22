@@ -78,6 +78,6 @@ module.exports = {
 
         await queryInterface.removeColumn('enrollments', 'withdrawal_id');
 
-        await queryInterface.dropTable('withdrawals');
+        await queryInterface.dropTable('withdrawals', { cascade: true });
     },
 };

@@ -5,6 +5,7 @@ import { Promotion } from './promotion.model';
 import { Cart } from './cart.model';
 import { Enrollment } from './enrollment.model';
 import { Withdrawal } from './withdrawal.model';
+import { Notification } from './notification.model';
 
 type AccountConfig = {
     language?: 'en' | 'es';
@@ -99,4 +100,7 @@ export class User extends Model {
 
     @HasMany(() => Withdrawal)
     declare withdrawals: Withdrawal[];
+
+    @HasMany(() => Notification)
+    declare notifications: Notification[];
 }

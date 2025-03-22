@@ -1,8 +1,10 @@
-import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, ForeignKey, HasOne, Model, Table } from 'sequelize-typescript';
 import { User } from './user.model';
 import { Purchasable } from './purchasable.model';
 import { Cart } from './cart.model';
 import { Withdrawal } from './withdrawal.model';
+import { Reimbursement } from './reimbursement.model';
+import { StudentFeedback } from './studentFeedback.model';
 
 enum EnrollmentStatus {
     DRAFT = 'draft',
@@ -70,4 +72,14 @@ export class Enrollment extends Model {
 
     @BelongsTo(() => Withdrawal)
     declare withdrawal?: Withdrawal;
+
+    @ForeignKey(() => Reimbursement)
+    @Column
+    declare reimbursementId?: string;
+
+    @BelongsTo(() => Reimbursement)
+    declare reimbursement?: Reimbursement;
+
+    @HasOne(() => StudentFeedback)
+    declare feedback?: StudentFeedback;
 }
