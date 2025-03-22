@@ -2,6 +2,9 @@ import { Column, Table, DataType, Model, HasMany } from 'sequelize-typescript';
 import { Course } from './course.model';
 import { Purchasable } from './purchasable.model';
 import { Promotion } from './promotion.model';
+import { Cart } from './cart.model';
+import { Enrollment } from './enrollment.model';
+import { Withdrawal } from './withdrawal.model';
 
 type AccountConfig = {
     language?: 'en' | 'es';
@@ -87,4 +90,13 @@ export class User extends Model {
 
     @HasMany(() => Promotion)
     declare promotions: Promotion[];
+
+    @HasMany(() => Cart)
+    declare carts: Cart[];
+
+    @HasMany(() => Enrollment)
+    declare enrollments: Enrollment[];
+
+    @HasMany(() => Withdrawal)
+    declare withdrawals: Withdrawal[];
 }

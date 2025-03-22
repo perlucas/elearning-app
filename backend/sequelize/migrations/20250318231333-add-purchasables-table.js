@@ -62,8 +62,8 @@ module.exports = {
                 },
                 allowNull: false,
             },
-            category_id: {
-                type: Sequelize.INTEGER,
+            categories: {
+                type: Sequelize.ARRAY(Sequelize.INTEGER),
                 comment: 'No categories table, will keep a local btree',
             },
             price: {
@@ -93,26 +93,37 @@ module.exports = {
                 type: Sequelize.FLOAT,
                 comment: 'average rank according to student feedbacks',
             },
+            created_at: {
+                type: Sequelize.DATE,
+                allowNull: false,
+            },
+            updated_at: {
+                type: Sequelize.DATE,
+                allowNull: false,
+            },
+            deleted_at: {
+                type: Sequelize.DATE,
+            },
         });
 
         await queryInterface.addIndex('purchasables', {
-            name: 'course_id_index',
+            name: 'purchasable_course_id_index',
             fields: ['course_id'],
         });
         await queryInterface.addIndex('purchasables', {
-            name: 'module_id_index',
+            name: 'purchasable_module_id_index',
             fields: ['module_id'],
         });
         await queryInterface.addIndex('purchasables', {
-            name: 'lecture_id_index',
+            name: 'purchasable_lecture_id_index',
             fields: ['lecture_id'],
         });
         await queryInterface.addIndex('purchasables', {
-            name: 'instructor_id_index',
+            name: 'purchasable_instructor_id_index',
             fields: ['instructor_id'],
         });
         await queryInterface.addIndex('purchasables', {
-            name: 'status_index',
+            name: 'purchasable_status_index',
             fields: ['status'],
         });
     },

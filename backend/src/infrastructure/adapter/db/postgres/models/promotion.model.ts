@@ -3,7 +3,7 @@ import { Purchasable } from './purchasable.model';
 import { User } from './user.model';
 
 @Table({
-    tableName: 'lectures',
+    tableName: 'promotions',
     underscored: true,
     timestamps: true,
     paranoid: true,

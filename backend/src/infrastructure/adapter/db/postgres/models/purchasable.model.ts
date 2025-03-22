@@ -1,9 +1,10 @@
-import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript';
 import { Course } from './course.model';
 import { Module } from './module.model';
 import { Lecture } from './lecture.model';
 import { User } from './user.model';
 import { Promotion } from './promotion.model';
+import { Enrollment } from './enrollment.model';
 
 enum PurchasableType {
     COURSE = 'course',
@@ -61,7 +62,7 @@ export class Purchasable extends Model {
     declare instructor: User;
 
     @Column
-    declare categoryId?: number;
+    declare categories?: number[];
 
     @Column
     declare price: number;
@@ -73,7 +74,7 @@ export class Purchasable extends Model {
         type: DataType.ARRAY(DataType.STRING),
         defaultValue: [],
     })
-    declare keywords: string[];
+    declare keywords?: string[];
 
     @Column
     declare releasedAt?: Date;
@@ -94,5 +95,8 @@ export class Purchasable extends Model {
     declare promotion_id?: string;
 
     @BelongsTo(() => Promotion)
-    declare purchasable?: Promotion;
+    declare promotion?: Promotion;
+
+    @HasMany(() => Enrollment)
+    declare enrollments: Enrollment[];
 }

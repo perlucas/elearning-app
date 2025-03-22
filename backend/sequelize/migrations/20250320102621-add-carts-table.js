@@ -8,28 +8,12 @@ module.exports = {
      * @returns {Promise<any>}
      */
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('promotions', {
+        await queryInterface.createTable('carts', {
             id: {
                 primaryKey: true,
                 type: Sequelize.UUID,
                 allowNull: false,
                 comment: 'sensitive entity, protect using uuid as pk',
-            },
-            discount_perc: {
-                type: Sequelize.FLOAT,
-                allowNull: false,
-                comment: 'discount percentage to apply to product price',
-            },
-            apply_since: {
-                type: Sequelize.DATE,
-            },
-            apply_to: {
-                type: Sequelize.DATE,
-            },
-            unbounded: {
-                type: Sequelize.BOOLEAN,
-                allowNull: false,
-                comment: 'true means the promotion never expires',
             },
             user_id: {
                 type: Sequelize.INTEGER,
@@ -38,6 +22,19 @@ module.exports = {
                     model: 'users',
                     key: 'id',
                 },
+            },
+            status: {
+                type: Sequelize.ENUM('draft', 'purchased'),
+                allowNull: false,
+            },
+            purchased_at: {
+                type: Sequelize.DATE,
+                comment: 'keeps the date at when the user confirmed and purchased the cart',
+            },
+            snapshot: {
+                type: Sequelize.JSONB,
+                defaultValue: {},
+                comment: 'store purchased items snapshot at the time the user confirmed',
             },
             created_at: {
                 type: Sequelize.DATE,
@@ -52,15 +49,9 @@ module.exports = {
             },
         });
 
-        await queryInterface.addIndex('promotions', { name: 'promotions_user_id_index', fields: ['user_id'] });
-
-        await queryInterface.addColumn('purchasables', 'promotion_id', {
-            type: Sequelize.UUID,
-            references: {
-                model: 'promotions',
-                key: 'id',
-            },
-            allowNull: true,
+        await queryInterface.addIndex('carts', {
+            name: 'carts_user_id_index',
+            fields: ['user_id'],
         });
     },
 
@@ -70,8 +61,6 @@ module.exports = {
      * @returns {Promise<any>}
      */
     async down(queryInterface, _Sequelize) {
-        await queryInterface.removeColumn('purchasables', 'promotion_id');
-
-        await queryInterface.dropTable('promotions', { cascade: true });
+        await queryInterface.dropTable('carts', { cascade: true });
     },
 };
