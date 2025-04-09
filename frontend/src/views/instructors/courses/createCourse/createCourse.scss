@@ -1,0 +1,12 @@
+.createCourseContainer {
+    .nav-tabs .nav-link {
+        color: black;
+        background-color: rgb(233, 233, 233);
+        font-weight: 500;
+    }
+
+    .nav-tabs .nav-link.active {
+        color: black;
+        background-color: white;
+    }
+}
