@@ -1,3 +1,18 @@
 {
-    "greeting": "Hello World!"
+    "greeting": "Hello World!",
+    "views": {
+        "instructors": {
+            "courses": {
+                "createCourse": {
+                    "createCourse": "Create course",
+                    "courseDetails": "Course details",
+                    "publishing": "Publishing",
+                    "title": "Title",
+                    "modules": "Modules",
+                    "addModule": "Add Module",
+                    "noModules": "No modules yet"
+                }
+            }
+        }
+    }
 }
