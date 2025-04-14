@@ -1,8 +1,7 @@
-import { Container, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import CourseDetails from './CourseDetails';
 import CustomTabs from '@/components/CustomTabs';
-import './createCourse.scss';
+//import './createCourse.scss';
 
 const CreateCourse = () => {
     const { t } = useTranslation();
@@ -18,12 +17,10 @@ const CreateCourse = () => {
     ];
 
     return (
-        <Container className="createCourseContainer">
-            <Row>
-                <h2>{t('views.instructors.courses.createCourse.createCourse')}</h2>
-            </Row>
+        <article className="__create-course-container">
+            <h2>{t('views.instructors.courses.createCourse.createCourse')}</h2>
             <CustomTabs tabs={tabs} defaultActiveKey={t('views.instructors.courses.createCourse.courseDetails')} />
-        </Container>
+        </article>
     );
 };
 
