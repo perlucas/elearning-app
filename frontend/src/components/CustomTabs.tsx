@@ -17,7 +17,7 @@ const CustomTabs: React.FC<CustomTabsProps> = ({ tabs, defaultActiveKey }) => {
         <TabContainer defaultActiveKey={defaultActiveKey || tabs[0]?.title}>
             <Nav variant="tabs">
                 {tabs.map((tab) => (
-                    <NavLink key={tab.title} eventKey={tab.title}>
+                    <NavLink key={tab.title} eventKey={tab.title} className="text-dark">
                         {tab.title}
                     </NavLink>
                 ))}

@@ -5,6 +5,6 @@ export default [
         index('views/index.tsx'),
         route('/dev/:name', 'views/DevPage.tsx'),
         route('/dashboard', 'views/dashboard/index.tsx'),
-        route('/courses/new', 'views/instructors/courses/createCourse/CreateCourseContainer.tsx')
+        route('/courses/new', 'views/instructors/courses/createCourse/CreateCoursePage.tsx'),
     ]),
 ] satisfies RouteConfig;

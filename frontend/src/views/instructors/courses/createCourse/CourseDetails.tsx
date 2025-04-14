@@ -1,5 +1,5 @@
 import { BsPlusCircle } from 'react-icons/bs';
-import { Row, Col, Form, FormControl, FormGroup, FormLabel, Button, Card } from 'react-bootstrap';
+import { Form, FormControl, FormGroup, FormLabel, Button, Card, Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import ModuleItem from './ModuleItem';
 import { Module } from './ModuleItem';
@@ -13,7 +13,7 @@ const CourseDetails = () => {
     ];
     //To test the "no modules" state, try using an empty array:
     return (
-        <>
+        <section className="p-0">
             <Form>
                 <FormGroup controlId="courseTitle">
                     <FormLabel>{t('views.instructors.courses.createCourse.title')}</FormLabel>
@@ -21,26 +21,24 @@ const CourseDetails = () => {
                 </FormGroup>
             </Form>
             <section>
-                <Row className="border-bottom g-0 mb-4">
-                    <Col xs={6}>
-                        <h3>{t('views.instructors.courses.createCourse.modules')}</h3>
-                    </Col>
-                    <Col xs={6} className="d-flex justify-content-end">
-                        <Button size="sm" className="d-flex align-items-center gap-2">
-                            <BsPlusCircle />
-                            {t('views.instructors.courses.createCourse.addModule')}
-                        </Button>
-                    </Col>
-                </Row>
+                <div className="d-flex flex-row justify-content-between">
+                    <h3>{t('views.instructors.courses.createCourse.modules')}</h3>
+                    <Button size="sm" className="d-flex align-items-center gap-2">
+                        <BsPlusCircle />
+                        {t('views.instructors.courses.createCourse.addModule')}
+                    </Button>
+                </div>
                 <Card>
-                    {modules.length > 0 ? (
-                        modules.map((mod, index) => <ModuleItem module={mod} index={index} key={index} />)
-                    ) : (
-                        <p>{t('views.instructors.courses.createCourse.noModules')}</p>
-                    )}
+                    <Container className="g-0">
+                        {modules.length > 0 ? (
+                            modules.map((mod, index) => <ModuleItem module={mod} index={index} key={index} />)
+                        ) : (
+                            <p>{t('views.instructors.courses.createCourse.noModules')}</p>
+                        )}
+                    </Container>
                 </Card>
             </section>
-        </>
+        </section>
     );
 };
 
