@@ -28,8 +28,8 @@ const CourseDetails = () => {
                         {t('views.instructors.courses.createCourse.addModule')}
                     </Button>
                 </div>
-                <Card>
-                    <Container className="g-0">
+                <Card className="p-0">
+                    <Container fluid>
                         {modules.length > 0 ? (
                             modules.map((mod, index) => <ModuleItem module={mod} index={index} key={index} />)
                         ) : (

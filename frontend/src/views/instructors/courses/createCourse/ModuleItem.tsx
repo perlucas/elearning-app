@@ -12,7 +12,7 @@ interface ModuleItemProps {
 
 const ModuleItem: React.FC<ModuleItemProps> = ({ module, index }) => {
     return (
-        <Row className="bg-secondary d-flex align-items-center g-0 px-2 py-2 text-dark my-2">
+        <Row className="bg-secondary d-flex align-items-center px-2 py-2 text-dark my-2">
             <Col xs="auto" className="px-1">
                 <BsList />
             </Col>
