@@ -2,49 +2,18 @@ import { BsPlusCircle } from 'react-icons/bs';
 import { Form, FormControl, FormGroup, FormLabel, Button, Card, Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import ModuleItem from './ModuleItem';
-import { Module } from './ModuleItem';
-import {
-    DndContext,
-    DragEndEvent,
-    KeyboardSensor,
-    PointerSensor,
-    TouchSensor,
-    closestCorners,
-    useSensor,
-    useSensors,
-} from '@dnd-kit/core';
-import {
-    arrayMove,
-    SortableContext,
-    sortableKeyboardCoordinates,
-    verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-import { useState } from 'react';
+import { DndContext, closestCorners } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { CreateCourseContext } from './context/CreateCourseContext';
+import useSafeContext from '@/hooks/useSafeContext';
+import { handleDragEnd } from '@/utils/dndFunctions';
+import useDndSensors from '@/hooks/useDndSensors';
 
 const CourseDetails = () => {
     const { t } = useTranslation();
-    const [modules, setModules] = useState<Module[]>([
-        { id: '1', title: 'REST principles 01' },
-        { id: '2', title: 'REST principles 02' },
-        { id: '3', title: 'REST principles 03' },
-    ]);
-    //To test the "no modules" state, try using an empty array:
 
-    const handleDragEnd = (event: DragEndEvent) => {
-        const { active, over } = event;
-        if (!over || active.id === over.id) return;
-        const originalIdx = modules.findIndex((m) => m.id === active.id);
-        const newIdx = modules.findIndex((m) => m.id === over.id);
-        setModules(arrayMove(modules, originalIdx, newIdx));
-    };
-
-    const sensors = useSensors(
-        useSensor(PointerSensor),
-        useSensor(TouchSensor),
-        useSensor(KeyboardSensor, {
-            coordinateGetter: sortableKeyboardCoordinates,
-        }),
-    );
+    const { modules, setModules } = useSafeContext(CreateCourseContext);
+    const sensors = useDndSensors();
 
     return (
         <section className="p-0">
@@ -63,7 +32,11 @@ const CourseDetails = () => {
                     </Button>
                 </div>
                 <Card className="p-0">
-                    <DndContext collisionDetection={closestCorners} onDragEnd={handleDragEnd} sensors={sensors}>
+                    <DndContext
+                        collisionDetection={closestCorners}
+                        onDragEnd={(event) => handleDragEnd(event, modules, setModules)}
+                        sensors={sensors}
+                    >
                         <Container fluid>
                             <SortableContext items={modules.map((m) => m.id)} strategy={verticalListSortingStrategy}>
                                 {modules.length > 0 ? (
