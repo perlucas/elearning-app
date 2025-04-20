@@ -1,19 +1,27 @@
 import { Col, Row } from 'react-bootstrap';
 import { BsList, BsPencilSquare, BsPlus, BsTrash } from 'react-icons/bs';
-
-export interface Module {
-    title: string;
-}
+import { useSortable } from '@dnd-kit/sortable';
+import { Module } from './context/CreateCourseContext';
+import { getSortableStyle } from '@/utils/dndFunctions';
 
 interface ModuleItemProps {
     module: Module;
     index: number;
 }
 
-const ModuleItem: React.FC<ModuleItemProps> = ({ module, index }) => {
+const ModuleItem: React.FC<ModuleItemProps> = ({ module, modules }) => {
+    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: module.id });
+
+    const dndStyle = getSortableStyle(transform, transition);
+
+    const index = modules.findIndex((m) => m.id === module.id);
     return (
-        <Row className="bg-secondary d-flex align-items-center px-2 py-2 text-dark my-2">
-            <Col xs="auto" className="px-1">
+        <Row
+            className="d-flex align-items-center px-2 py-2 text-dark my-2 __module-item"
+            ref={setNodeRef}
+            style={dndStyle}
+        >
+            <Col xs="auto" className="px-1 __module-item-draggable" {...attributes} {...listeners}>
                 <BsList />
             </Col>
             <Col className="px-1">
