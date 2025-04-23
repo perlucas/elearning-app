@@ -1,11 +1,11 @@
-import CreateCourseContextComponent from './context/CreateCourseContext';
+import CreateCourseContextBoundary from './context/CreateCourseContext';
 import CreateCourse from './CreateCourse';
 
 const CreateCoursePage = () => {
     return (
-        <CreateCourseContextComponent>
+        <CreateCourseContextBoundary>
             <CreateCourse />;
-        </CreateCourseContextComponent>
+        </CreateCourseContextBoundary>
     );
 };
 

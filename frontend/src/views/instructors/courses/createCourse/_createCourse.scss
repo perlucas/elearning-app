@@ -9,14 +9,4 @@
     .nav-tabs .nav-link.active {
         background-color: $white;
     }
-    .__module-item {
-        background-color: $gray-300;
-        .__module-item-draggable {
-            cursor: grab;
-            touch-action: none;
-            &:active {
-                cursor: grabbing;
-            }
-        }
-    }
 }
