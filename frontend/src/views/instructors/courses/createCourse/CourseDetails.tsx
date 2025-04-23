@@ -9,7 +9,6 @@ import { Item } from '@/components/draggable/types';
 
 const CourseDetails = () => {
     const { t } = useTranslation();
-
     const { modules, setModules, handleAddModule } = useSafeContext(CreateCourseContext);
 
     return (
