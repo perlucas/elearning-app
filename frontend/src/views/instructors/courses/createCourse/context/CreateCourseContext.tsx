@@ -16,7 +16,7 @@ type ContextType = {
 
 export const CreateCourseContext = createContext<ContextType | undefined>(undefined);
 
-const CreateCourseContextComponent = ({ children }: Props) => {
+const CreateCourseContextBoundary = ({ children }: Props) => {
     const [modules, setModules] = useState<Module[]>([
         { id: '1', title: 'REST principles 01' },
         { id: '2', title: 'REST principles 02' },
@@ -31,4 +31,4 @@ const CreateCourseContextComponent = ({ children }: Props) => {
     return <CreateCourseContext.Provider value={data}>{children}</CreateCourseContext.Provider>;
 };
 
-export default CreateCourseContextComponent;
+export default CreateCourseContextBoundary;

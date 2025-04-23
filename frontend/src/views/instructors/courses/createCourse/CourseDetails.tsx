@@ -2,18 +2,13 @@ import { BsPlusCircle } from 'react-icons/bs';
 import { Form, FormControl, FormGroup, FormLabel, Button, Card, Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import ModuleItem from './ModuleItem';
-import { DndContext, closestCorners } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CreateCourseContext } from './context/CreateCourseContext';
 import useSafeContext from '@/hooks/useSafeContext';
-import { handleDragEnd } from '@/utils/dndFunctions';
-import useDndSensors from '@/hooks/useDndSensors';
+import DraggableZone from '@/components/draggable/DraggableZone';
 
 const CourseDetails = () => {
     const { t } = useTranslation();
-
     const { modules, setModules } = useSafeContext(CreateCourseContext);
-    const sensors = useDndSensors();
 
     return (
         <section className="p-0">
@@ -32,21 +27,15 @@ const CourseDetails = () => {
                     </Button>
                 </div>
                 <Card className="p-0">
-                    <DndContext
-                        collisionDetection={closestCorners}
-                        onDragEnd={(event) => handleDragEnd(event, modules, setModules)}
-                        sensors={sensors}
-                    >
+                    <DraggableZone items={modules} setItems={setModules}>
                         <Container fluid>
-                            <SortableContext items={modules.map((m) => m.id)} strategy={verticalListSortingStrategy}>
-                                {modules.length > 0 ? (
-                                    modules.map((mod) => <ModuleItem module={mod} modules={modules} key={mod.id} />)
-                                ) : (
-                                    <p>{t('views.instructors.courses.createCourse.noModules')}</p>
-                                )}
-                            </SortableContext>
+                            {modules.length > 0 ? (
+                                modules.map((mod, index) => <ModuleItem module={mod} index={index} key={mod.id} />)
+                            ) : (
+                                <p>{t('views.instructors.courses.createCourse.noModules')}</p>
+                            )}
                         </Container>
-                    </DndContext>
+                    </DraggableZone>
                 </Card>
             </section>
         </section>
