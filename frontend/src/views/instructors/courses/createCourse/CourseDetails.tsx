@@ -9,7 +9,8 @@ import { Item } from '@/components/draggable/types';
 
 const CourseDetails = () => {
     const { t } = useTranslation();
-    const { modules, setModules } = useSafeContext(CreateCourseContext);
+
+    const { modules, setModules, handleAddModule } = useSafeContext(CreateCourseContext);
 
     return (
         <section className="p-0">
@@ -22,7 +23,7 @@ const CourseDetails = () => {
             <section>
                 <div className="d-flex flex-row justify-content-between">
                     <h3>{t('views.instructors.courses.createCourse.modules')}</h3>
-                    <Button size="sm" className="d-flex align-items-center gap-2">
+                    <Button size="sm" className="d-flex align-items-center gap-2" onClick={handleAddModule}>
                         <BsPlusCircle />
                         {t('views.instructors.courses.createCourse.addModule')}
                     </Button>
