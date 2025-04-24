@@ -3,11 +3,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { Col, Row } from 'react-bootstrap';
 import { BsList } from 'react-icons/bs';
 import './_draggableItem.scss';
-
-interface Item {
-    id: string;
-    title: string;
-}
+import { Item } from './DraggableZone';
 
 interface Props {
     item: Item;
@@ -22,11 +18,11 @@ const DraggableItem = ({ item, children }: Props) => {
     };
     return (
         <Row
-            className="d-flex align-items-center px-2 py-2 text-dark my-2 __module-item"
+            className="d-flex align-items-center px-2 py-2 text-dark my-2 __draggable-item"
             ref={setNodeRef}
             style={dndStyle}
         >
-            <Col xs="auto" className="px-1 __module-item-draggable" {...attributes} {...listeners}>
+            <Col xs="auto" className="px-1 __draggable-selection" {...attributes} {...listeners}>
                 <BsList />
             </Col>
             {children}
