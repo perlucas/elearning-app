@@ -15,24 +15,24 @@ import {
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 
-interface Item {
+export interface Item {
     id: string;
     title: string;
 }
 
 interface Props {
     items: Item[];
-    setItems: React.Dispatch<React.SetStateAction<Item[]>>;
+    updateItems: React.Dispatch<React.SetStateAction<Item[]>>;
     children: React.ReactNode;
 }
 
-const DraggableZone = ({ items, setItems, children }: Props) => {
+const DraggableZone = ({ items, updateItems, children }: Props) => {
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event;
         if (!over || active.id === over.id) return;
         const originalIdx = items.findIndex((m) => m.id === active.id);
         const newIdx = items.findIndex((m) => m.id === over.id);
-        setItems(arrayMove(items, originalIdx, newIdx));
+        updateItems(arrayMove(items, originalIdx, newIdx));
     };
 
     const sensors = useSensors(
