@@ -27,7 +27,7 @@ const CourseDetails = () => {
                     </Button>
                 </div>
                 <Card className="p-0">
-                    <DraggableZone items={modules} setItems={setModules}>
+                    <DraggableZone items={modules} updateItems={setModules}>
                         <Container fluid>
                             {modules.length > 0 ? (
                                 modules.map((mod, index) => <ModuleItem module={mod} index={index} key={mod.id} />)
