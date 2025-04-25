@@ -3,7 +3,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { Col, Row } from 'react-bootstrap';
 import { BsList } from 'react-icons/bs';
 import './_draggableItem.scss';
-import { Item } from './DraggableZone';
+import { Item } from './types';
 
 interface Props {
     item: Item;

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import CourseDetails from './CourseDetails';
 import CustomTabs from '@/components/CustomTabs';
-//import './createCourse.scss';
+import './createCourse.scss';
 
 const CreateCourse = () => {
     const { t } = useTranslation();

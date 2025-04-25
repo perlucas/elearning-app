@@ -14,15 +14,11 @@ import {
     sortableKeyboardCoordinates,
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-
-export interface Item {
-    id: string;
-    title: string;
-}
+import { Item } from './types';
 
 interface Props {
     items: Item[];
-    updateItems: React.Dispatch<React.SetStateAction<Item[]>>;
+    updateItems: (items: Item[]) => void;
     children: React.ReactNode;
 }
 
