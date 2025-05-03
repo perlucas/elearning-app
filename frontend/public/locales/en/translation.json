@@ -10,7 +10,11 @@
                     "title": "Title",
                     "modules": "Modules",
                     "addModule": "Add Module",
-                    "noModules": "No modules yet"
+                    "noModules": "No modules yet",
+                    "moduleItem": {
+                        "delete": "Delete",
+                        "cancel": "Cancel"
+                    }
                 }
             }
         }

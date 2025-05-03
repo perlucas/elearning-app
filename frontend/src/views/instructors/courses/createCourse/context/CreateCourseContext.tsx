@@ -17,7 +17,11 @@ type ContextType = {
     handleAddModule: () => void;
     editingModuleId: string;
     setEditingModuleId: React.Dispatch<React.SetStateAction<string>>;
+    deletingModuleId: string;
+    setDeletingModuleId: React.Dispatch<React.SetStateAction<string>>;
     changeItemName: ChangeItemNameFn;
+    handleTrashButton: (id: string) => void;
+    handleDeleteButton: (id: string) => void;
 };
 
 export const CreateCourseContext = createContext<ContextType | undefined>(undefined);
@@ -57,6 +61,19 @@ const CreateCourseContextBoundary = ({ children }: Props) => {
         setEditingModuleId('');
     };
 
+    //Delete module
+
+    const [deletingModuleId, setDeletingModuleId] = useState('');
+
+    const handleTrashButton = (id: string) => {
+        setDeletingModuleId(id);
+    };
+
+    const handleDeleteButton = (id: string) => {
+        setModules((prev) => prev.filter((m) => m.id !== id));
+        setDeletingModuleId('');
+    };
+
     const data: ContextType = {
         modules,
         setModules,
@@ -64,6 +81,10 @@ const CreateCourseContextBoundary = ({ children }: Props) => {
         editingModuleId,
         setEditingModuleId,
         changeItemName,
+        deletingModuleId,
+        setDeletingModuleId,
+        handleTrashButton,
+        handleDeleteButton,
     };
 
     return <CreateCourseContext.Provider value={data}>{children}</CreateCourseContext.Provider>;
