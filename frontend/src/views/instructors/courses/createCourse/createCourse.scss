@@ -9,4 +9,13 @@
     .nav-tabs .nav-link.active {
         background-color: $white;
     }
+
+    .__module-item-input {
+        border: none;
+        background-color: rgb(0, 0, 0, 0);
+        &:focus {
+            outline: none;
+            border-bottom: 1.5px solid $black;
+        }
+    }
 }

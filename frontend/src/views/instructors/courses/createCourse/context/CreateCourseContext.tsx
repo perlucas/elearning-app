@@ -17,8 +17,6 @@ type ContextType = {
     handleAddModule: () => void;
     editingModuleId: string;
     setEditingModuleId: React.Dispatch<React.SetStateAction<string>>;
-    tempModules: Item[];
-    setTempModules: React.Dispatch<React.SetStateAction<Item[]>>;
     changeItemName: ChangeItemNameFn;
 };
 
@@ -31,8 +29,6 @@ const CreateCourseContextBoundary = ({ children }: Props) => {
         { id: '3', title: 'REST principles 03' },
     ]);
 
-    const [tempModules, setTempModules] = useState<Item[]>([]);
-
     //Provisional function
     const idGenerator = () => {
         return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
@@ -40,7 +36,7 @@ const CreateCourseContextBoundary = ({ children }: Props) => {
 
     const handleAddModule = () => {
         const id = idGenerator();
-        setModules([...modules, { id, title: 'Untitled' }]);
+        setModules((prev) => [...prev, { id, title: 'Untitled' }]);
         setEditingModuleId(id);
     };
 
@@ -53,12 +49,11 @@ const CreateCourseContextBoundary = ({ children }: Props) => {
             inputValue = 'Untitled';
         }
         const updatedItem = { ...item, title: inputValue };
-        setTempModules((prev) =>
+        setModules((prev) =>
             prev.some((i) => i.id === item.id)
                 ? prev.map((i) => (i.id === item.id ? updatedItem : i))
                 : [...prev, updatedItem],
         );
-
         setEditingModuleId('');
     };
 
@@ -68,8 +63,6 @@ const CreateCourseContextBoundary = ({ children }: Props) => {
         handleAddModule,
         editingModuleId,
         setEditingModuleId,
-        tempModules,
-        setTempModules,
         changeItemName,
     };
 
