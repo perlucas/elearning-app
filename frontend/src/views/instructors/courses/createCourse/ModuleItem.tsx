@@ -1,9 +1,9 @@
-import { Col, FormControl } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 import { BsPencilSquare, BsPlus, BsTrash } from 'react-icons/bs';
 import { CreateCourseContext, Item } from './context/CreateCourseContext';
 import DraggableItem from '@/components/draggable/DraggableItem';
 import useSafeContext from '@/hooks/useSafeContext';
-import { useEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 
 interface ModuleItemProps {
     module: Item;
@@ -11,16 +11,19 @@ interface ModuleItemProps {
 }
 
 const ModuleItem: React.FC<ModuleItemProps> = ({ module, index }) => {
-    const { editingModuleId, setEditingModuleId, tempModules, changeItemName } = useSafeContext(CreateCourseContext);
+    const { editingModuleId, setEditingModuleId, changeItemName } = useSafeContext(CreateCourseContext);
     const isEditing = editingModuleId === module.id;
     const inputRef = useRef<HTMLInputElement>(null);
-    const tempModule = tempModules.find((m) => m.id === module.id);
     const [inputValue, setInputValue] = useState('');
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (isEditing && inputRef.current) {
-            inputRef.current.focus();
-            setInputValue(tempModule?.title ?? module.title);
+            const newValue = module.title;
+            setInputValue(newValue);
+            requestAnimationFrame(() => {
+                inputRef.current?.focus();
+                inputRef.current?.select();
+            });
         }
     }, [isEditing]);
 
@@ -32,22 +35,22 @@ const ModuleItem: React.FC<ModuleItemProps> = ({ module, index }) => {
 
     return (
         <DraggableItem item={module}>
-            <Col className="px-1">
+            <Col className="d-flex align-items-center px-1 flex-grow-1">
                 {isEditing ? (
-                    <FormControl
-                        type="text"
-                        style={{ height: '1.8rem' }}
-                        className="__form-input"
-                        ref={inputRef}
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                        onKeyDown={handleKeydown}
-                        onBlur={() => changeItemName(module, inputValue)}
-                    />
+                    <>
+                        <span className="me-1">{index + 1}.</span>
+                        <input
+                            type="text"
+                            className="w-100 __module-item-input"
+                            ref={inputRef}
+                            value={inputValue}
+                            onChange={(e) => setInputValue(e.target.value)}
+                            onKeyDown={handleKeydown}
+                            onBlur={() => changeItemName(module, inputValue)}
+                        />
+                    </>
                 ) : (
-                    <span
-                        onDoubleClick={() => setEditingModuleId(module.id)}
-                    >{`${index + 1}. ${tempModule ? tempModule.title : module.title}`}</span>
+                    <span onDoubleClick={() => setEditingModuleId(module.id)}>{`${index + 1}. ${module.title}`}</span>
                 )}
             </Col>
 
