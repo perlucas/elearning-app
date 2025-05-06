@@ -1,6 +1,6 @@
 import React, { createContext, ReactNode, useState } from 'react';
 
-export interface Item {
+export interface Module {
     id: string;
     title: string;
 }
@@ -9,21 +9,19 @@ type Props = {
     children: ReactNode;
 };
 
-type ChangeItemNameFn = (item: Item, inputValue: string) => void;
+type updateModuleFn = (updatedModule: Module) => void;
 
 type ContextType = {
-    modules: Item[];
-    setModules: React.Dispatch<React.SetStateAction<Item[]>>;
-    handleAddModule: () => void;
-    editingModuleId: string;
-    setEditingModuleId: React.Dispatch<React.SetStateAction<string>>;
-    changeItemName: ChangeItemNameFn;
+    modules: Module[];
+    setModules: React.Dispatch<React.SetStateAction<Module[]>>;
+    addModule: () => Module;
+    updateModule: updateModuleFn;
 };
 
 export const CreateCourseContext = createContext<ContextType | undefined>(undefined);
 
 const CreateCourseContextBoundary = ({ children }: Props) => {
-    const [modules, setModules] = useState<Item[]>([
+    const [modules, setModules] = useState<Module[]>([
         { id: '1', title: 'REST principles 01' },
         { id: '2', title: 'REST principles 02' },
         { id: '3', title: 'REST principles 03' },
@@ -34,36 +32,35 @@ const CreateCourseContextBoundary = ({ children }: Props) => {
         return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
     };
 
-    const handleAddModule = () => {
+    const addModule = () => {
         const id = idGenerator();
-        setModules((prev) => [...prev, { id, title: 'Untitled' }]);
-        setEditingModuleId(id);
+        const newModule: Module = {
+            id,
+            title: 'Untitled',
+        };
+        setModules((prev) => [...prev, newModule]);
+        return newModule;
     };
 
-    //Change Item name
-
-    const [editingModuleId, setEditingModuleId] = useState('');
-
-    const changeItemName: ChangeItemNameFn = (item, inputValue) => {
-        if (inputValue === '') {
-            inputValue = 'Untitled';
+    const updateModule: updateModuleFn = (updatedModule) => {
+        if (updatedModule.title === '') {
+            updatedModule.title = 'Untitled';
         }
-        const updatedItem = { ...item, title: inputValue };
-        setModules((prev) =>
-            prev.some((i) => i.id === item.id)
-                ? prev.map((i) => (i.id === item.id ? updatedItem : i))
-                : [...prev, updatedItem],
-        );
-        setEditingModuleId('');
+        setModules((prev) => {
+            const updatedModules = [...prev];
+            const index = updatedModules.findIndex((m) => m.id === updatedModule.id);
+            if (index !== -1) {
+                updatedModules.splice(index, 1, updatedModule);
+            }
+            return updatedModules;
+        });
     };
 
     const data: ContextType = {
         modules,
         setModules,
-        handleAddModule,
-        editingModuleId,
-        setEditingModuleId,
-        changeItemName,
+        addModule,
+        updateModule,
     };
 
     return <CreateCourseContext.Provider value={data}>{children}</CreateCourseContext.Provider>;
