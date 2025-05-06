@@ -1,24 +1,49 @@
 import { BsPlusCircle } from 'react-icons/bs';
-import { Form, FormControl, FormGroup, FormLabel, Button, Card, Container } from 'react-bootstrap';
+import { FormControl, FormLabel, Button, Card, Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import ModuleItem from './ModuleItem';
 import { CreateCourseContext, Item as Module } from './context/CreateCourseContext';
 import useSafeContext from '@/hooks/useSafeContext';
 import DraggableZone from '@/components/draggable/DraggableZone';
 import { Item } from '@/components/draggable/types';
+import { useEffect, useRef } from 'react';
 
 const CourseDetails = () => {
     const { t } = useTranslation();
-    const { modules, setModules, handleAddModule } = useSafeContext(CreateCourseContext);
+    const { modules, setModules, handleAddModule, courseTitle, setCourseTitle, handleOnBlurTitle } =
+        useSafeContext(CreateCourseContext);
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        if (courseTitle === '') {
+            requestAnimationFrame(() => {
+                inputRef.current?.focus();
+            });
+        }
+    }, [courseTitle]);
+
+    const handleKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleOnBlurTitle(courseTitle);
+            inputRef.current?.blur();
+        }
+    };
 
     return (
         <section className="p-0">
-            <Form>
-                <FormGroup controlId="courseTitle">
-                    <FormLabel>{t('views.instructors.courses.createCourse.title')}</FormLabel>
-                    <FormControl type="text"></FormControl>
-                </FormGroup>
-            </Form>
+            <div>
+                <FormLabel>{t('views.instructors.courses.createCourse.title')}</FormLabel>
+                <FormControl
+                    type="text"
+                    value={courseTitle}
+                    ref={inputRef}
+                    onChange={(e) => setCourseTitle(e.target.value)}
+                    onBlur={(e) => handleOnBlurTitle(e.target.value)}
+                    onKeyDown={handleKeydown}
+                />
+            </div>
+
             <section>
                 <div className="d-flex flex-row justify-content-between">
                     <h3>{t('views.instructors.courses.createCourse.modules')}</h3>

@@ -11,22 +11,37 @@ type Props = {
 
 type ChangeItemNameFn = (item: Item, inputValue: string) => void;
 
+type Setter<T> = React.Dispatch<React.SetStateAction<T>>;
+
+type VoidFn = () => void;
+type VoidStringFn = (t: string) => void;
+
 type ContextType = {
+    courseTitle: string;
+    setCourseTitle: Setter<string>;
+
     modules: Item[];
-    setModules: React.Dispatch<React.SetStateAction<Item[]>>;
-    handleAddModule: () => void;
+    setModules: Setter<Item[]>;
+    handleAddModule: VoidFn;
     editingModuleId: string;
-    setEditingModuleId: React.Dispatch<React.SetStateAction<string>>;
+    setEditingModuleId: Setter<string>;
     deletingModuleId: string;
-    setDeletingModuleId: React.Dispatch<React.SetStateAction<string>>;
+    setDeletingModuleId: Setter<string>;
     changeItemName: ChangeItemNameFn;
-    handleTrashButton: (id: string) => void;
-    handleDeleteButton: (id: string) => void;
+    handleTrashButton: VoidStringFn;
+    handleDeleteButton: VoidStringFn;
+    handleOnBlurTitle: VoidStringFn;
 };
 
 export const CreateCourseContext = createContext<ContextType | undefined>(undefined);
 
 const CreateCourseContextBoundary = ({ children }: Props) => {
+    const [courseTitle, setCourseTitle] = useState('');
+
+    const handleOnBlurTitle = (value: string) => {
+        setCourseTitle(value !== '' ? value : 'Untitled');
+    };
+
     const [modules, setModules] = useState<Item[]>([
         { id: '1', title: 'REST principles 01' },
         { id: '2', title: 'REST principles 02' },
@@ -85,6 +100,9 @@ const CreateCourseContextBoundary = ({ children }: Props) => {
         setDeletingModuleId,
         handleTrashButton,
         handleDeleteButton,
+        courseTitle,
+        setCourseTitle,
+        handleOnBlurTitle,
     };
 
     return <CreateCourseContext.Provider value={data}>{children}</CreateCourseContext.Provider>;
