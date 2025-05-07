@@ -1,36 +1,31 @@
 import { Button, Col } from 'react-bootstrap';
 import { BsPencilSquare, BsPlus, BsTrash } from 'react-icons/bs';
-import { CreateCourseContext, Item } from './context/CreateCourseContext';
+import { CreateCourseContext, Module } from './context/CreateCourseContext';
 import DraggableItem from '@/components/draggable/DraggableItem';
 import useSafeContext from '@/hooks/useSafeContext';
 import { useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface ModuleItemProps {
-    module: Item;
+    module: Module;
     index: number;
+    editingModuleId: string;
+    setEditingModuleId: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const ModuleItem: React.FC<ModuleItemProps> = ({ module, index }) => {
-    const {
-        editingModuleId,
-        setEditingModuleId,
-        changeItemName,
-        deletingModuleId,
-        setDeletingModuleId,
-        handleTrashButton,
-        handleDeleteButton,
-    } = useSafeContext(CreateCourseContext);
+const ModuleItem: React.FC<ModuleItemProps> = ({ module, index, editingModuleId, setEditingModuleId }) => {
+    const { updateModule, deletingModuleId, setDeletingModuleId, handleTrashButton, handleDeleteButton } =
+        useSafeContext(CreateCourseContext);
     const isEditing = editingModuleId === module.id;
     const isDeleting = deletingModuleId === module.id;
     const inputRef = useRef<HTMLInputElement>(null);
-    const [inputValue, setInputValue] = useState('');
+    const [titleValue, setTitleValue] = useState('');
     const { t } = useTranslation();
 
     useLayoutEffect(() => {
         if (isEditing && inputRef.current) {
             const newValue = module.title;
-            setInputValue(newValue);
+            setTitleValue(newValue);
             requestAnimationFrame(() => {
                 inputRef.current?.focus();
                 inputRef.current?.select();
@@ -40,7 +35,8 @@ const ModuleItem: React.FC<ModuleItemProps> = ({ module, index }) => {
 
     const handleKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-            changeItemName(module, inputValue);
+            updateModule({ ...module, title: titleValue });
+            setEditingModuleId('');
         }
     };
 
@@ -54,10 +50,13 @@ const ModuleItem: React.FC<ModuleItemProps> = ({ module, index }) => {
                             type="text"
                             className="w-100 __module-item-input"
                             ref={inputRef}
-                            value={inputValue}
-                            onChange={(e) => setInputValue(e.target.value)}
+                            value={titleValue}
+                            onChange={(e) => setTitleValue(e.target.value)}
                             onKeyDown={handleKeydown}
-                            onBlur={() => changeItemName(module, inputValue)}
+                            onBlur={() => {
+                                updateModule({ ...module, title: titleValue });
+                                setEditingModuleId('');
+                            }}
                         />
                     </>
                 ) : (
