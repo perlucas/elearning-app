@@ -20,7 +20,7 @@ const DraggableItem = ({ item, children }: Props) => {
         <Row
             className="d-flex align-items-center px-2 py-2 text-dark my-2 __draggable-item"
             ref={setNodeRef}
-            style={dndStyle}
+            style={{ height: '2.8rem', ...dndStyle }}
         >
             <Col xs="auto" className="px-1 __draggable-selection" {...attributes} {...listeners}>
                 <BsList />

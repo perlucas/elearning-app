@@ -9,10 +9,17 @@ type Props = {
     children: ReactNode;
 };
 
+type updateModuleFn = (updatedModule: Module) => void;
+
 type ContextType = {
     modules: Module[];
     setModules: React.Dispatch<React.SetStateAction<Module[]>>;
-    handleAddModule: () => void;
+    addModule: () => Module;
+    updateModule: updateModuleFn;
+    deletingModuleId: string;
+    setDeletingModuleId: React.Dispatch<React.SetStateAction<string>>;
+    handleTrashButton: (id: string) => void;
+    handleDeleteButton: (id: string) => void;
 };
 
 export const CreateCourseContext = createContext<ContextType | undefined>(undefined);
@@ -29,15 +36,52 @@ const CreateCourseContextBoundary = ({ children }: Props) => {
         return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
     };
 
-    const handleAddModule = () => {
+    const addModule = () => {
         const id = idGenerator();
-        setModules([...modules, { id, title: 'Untitled' }]);
+        const newModule: Module = {
+            id,
+            title: 'Untitled',
+        };
+        setModules((prev) => [...prev, newModule]);
+        return newModule;
+    };
+
+    const updateModule: updateModuleFn = (updatedModule) => {
+        if (updatedModule.title === '') {
+            updatedModule.title = 'Untitled';
+        }
+        setModules((prev) => {
+            const updatedModules = [...prev];
+            const index = updatedModules.findIndex((m) => m.id === updatedModule.id);
+            if (index !== -1) {
+                updatedModules.splice(index, 1, updatedModule);
+            }
+            return updatedModules;
+        });
+    };
+
+    //Delete module
+
+    const [deletingModuleId, setDeletingModuleId] = useState('');
+
+    const handleTrashButton = (id: string) => {
+        setDeletingModuleId(id);
+    };
+
+    const handleDeleteButton = (id: string) => {
+        setModules((prev) => prev.filter((m) => m.id !== id));
+        setDeletingModuleId('');
     };
 
     const data: ContextType = {
         modules,
         setModules,
-        handleAddModule,
+        addModule,
+        updateModule,
+        deletingModuleId,
+        setDeletingModuleId,
+        handleTrashButton,
+        handleDeleteButton,
     };
 
     return <CreateCourseContext.Provider value={data}>{children}</CreateCourseContext.Provider>;

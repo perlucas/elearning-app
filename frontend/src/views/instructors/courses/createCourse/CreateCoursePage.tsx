@@ -4,7 +4,7 @@ import CreateCourse from './CreateCourse';
 const CreateCoursePage = () => {
     return (
         <CreateCourseContextBoundary>
-            <CreateCourse />;
+            <CreateCourse />
         </CreateCourseContextBoundary>
     );
 };
