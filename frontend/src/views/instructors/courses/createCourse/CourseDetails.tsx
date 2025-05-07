@@ -6,10 +6,16 @@ import { CreateCourseContext, Module } from './context/CreateCourseContext';
 import useSafeContext from '@/hooks/useSafeContext';
 import DraggableZone from '@/components/draggable/DraggableZone';
 import { Item } from '@/components/draggable/types';
+import { useState } from 'react';
 
 const CourseDetails = () => {
     const { t } = useTranslation();
-    const { modules, setModules, handleAddModule } = useSafeContext(CreateCourseContext);
+    const { modules, setModules, addModule } = useSafeContext(CreateCourseContext);
+    const [editingModuleId, setEditingModuleId] = useState('');
+    const handleAddModule = () => {
+        const newModule = addModule();
+        setEditingModuleId(newModule.id);
+    };
 
     return (
         <section className="p-0">
@@ -31,7 +37,15 @@ const CourseDetails = () => {
                     <DraggableZone items={modules} updateItems={(items: Item[]) => setModules(items as Module[])}>
                         <Container fluid>
                             {modules.length > 0 ? (
-                                modules.map((mod, index) => <ModuleItem module={mod} index={index} key={mod.id} />)
+                                modules.map((mod, index) => (
+                                    <ModuleItem
+                                        module={mod}
+                                        index={index}
+                                        key={mod.id}
+                                        editingModuleId={editingModuleId}
+                                        setEditingModuleId={setEditingModuleId}
+                                    />
+                                ))
                             ) : (
                                 <p>{t('views.instructors.courses.createCourse.noModules')}</p>
                             )}
