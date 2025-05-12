@@ -1,29 +1,34 @@
 import { Button, Col } from 'react-bootstrap';
 import { BsPencilSquare, BsPlus, BsTrash } from 'react-icons/bs';
-import { CreateCourseContext, Module } from './context/CreateCourseContext';
 import DraggableItem from '@/components/draggable/DraggableItem';
-import useSafeContext from '@/hooks/useSafeContext';
 import { useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import useSafeContext from '@/hooks/useSafeContext';
+import { CreateCourseContext } from './context/CreateCourseContext';
+
+interface Module {
+    id: string;
+    title: string;
+}
 
 interface ModuleItemProps {
     module: Module;
     index: number;
-    editingModuleId: string;
-    setEditingModuleId: React.Dispatch<React.SetStateAction<string>>;
+    editMode: boolean;
+    onToggleEditMode: (moduleId: string, editMode: boolean) => void;
+    onUpdateModule: (updateModule: Module) => void;
 }
 
-const ModuleItem: React.FC<ModuleItemProps> = ({ module, index, editingModuleId, setEditingModuleId }) => {
-    const { updateModule, deletingModuleId, setDeletingModuleId, handleTrashButton, handleDeleteButton } =
+const ModuleItem: React.FC<ModuleItemProps> = ({ module, index, editMode, onToggleEditMode, onUpdateModule }) => {
+    const { deletingModuleId, setDeletingModuleId, handleTrashButton, handleDeleteButton } =
         useSafeContext(CreateCourseContext);
-    const isEditing = editingModuleId === module.id;
     const isDeleting = deletingModuleId === module.id;
     const inputRef = useRef<HTMLInputElement>(null);
     const [titleValue, setTitleValue] = useState('');
     const { t } = useTranslation();
 
     useLayoutEffect(() => {
-        if (isEditing && inputRef.current) {
+        if (editMode && inputRef.current) {
             const newValue = module.title;
             setTitleValue(newValue);
             requestAnimationFrame(() => {
@@ -31,19 +36,19 @@ const ModuleItem: React.FC<ModuleItemProps> = ({ module, index, editingModuleId,
                 inputRef.current?.select();
             });
         }
-    }, [isEditing]);
+    }, [editMode]);
 
     const handleKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-            updateModule({ ...module, title: titleValue });
-            setEditingModuleId('');
+            onUpdateModule({ ...module, title: titleValue });
+            onToggleEditMode(module.id, false);
         }
     };
 
     return (
         <DraggableItem item={module}>
             <Col className="d-flex align-items-center px-1 flex-grow-1">
-                {isEditing ? (
+                {editMode ? (
                     <>
                         <span className="me-1">{index + 1}.</span>
                         <input
@@ -54,13 +59,15 @@ const ModuleItem: React.FC<ModuleItemProps> = ({ module, index, editingModuleId,
                             onChange={(e) => setTitleValue(e.target.value)}
                             onKeyDown={handleKeydown}
                             onBlur={() => {
-                                updateModule({ ...module, title: titleValue });
-                                setEditingModuleId('');
+                                onUpdateModule({ ...module, title: titleValue });
+                                onToggleEditMode(module.id, false);
                             }}
                         />
                     </>
                 ) : (
-                    <span onDoubleClick={() => setEditingModuleId(module.id)}>{`${index + 1}. ${module.title}`}</span>
+                    <span
+                        onDoubleClick={() => onToggleEditMode(module.id, true)}
+                    >{`${index + 1}. ${module.title}`}</span>
                 )}
             </Col>
 
@@ -74,12 +81,12 @@ const ModuleItem: React.FC<ModuleItemProps> = ({ module, index, editingModuleId,
                                 className="p-0 m-0"
                                 onClick={() => handleDeleteButton(module.id)}
                             >
-                                {t('views.instructors.courses.createCourse.moduleItem.delete').toUpperCase()}
+                                {t('views.common.delete')}
                             </Button>
                         </div>
                         <div className="__module-item-cancelButton" onClick={() => setDeletingModuleId('')}>
                             <Button size="sm" variant="link" className="p-0 m-0">
-                                {t('views.instructors.courses.createCourse.moduleItem.cancel').toUpperCase()}
+                                {t('views.common.cancel')}
                             </Button>
                         </div>
                     </>

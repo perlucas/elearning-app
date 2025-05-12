@@ -10,13 +10,13 @@
                     "title": "Título",
                     "modules": "Módulos",
                     "addModule": "Agregar Módulo",
-                    "noModules": "Aún no hay módulos",
-                    "moduleItem": {
-                        "delete": "Eliminar",
-                        "cancel": "Cancelar"
-                    }
+                    "noModules": "Aún no hay módulos"
                 }
             }
+        },
+        "common": {
+            "delete": "Eliminar",
+            "cancel": "Cancelar"
         }
     }
 }

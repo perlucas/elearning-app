@@ -11,15 +11,19 @@
         background-color: $white;
     }
 
+    //Belong to ModuleItem component
+
     .__module-item-input {
         border: none;
         background-color: $transparent;
+        padding: 0;
         &:focus {
             outline: none;
             border-bottom: 1.5px solid $black;
         }
     }
     .__module-item-deleteButton {
+        text-transform: uppercase;
         .btn-link {
             color: $red;
             &:hover {
@@ -28,6 +32,7 @@
         }
     }
     .__module-item-cancelButton {
+        text-transform: uppercase;
         .btn-link {
             color: $gray-900;
             &:hover {
