@@ -11,9 +11,9 @@ import { useState } from 'react';
 const CourseDetails = () => {
     const { t } = useTranslation();
     const { modules, setModules, addModule, updateModule } = useSafeContext(CreateCourseContext);
-    const [editModeMap, setEditModMap] = useState<Record<string, boolean>>({});
+    const [editModeMap, setEditModeMap] = useState<Record<string, boolean>>({});
     const toggleEditMode = (moduleId: string, editMode: boolean) => {
-        setEditModMap((prev) => ({ ...prev, [moduleId]: editMode }));
+        setEditModeMap((prev) => ({ ...prev, [moduleId]: editMode }));
     };
 
     const handleAddModule = () => {
