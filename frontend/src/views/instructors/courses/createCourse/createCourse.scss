@@ -11,9 +11,12 @@
         background-color: $white;
     }
 
+    //Belong to ModuleItem component
+
     .__module-item-input {
         border: none;
         background-color: $transparent;
+        padding: 0;
         &:focus {
             outline: none;
             border-bottom: 1.5px solid $black;
