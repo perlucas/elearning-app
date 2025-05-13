@@ -3,8 +3,6 @@ import { BsPencilSquare, BsPlus, BsTrash } from 'react-icons/bs';
 import DraggableItem from '@/components/draggable/DraggableItem';
 import { useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import useSafeContext from '@/hooks/useSafeContext';
-import { CreateCourseContext } from './context/CreateCourseContext';
 
 interface Module {
     id: string;
@@ -17,12 +15,21 @@ interface ModuleItemProps {
     editMode: boolean;
     onToggleEditMode: (moduleId: string, editMode: boolean) => void;
     onUpdateModule: (updateModule: Module) => void;
+    deleteMode: boolean;
+    onToggleDeleteMode: (moduleId: string, editMode: boolean) => void;
+    onDelete: (id: string) => void;
 }
 
-const ModuleItem: React.FC<ModuleItemProps> = ({ module, index, editMode, onToggleEditMode, onUpdateModule }) => {
-    const { deletingModuleId, setDeletingModuleId, handleTrashButton, handleDeleteButton } =
-        useSafeContext(CreateCourseContext);
-    const isDeleting = deletingModuleId === module.id;
+const ModuleItem: React.FC<ModuleItemProps> = ({
+    module,
+    index,
+    editMode,
+    onToggleEditMode,
+    onUpdateModule,
+    deleteMode,
+    onToggleDeleteMode,
+    onDelete,
+}) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const [titleValue, setTitleValue] = useState('');
     const { t } = useTranslation();
@@ -72,19 +79,17 @@ const ModuleItem: React.FC<ModuleItemProps> = ({ module, index, editMode, onTogg
             </Col>
 
             <Col xs="auto" className="d-flex gap-3 px-1 ">
-                {isDeleting ? (
+                {deleteMode ? (
                     <>
                         <div className="__module-item-deleteButton">
-                            <Button
-                                size="sm"
-                                variant="link"
-                                className="p-0 m-0"
-                                onClick={() => handleDeleteButton(module.id)}
-                            >
+                            <Button size="sm" variant="link" className="p-0 m-0" onClick={() => onDelete(module.id)}>
                                 {t('views.common.delete')}
                             </Button>
                         </div>
-                        <div className="__module-item-cancelButton" onClick={() => setDeletingModuleId('')}>
+                        <div
+                            className="__module-item-cancelButton"
+                            onClick={() => onToggleDeleteMode(module.id, false)}
+                        >
                             <Button size="sm" variant="link" className="p-0 m-0">
                                 {t('views.common.cancel')}
                             </Button>
@@ -93,7 +98,7 @@ const ModuleItem: React.FC<ModuleItemProps> = ({ module, index, editMode, onTogg
                 ) : (
                     <>
                         <BsPencilSquare role="button" />
-                        <BsTrash role="button" onClick={() => handleTrashButton(module.id)} />
+                        <BsTrash role="button" onClick={() => onToggleDeleteMode(module.id, true)} />
                         <BsPlus role="button" />
                     </>
                 )}

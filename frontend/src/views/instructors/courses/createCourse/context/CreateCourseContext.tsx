@@ -16,9 +16,6 @@ type ContextType = {
     setModules: React.Dispatch<React.SetStateAction<Module[]>>;
     addModule: () => Module;
     updateModule: updateModuleFn;
-    deletingModuleId: string;
-    setDeletingModuleId: React.Dispatch<React.SetStateAction<string>>;
-    handleTrashButton: (id: string) => void;
     handleDeleteButton: (id: string) => void;
 };
 
@@ -62,15 +59,8 @@ const CreateCourseContextBoundary = ({ children }: Props) => {
 
     //Delete module
 
-    const [deletingModuleId, setDeletingModuleId] = useState('');
-
-    const handleTrashButton = (id: string) => {
-        setDeletingModuleId(id);
-    };
-
     const handleDeleteButton = (id: string) => {
         setModules((prev) => prev.filter((m) => m.id !== id));
-        setDeletingModuleId('');
     };
 
     const data: ContextType = {
@@ -78,9 +68,6 @@ const CreateCourseContextBoundary = ({ children }: Props) => {
         setModules,
         addModule,
         updateModule,
-        deletingModuleId,
-        setDeletingModuleId,
-        handleTrashButton,
         handleDeleteButton,
     };
 

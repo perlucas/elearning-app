@@ -23,21 +23,25 @@
         }
     }
     .__module-item-deleteButton {
-        text-transform: uppercase;
         .btn-link {
             color: $red;
             &:hover {
                 color: #d3031b;
             }
         }
+        Button {
+            text-transform: uppercase;
+        }
     }
     .__module-item-cancelButton {
-        text-transform: uppercase;
         .btn-link {
             color: $gray-900;
             &:hover {
                 color: $black;
             }
+        }
+        Button {
+            text-transform: uppercase;
         }
     }
 }
