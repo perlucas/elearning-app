@@ -10,9 +10,31 @@ import { useEffect, useRef, useState } from 'react';
 
 const CourseDetails = () => {
     const { t } = useTranslation();
-    const { modules, setModules, addModule, courseTitle, setCourseTitle, handleOnBlurTitle } =
-        useSafeContext(CreateCourseContext);
-    const [editingModuleId, setEditingModuleId] = useState('');
+    const {
+        modules,
+        setModules,
+        addModule,
+        updateModule,
+        handleDeleteButton,
+        courseTitle,
+        setCourseTitle,
+        handleOnBlurTitle,
+    } = useSafeContext(CreateCourseContext);
+    const [editModeMap, setEditModeMap] = useState<Record<string, boolean>>({});
+    const [deleteModeMap, setDeleteModeMap] = useState<Record<string, boolean>>({});
+
+    const toggleEditMode = (moduleId: string, editMode: boolean) => {
+        setEditModeMap((prev) => ({ ...prev, [moduleId]: editMode }));
+    };
+
+    const toggleDeleteMode = (moduleId: string, editMode: boolean) => {
+        setDeleteModeMap((prev) => ({ ...prev, [moduleId]: editMode }));
+    };
+
+    const handleAddModule = () => {
+        const newModule = addModule();
+        toggleEditMode(newModule.id, true);
+    };
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -23,11 +45,6 @@ const CourseDetails = () => {
             });
         }
     }, [courseTitle]);
-
-    const handleAddModule = () => {
-        const newModule = addModule();
-        setEditingModuleId(newModule.id);
-    };
 
     const handleKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
@@ -68,8 +85,12 @@ const CourseDetails = () => {
                                         module={mod}
                                         index={index}
                                         key={mod.id}
-                                        editingModuleId={editingModuleId}
-                                        setEditingModuleId={setEditingModuleId}
+                                        editMode={editModeMap[mod.id] || false}
+                                        onToggleEditMode={toggleEditMode}
+                                        onUpdateModule={updateModule}
+                                        deleteMode={deleteModeMap[mod.id] || false}
+                                        onToggleDeleteMode={toggleDeleteMode}
+                                        onDelete={handleDeleteButton}
                                     />
                                 ))
                             ) : (

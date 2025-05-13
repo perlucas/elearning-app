@@ -22,11 +22,8 @@ type ContextType = {
     modules: Module[];
     setModules: Setter<Module[]>;
     addModule: () => Module;
-    deletingModuleId: string;
-    setDeletingModuleId: Setter<string>;
     updateModule: updateModuleFn;
-    handleTrashButton: VoidStringFn;
-    handleDeleteButton: VoidStringFn;
+    handleDeleteButton: (id: string) => void;
     handleOnBlurTitle: VoidStringFn;
 };
 
@@ -76,15 +73,8 @@ const CreateCourseContextBoundary = ({ children }: Props) => {
 
     //Delete module
 
-    const [deletingModuleId, setDeletingModuleId] = useState('');
-
-    const handleTrashButton = (id: string) => {
-        setDeletingModuleId(id);
-    };
-
     const handleDeleteButton = (id: string) => {
         setModules((prev) => prev.filter((m) => m.id !== id));
-        setDeletingModuleId('');
     };
 
     const data: ContextType = {
@@ -92,9 +82,6 @@ const CreateCourseContextBoundary = ({ children }: Props) => {
         setModules,
         addModule,
         updateModule,
-        deletingModuleId,
-        setDeletingModuleId,
-        handleTrashButton,
         handleDeleteButton,
         courseTitle,
         setCourseTitle,

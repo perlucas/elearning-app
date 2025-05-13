@@ -10,13 +10,13 @@
                     "title": "Title",
                     "modules": "Modules",
                     "addModule": "Add Module",
-                    "noModules": "No modules yet",
-                    "moduleItem": {
-                        "delete": "Delete",
-                        "cancel": "Cancel"
-                    }
+                    "noModules": "No modules yet"
                 }
             }
+        },
+        "common": {
+            "delete": "Delete",
+            "cancel": "Cancel"
         }
     }
 }
