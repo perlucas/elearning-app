@@ -23,8 +23,8 @@ type ContextType = {
     setModules: Setter<Module[]>;
     addModule: () => Module;
     updateModule: updateModuleFn;
-    handleDeleteButton: (id: string) => void;
-    handleOnBlurTitle: VoidStringFn;
+    deleteModule: (id: string) => void;
+    changeCourseTitle: VoidStringFn;
 };
 
 export const CreateCourseContext = createContext<ContextType | undefined>(undefined);
@@ -32,7 +32,7 @@ export const CreateCourseContext = createContext<ContextType | undefined>(undefi
 const CreateCourseContextBoundary = ({ children }: Props) => {
     const [courseTitle, setCourseTitle] = useState('');
 
-    const handleOnBlurTitle = (value: string) => {
+    const changeCourseTitle = (value: string) => {
         setCourseTitle(value !== '' ? value : 'Untitled');
     };
 
@@ -73,7 +73,7 @@ const CreateCourseContextBoundary = ({ children }: Props) => {
 
     //Delete module
 
-    const handleDeleteButton = (id: string) => {
+    const deleteModule = (id: string) => {
         setModules((prev) => prev.filter((m) => m.id !== id));
     };
 
@@ -82,10 +82,10 @@ const CreateCourseContextBoundary = ({ children }: Props) => {
         setModules,
         addModule,
         updateModule,
-        handleDeleteButton,
+        deleteModule,
         courseTitle,
         setCourseTitle,
-        handleOnBlurTitle,
+        changeCourseTitle,
     };
 
     return <CreateCourseContext.Provider value={data}>{children}</CreateCourseContext.Provider>;

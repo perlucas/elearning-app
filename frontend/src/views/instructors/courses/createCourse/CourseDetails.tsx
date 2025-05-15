@@ -15,10 +15,10 @@ const CourseDetails = () => {
         setModules,
         addModule,
         updateModule,
-        handleDeleteButton,
+        deleteModule,
         courseTitle,
         setCourseTitle,
-        handleOnBlurTitle,
+        changeCourseTitle,
     } = useSafeContext(CreateCourseContext);
     const [editModeMap, setEditModeMap] = useState<Record<string, boolean>>({});
     const [deleteModeMap, setDeleteModeMap] = useState<Record<string, boolean>>({});
@@ -49,7 +49,7 @@ const CourseDetails = () => {
     const handleKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            handleOnBlurTitle(courseTitle);
+            changeCourseTitle(courseTitle);
             inputRef.current?.blur();
         }
     };
@@ -63,7 +63,7 @@ const CourseDetails = () => {
                     value={courseTitle}
                     ref={inputRef}
                     onChange={(e) => setCourseTitle(e.target.value)}
-                    onBlur={(e) => handleOnBlurTitle(e.target.value)}
+                    onBlur={(e) => changeCourseTitle(e.target.value)}
                     onKeyDown={handleKeydown}
                 />
             </div>
@@ -85,12 +85,12 @@ const CourseDetails = () => {
                                         module={mod}
                                         index={index}
                                         key={mod.id}
-                                        editMode={editModeMap[mod.id] || false}
-                                        onToggleEditMode={toggleEditMode}
+                                        isEditing={editModeMap[mod.id] || false}
+                                        toggleEditMode={toggleEditMode}
                                         onUpdateModule={updateModule}
-                                        deleteMode={deleteModeMap[mod.id] || false}
-                                        onToggleDeleteMode={toggleDeleteMode}
-                                        onDelete={handleDeleteButton}
+                                        isDeleting={deleteModeMap[mod.id] || false}
+                                        toggleDeleteMode={toggleDeleteMode}
+                                        onDeleteModule={deleteModule}
                                     />
                                 ))
                             ) : (
