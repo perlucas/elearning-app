@@ -10,7 +10,7 @@ import { useState } from 'react';
 
 const CourseDetails = () => {
     const { t } = useTranslation();
-    const { modules, setModules, addModule, updateModule, handleDeleteButton } = useSafeContext(CreateCourseContext);
+    const { modules, setModules, addModule, updateModule, deleteModule } = useSafeContext(CreateCourseContext);
     const [editModeMap, setEditModeMap] = useState<Record<string, boolean>>({});
     const [deleteModeMap, setDeleteModeMap] = useState<Record<string, boolean>>({});
 
@@ -52,12 +52,12 @@ const CourseDetails = () => {
                                         module={mod}
                                         index={index}
                                         key={mod.id}
-                                        editMode={editModeMap[mod.id] || false}
-                                        onToggleEditMode={toggleEditMode}
+                                        isEditing={editModeMap[mod.id] || false}
+                                        toggleEditMode={toggleEditMode}
                                         onUpdateModule={updateModule}
-                                        deleteMode={deleteModeMap[mod.id] || false}
-                                        onToggleDeleteMode={toggleDeleteMode}
-                                        onDelete={handleDeleteButton}
+                                        isDeleting={deleteModeMap[mod.id] || false}
+                                        toggleDeleteMode={toggleDeleteMode}
+                                        onDeleteModule={deleteModule}
                                     />
                                 ))
                             ) : (
