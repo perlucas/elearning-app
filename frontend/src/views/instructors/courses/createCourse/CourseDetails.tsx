@@ -2,7 +2,8 @@ import { BsPlusCircle } from 'react-icons/bs';
 import { FormControl, FormLabel, Button, Card, Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import ModuleItem from './ModuleItem';
-import { CreateCourseContext, Module } from './context/CreateCourseContext';
+import { CreateCourseContext } from './context/CreateCourseContext';
+import { Module, ModeMap } from '../types';
 import useSafeContext from '@/hooks/useSafeContext';
 import DraggableZone from '@/components/draggable/DraggableZone';
 import { Item } from '@/components/draggable/types';
@@ -20,8 +21,9 @@ const CourseDetails = () => {
         setCourseTitle,
         handleOnBlurTitle,
     } = useSafeContext(CreateCourseContext);
-    const [editModeMap, setEditModeMap] = useState<Record<string, boolean>>({});
-    const [deleteModeMap, setDeleteModeMap] = useState<Record<string, boolean>>({});
+    const [editModeMap, setEditModeMap] = useState<ModeMap>({});
+    const [deleteModeMap, setDeleteModeMap] = useState<ModeMap>({});
+    const [dropDownModeMap, setDropDownModeMap] = useState<ModeMap>({});
 
     const toggleEditMode = (moduleId: string, editMode: boolean) => {
         setEditModeMap((prev) => ({ ...prev, [moduleId]: editMode }));
@@ -29,6 +31,10 @@ const CourseDetails = () => {
 
     const toggleDeleteMode = (moduleId: string, editMode: boolean) => {
         setDeleteModeMap((prev) => ({ ...prev, [moduleId]: editMode }));
+    };
+
+    const toggleDropDownMode = (moduleId: string, editMode: boolean) => {
+        setDropDownModeMap((prev) => ({ ...prev, [moduleId]: editMode }));
     };
 
     const handleAddModule = () => {
@@ -91,6 +97,8 @@ const CourseDetails = () => {
                                         deleteMode={deleteModeMap[mod.id] || false}
                                         onToggleDeleteMode={toggleDeleteMode}
                                         onDelete={handleDeleteButton}
+                                        dropDownMode={dropDownModeMap[mod.id] || false}
+                                        onToggleDropDownMode={toggleDropDownMode}
                                     />
                                 ))
                             ) : (

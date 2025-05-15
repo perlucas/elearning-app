@@ -1,9 +1,5 @@
 import React, { createContext, ReactNode, useState } from 'react';
-
-export interface Module {
-    id: string;
-    title: string;
-}
+import { Module } from '../../types';
 
 type Props = {
     children: ReactNode;

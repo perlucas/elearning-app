@@ -1,18 +1,11 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { Col } from 'react-bootstrap';
+import { Module, ModuleItemProps } from '../types';
 
-interface Item {
-    id: string;
-    title: string;
-}
-
-interface ItemTitleProps {
-    item: Item;
-    index: number;
-    editMode: boolean;
-    onToggleEditMode: (moduleId: string, editMode: boolean) => void;
-    onUpdateItem: (updateModule: Item) => void;
-}
+type ItemTitleProps = Pick<ModuleItemProps, 'index' | 'editMode' | 'onToggleEditMode'> & {
+    item: Module;
+    onUpdateItem: ModuleItemProps['onUpdateModule'];
+};
 
 const ItemTitle: React.FC<ItemTitleProps> = ({ item, index, editMode, onToggleEditMode, onUpdateItem }) => {
     const inputRef = useRef<HTMLInputElement>(null);

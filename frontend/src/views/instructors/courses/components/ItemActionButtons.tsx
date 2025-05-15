@@ -2,19 +2,12 @@ import React, { ReactNode } from 'react';
 import { Button, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { BsPencilSquare, BsTrash } from 'react-icons/bs';
+import { ModuleItemProps, Module } from '../types';
 
-interface Item {
-    id: string;
-    title: string;
-}
-
-interface ItemActionButtonsProps {
-    item: Item;
-    deleteMode: boolean;
-    onToggleDeleteMode: (moduleId: string, editMode: boolean) => void;
-    onDelete: (id: string) => void;
+type ItemActionButtonsProps = Pick<ModuleItemProps, 'deleteMode' | 'onToggleDeleteMode' | 'onDelete'> & {
     children?: ReactNode;
-}
+    item: Module;
+};
 
 const ItemActionButtons: React.FC<ItemActionButtonsProps> = ({
     item,
