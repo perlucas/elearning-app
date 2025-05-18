@@ -15,11 +15,12 @@ const CourseDetails = () => {
         modules,
         setModules,
         addModule,
-        updateModule,
-        handleDeleteButton,
+        updateItem,
+        deleteItem,
         courseTitle,
         setCourseTitle,
-        handleOnBlurTitle,
+        changeCourseTitle,
+        idGenerator,
     } = useSafeContext(CreateCourseContext);
     const [editModeMap, setEditModeMap] = useState<ModeMap>({});
     const [deleteModeMap, setDeleteModeMap] = useState<ModeMap>({});
@@ -55,7 +56,7 @@ const CourseDetails = () => {
     const handleKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            handleOnBlurTitle(courseTitle);
+            changeCourseTitle(courseTitle);
             inputRef.current?.blur();
         }
     };
@@ -69,7 +70,7 @@ const CourseDetails = () => {
                     value={courseTitle}
                     ref={inputRef}
                     onChange={(e) => setCourseTitle(e.target.value)}
-                    onBlur={(e) => handleOnBlurTitle(e.target.value)}
+                    onBlur={(e) => changeCourseTitle(e.target.value)}
                     onKeyDown={handleKeydown}
                 />
             </div>
@@ -84,21 +85,25 @@ const CourseDetails = () => {
                 </div>
                 <Card className="p-0">
                     <DraggableZone items={modules} updateItems={(items: Item[]) => setModules(items as Module[])}>
-                        <Container fluid>
+                        <Container fluid className="p-0">
                             {modules.length > 0 ? (
                                 modules.map((mod, index) => (
                                     <ModuleItem
                                         module={mod}
                                         index={index}
                                         key={mod.id}
-                                        editMode={editModeMap[mod.id] || false}
-                                        onToggleEditMode={toggleEditMode}
-                                        onUpdateModule={updateModule}
-                                        deleteMode={deleteModeMap[mod.id] || false}
-                                        onToggleDeleteMode={toggleDeleteMode}
-                                        onDelete={handleDeleteButton}
-                                        dropDownMode={dropDownModeMap[mod.id] || false}
-                                        onToggleDropDownMode={toggleDropDownMode}
+                                        isEditing={editModeMap[mod.id] || false}
+                                        toggleEditMode={toggleEditMode}
+                                        onUpdateItem={updateItem}
+                                        isDeleting={deleteModeMap[mod.id] || false}
+                                        toggleDeleteMode={toggleDeleteMode}
+                                        onDeleteItem={deleteItem}
+                                        isDropDownOpen={dropDownModeMap[mod.id] || false}
+                                        toggleDropDownMode={toggleDropDownMode}
+                                        idGenerator={idGenerator}
+                                        editModeMap={editModeMap}
+                                        deleteModeMap={deleteModeMap}
+                                        setModules={setModules}
                                     />
                                 ))
                             ) : (

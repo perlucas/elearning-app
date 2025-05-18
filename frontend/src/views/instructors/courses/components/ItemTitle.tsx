@@ -1,18 +1,28 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { Col } from 'react-bootstrap';
-import { Module, ModuleItemProps } from '../types';
+import { Lecture, Module, ModuleItemProps } from '../types';
 
-type ItemTitleProps = Pick<ModuleItemProps, 'index' | 'editMode' | 'onToggleEditMode'> & {
-    item: Module;
-    onUpdateItem: ModuleItemProps['onUpdateModule'];
+type ItemTitleProps<T extends Module | Lecture> = Pick<
+    ModuleItemProps,
+    'index' | 'isEditing' | 'toggleEditMode' | 'onUpdateItem'
+> & {
+    item: T;
+    setItems: React.Dispatch<React.SetStateAction<T[]>>;
 };
 
-const ItemTitle: React.FC<ItemTitleProps> = ({ item, index, editMode, onToggleEditMode, onUpdateItem }) => {
+const ItemTitle = <T extends Module | Lecture>({
+    item,
+    index,
+    isEditing,
+    toggleEditMode,
+    onUpdateItem,
+    setItems,
+}: ItemTitleProps<T>) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const [titleValue, setTitleValue] = useState('');
 
     useLayoutEffect(() => {
-        if (editMode && inputRef.current) {
+        if (isEditing && inputRef.current) {
             const newValue = item.title;
             setTitleValue(newValue);
             requestAnimationFrame(() => {
@@ -20,18 +30,18 @@ const ItemTitle: React.FC<ItemTitleProps> = ({ item, index, editMode, onToggleEd
                 inputRef.current?.select();
             });
         }
-    }, [editMode]);
+    }, [isEditing]);
 
     const handleKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-            onUpdateItem({ ...item, title: titleValue });
-            onToggleEditMode(item.id, false);
+            onUpdateItem({ ...item, title: titleValue }, setItems);
+            toggleEditMode(item.id, false);
         }
     };
     return (
         <>
             <Col className="d-flex align-items-center px-1 flex-grow-1">
-                {editMode ? (
+                {isEditing ? (
                     <>
                         <span className="me-1">{index + 1}.</span>
                         <input
@@ -42,13 +52,13 @@ const ItemTitle: React.FC<ItemTitleProps> = ({ item, index, editMode, onToggleEd
                             onChange={(e) => setTitleValue(e.target.value)}
                             onKeyDown={handleKeydown}
                             onBlur={() => {
-                                onUpdateItem({ ...item, title: titleValue });
-                                onToggleEditMode(item.id, false);
+                                onUpdateItem({ ...item, title: titleValue }, setItems);
+                                toggleEditMode(item.id, false);
                             }}
                         />
                     </>
                 ) : (
-                    <span onDoubleClick={() => onToggleEditMode(item.id, true)}>{`${index + 1}. ${item.title}`}</span>
+                    <span onDoubleClick={() => toggleEditMode(item.id, true)}>{`${index + 1}. ${item.title}`}</span>
                 )}
             </Col>
         </>

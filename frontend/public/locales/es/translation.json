@@ -10,7 +10,9 @@
                     "title": "Título",
                     "modules": "Módulos",
                     "addModule": "Agregar Módulo",
-                    "noModules": "Aún no hay módulos"
+                    "noModules": "Aún no hay módulos",
+                    "addLecture": "Agregar clase",
+                    "noLectures": "Aún no hay clases"
                 }
             }
         },

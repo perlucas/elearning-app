@@ -1,12 +1,17 @@
 @use '@/assets/scss/style.scss' as *;
 
-.__draggable-item {
+.__draggable-item-darkGrey {
     background-color: $gray-300;
-    .__draggable-selection {
-        cursor: grab;
-        touch-action: none;
-        &:active {
-            cursor: grabbing;
-        }
+}
+
+.__draggable-item-lightGrey {
+    background-color: $gray-200;
+}
+
+.__draggable-selection {
+    cursor: grab;
+    touch-action: none;
+    &:active {
+        cursor: grabbing;
     }
 }
