@@ -1,7 +1,7 @@
 import DraggableItem from '@/components/draggable/DraggableItem';
 import ItemTitle from '../components/ItemTitle';
 import ItemActionButtons from '../components/ItemActionButtons';
-import { BsChevronDown, BsPlus, BsPlusCircle } from 'react-icons/bs';
+import { BsDash, BsPlus, BsPlusCircle } from 'react-icons/bs';
 import { ModuleItemProps, Lecture, Module } from '../types';
 import DraggableZone from '@/components/draggable/DraggableZone';
 import { Button, Col, Row } from 'react-bootstrap';
@@ -67,7 +67,7 @@ const ModuleItem: React.FC<ModuleItemProps> = ({
                     setItems={setModules}
                 >
                     {isDropDownOpen ? (
-                        <BsChevronDown role="button" onClick={() => toggleDropDownMode(module.id, false)} />
+                        <BsDash role="button" onClick={() => toggleDropDownMode(module.id, false)} />
                     ) : (
                         <BsPlus role="button" onClick={() => toggleDropDownMode(module.id, true)} />
                     )}
