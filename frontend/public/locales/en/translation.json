@@ -13,6 +13,10 @@
                     "noModules": "No modules yet"
                 }
             }
+        },
+        "common": {
+            "delete": "Delete",
+            "cancel": "Cancel"
         }
     }
 }

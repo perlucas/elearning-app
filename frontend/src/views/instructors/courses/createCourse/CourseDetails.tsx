@@ -10,10 +10,16 @@ import { useState } from 'react';
 
 const CourseDetails = () => {
     const { t } = useTranslation();
-    const { modules, setModules, addModule, updateModule } = useSafeContext(CreateCourseContext);
+    const { modules, setModules, addModule, updateModule, deleteModule } = useSafeContext(CreateCourseContext);
     const [editModeMap, setEditModeMap] = useState<Record<string, boolean>>({});
+    const [deleteModeMap, setDeleteModeMap] = useState<Record<string, boolean>>({});
+
     const toggleEditMode = (moduleId: string, editMode: boolean) => {
         setEditModeMap((prev) => ({ ...prev, [moduleId]: editMode }));
+    };
+
+    const toggleDeleteMode = (moduleId: string, editMode: boolean) => {
+        setDeleteModeMap((prev) => ({ ...prev, [moduleId]: editMode }));
     };
 
     const handleAddModule = () => {
@@ -46,9 +52,12 @@ const CourseDetails = () => {
                                         module={mod}
                                         index={index}
                                         key={mod.id}
-                                        editMode={editModeMap[mod.id] || false}
-                                        onToggleEditMode={toggleEditMode}
+                                        isEditing={editModeMap[mod.id] || false}
+                                        toggleEditMode={toggleEditMode}
                                         onUpdateModule={updateModule}
+                                        isDeleting={deleteModeMap[mod.id] || false}
+                                        toggleDeleteMode={toggleDeleteMode}
+                                        onDeleteModule={deleteModule}
                                     />
                                 ))
                             ) : (

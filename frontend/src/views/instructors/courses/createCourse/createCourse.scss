@@ -22,4 +22,26 @@
             border-bottom: 1.5px solid $black;
         }
     }
+    .__module-item-deleteButton {
+        .btn-link {
+            color: $red;
+            &:hover {
+                color: #d3031b;
+            }
+        }
+        Button {
+            text-transform: uppercase;
+        }
+    }
+    .__module-item-cancelButton {
+        .btn-link {
+            color: $gray-900;
+            &:hover {
+                color: $black;
+            }
+        }
+        Button {
+            text-transform: uppercase;
+        }
+    }
 }

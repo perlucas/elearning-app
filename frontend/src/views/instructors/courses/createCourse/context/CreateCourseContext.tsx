@@ -16,6 +16,7 @@ type ContextType = {
     setModules: React.Dispatch<React.SetStateAction<Module[]>>;
     addModule: () => Module;
     updateModule: updateModuleFn;
+    deleteModule: (id: string) => void;
 };
 
 export const CreateCourseContext = createContext<ContextType | undefined>(undefined);
@@ -56,11 +57,18 @@ const CreateCourseContextBoundary = ({ children }: Props) => {
         });
     };
 
+    //Delete module
+
+    const deleteModule = (id: string) => {
+        setModules((prev) => prev.filter((m) => m.id !== id));
+    };
+
     const data: ContextType = {
         modules,
         setModules,
         addModule,
         updateModule,
+        deleteModule,
     };
 
     return <CreateCourseContext.Provider value={data}>{children}</CreateCourseContext.Provider>;
