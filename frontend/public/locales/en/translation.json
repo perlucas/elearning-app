@@ -12,7 +12,9 @@
                     "addModule": "Add Module",
                     "noModules": "No modules yet",
                     "addLecture": "Add Lecture",
-                    "noLectures": "No lectures yet"
+                    "noLectures": "No lectures yet",
+                    "moduleDetails": "Module details",
+                    "backToCourse": "Back to course"
                 }
             }
         },
