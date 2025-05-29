@@ -11,17 +11,31 @@ type Props = {
 
 type updateModuleFn = (updatedModule: Module) => void;
 
+type Setter<T> = React.Dispatch<React.SetStateAction<T>>;
+
+type VoidStringFn = (t: string) => void;
+
 type ContextType = {
+    courseTitle: string;
+    setCourseTitle: Setter<string>;
+
     modules: Module[];
-    setModules: React.Dispatch<React.SetStateAction<Module[]>>;
+    setModules: Setter<Module[]>;
     addModule: () => Module;
     updateModule: updateModuleFn;
     deleteModule: (id: string) => void;
+    changeCourseTitle: VoidStringFn;
 };
 
 export const CreateCourseContext = createContext<ContextType | undefined>(undefined);
 
 const CreateCourseContextBoundary = ({ children }: Props) => {
+    const [courseTitle, setCourseTitle] = useState('');
+
+    const changeCourseTitle = (value: string) => {
+        setCourseTitle(value !== '' ? value : 'Untitled');
+    };
+
     const [modules, setModules] = useState<Module[]>([
         { id: '1', title: 'REST principles 01' },
         { id: '2', title: 'REST principles 02' },
@@ -69,6 +83,9 @@ const CreateCourseContextBoundary = ({ children }: Props) => {
         addModule,
         updateModule,
         deleteModule,
+        courseTitle,
+        setCourseTitle,
+        changeCourseTitle,
     };
 
     return <CreateCourseContext.Provider value={data}>{children}</CreateCourseContext.Provider>;
