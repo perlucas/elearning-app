@@ -25,6 +25,7 @@ const ModuleItem: React.FC<ModuleItemProps> = ({
     editModeMap,
     deleteModeMap,
     setModules,
+    setEditingViewItem,
 }) => {
     const { t } = useTranslation();
     const [lectures, setLectures] = useState<Lecture[]>(module.lectures);
@@ -61,10 +62,12 @@ const ModuleItem: React.FC<ModuleItemProps> = ({
                 />
                 <ItemActionButtons<Module>
                     item={module}
+                    itemType="module"
                     isDeleting={isDeleting}
                     toggleDeleteMode={toggleDeleteMode}
                     onDeleteItem={onDeleteItem}
                     setItems={setModules}
+                    setEditingViewItem={setEditingViewItem}
                 >
                     {isDropDownOpen ? (
                         <BsDash role="button" onClick={() => toggleDropDownMode(module.id, false)} />
@@ -89,6 +92,7 @@ const ModuleItem: React.FC<ModuleItemProps> = ({
                                     onDeleteItem={onDeleteItem}
                                     onUpdateItem={onUpdateItem}
                                     setItems={setLectures}
+                                    setEditingViewItem={setEditingViewItem}
                                 />
                             ))
                         ) : (

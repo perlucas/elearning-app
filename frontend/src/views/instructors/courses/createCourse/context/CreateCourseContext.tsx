@@ -1,11 +1,9 @@
-import React, { createContext, ReactNode, useState } from 'react';
-import { Module, Lecture } from '../../types';
+import { createContext, ReactNode, useState } from 'react';
+import { Module, Lecture, Setter, EditTarget } from '../../types';
 
 type Props = {
     children: ReactNode;
 };
-
-type Setter<T> = React.Dispatch<React.SetStateAction<T>>;
 
 type updateItemFn = <T extends Module | Lecture>(updatedItem: T, setItems: Setter<T[]>) => void;
 type deleteItemFn = <T extends Module | Lecture>(id: string, setItems: Setter<T[]>) => void;
@@ -22,6 +20,8 @@ type ContextType = {
     deleteItem: deleteItemFn;
     changeCourseTitle: VoidStringFn;
     idGenerator: () => string;
+    editingViewItem: EditTarget;
+    setEditingViewItem: Setter<EditTarget>;
 };
 
 export const CreateCourseContext = createContext<ContextType | undefined>(undefined);
@@ -75,6 +75,8 @@ const CreateCourseContextBoundary = ({ children }: Props) => {
         setItems((prev) => prev.filter((m) => m.id !== id));
     };
 
+    const [editingViewItem, setEditingViewItem] = useState<EditTarget>(null);
+
     const data: ContextType = {
         modules,
         setModules,
@@ -85,6 +87,8 @@ const CreateCourseContextBoundary = ({ children }: Props) => {
         setCourseTitle,
         changeCourseTitle,
         idGenerator,
+        editingViewItem,
+        setEditingViewItem,
     };
 
     return <CreateCourseContext.Provider value={data}>{children}</CreateCourseContext.Provider>;

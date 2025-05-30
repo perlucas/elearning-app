@@ -3,11 +3,12 @@ import { FormControl, FormLabel, Button, Card, Container } from 'react-bootstrap
 import { useTranslation } from 'react-i18next';
 import ModuleItem from './ModuleItem';
 import { CreateCourseContext } from './context/CreateCourseContext';
-import { Module, ModeMap } from '../types';
+import { Module } from '../types';
 import useSafeContext from '@/hooks/useSafeContext';
 import DraggableZone from '@/components/draggable/DraggableZone';
 import { Item } from '@/components/draggable/types';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
+import useModeMap from '@/hooks/useModeMap';
 
 const CourseDetails = () => {
     const { t } = useTranslation();
@@ -21,22 +22,11 @@ const CourseDetails = () => {
         setCourseTitle,
         changeCourseTitle,
         idGenerator,
+        setEditingViewItem,
     } = useSafeContext(CreateCourseContext);
-    const [editModeMap, setEditModeMap] = useState<ModeMap>({});
-    const [deleteModeMap, setDeleteModeMap] = useState<ModeMap>({});
-    const [dropDownModeMap, setDropDownModeMap] = useState<ModeMap>({});
-
-    const toggleEditMode = (moduleId: string, editMode: boolean) => {
-        setEditModeMap((prev) => ({ ...prev, [moduleId]: editMode }));
-    };
-
-    const toggleDeleteMode = (moduleId: string, editMode: boolean) => {
-        setDeleteModeMap((prev) => ({ ...prev, [moduleId]: editMode }));
-    };
-
-    const toggleDropDownMode = (moduleId: string, editMode: boolean) => {
-        setDropDownModeMap((prev) => ({ ...prev, [moduleId]: editMode }));
-    };
+    const { modeMap: editModeMap, toggleMode: toggleEditMode } = useModeMap();
+    const { modeMap: deleteModeMap, toggleMode: toggleDeleteMode } = useModeMap();
+    const { modeMap: dropDownModeMap, toggleMode: toggleDropDownMode } = useModeMap();
 
     const handleAddModule = () => {
         const newModule = addModule();
@@ -104,6 +94,7 @@ const CourseDetails = () => {
                                         editModeMap={editModeMap}
                                         deleteModeMap={deleteModeMap}
                                         setModules={setModules}
+                                        setEditingViewItem={setEditingViewItem}
                                     />
                                 ))
                             ) : (

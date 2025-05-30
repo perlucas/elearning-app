@@ -5,7 +5,14 @@ import ItemActionButtons from '../components/ItemActionButtons';
 
 type LectureItemProps = Pick<
     ModuleItemProps,
-    'index' | 'isEditing' | 'toggleEditMode' | 'isDeleting' | 'toggleDeleteMode' | 'onUpdateItem' | 'onDeleteItem'
+    | 'index'
+    | 'isEditing'
+    | 'toggleEditMode'
+    | 'isDeleting'
+    | 'toggleDeleteMode'
+    | 'onUpdateItem'
+    | 'onDeleteItem'
+    | 'setEditingViewItem'
 > & {
     lecture: Lecture;
     setItems: React.Dispatch<React.SetStateAction<Lecture[]>>;
@@ -21,6 +28,7 @@ const LectureItem: React.FC<LectureItemProps> = ({
     onUpdateItem,
     setItems,
     onDeleteItem,
+    setEditingViewItem,
 }) => {
     return (
         <>
@@ -35,10 +43,12 @@ const LectureItem: React.FC<LectureItemProps> = ({
                 />
                 <ItemActionButtons<Lecture>
                     item={lecture}
+                    itemType="lecture"
                     isDeleting={isDeleting}
                     toggleDeleteMode={toggleDeleteMode}
                     onDeleteItem={onDeleteItem}
                     setItems={setItems}
+                    setEditingViewItem={setEditingViewItem}
                 ></ItemActionButtons>
             </DraggableItem>
         </>

@@ -9,18 +9,23 @@
                     "publishing": "Publishing",
                     "title": "Title",
                     "modules": "Modules",
+                    "lectures": "Lectures",
                     "addModule": "Add Module",
                     "noModules": "No modules yet",
                     "addLecture": "Add Lecture",
                     "noLectures": "No lectures yet",
+                    "editModule": "Edit Module",
                     "moduleDetails": "Module details",
-                    "backToCourse": "Back to course"
+                    "backToCourse": "Back to course",
+                    "editLecture": "Edit Lecture",
+                    "lectureDetails": "Lecture details"
                 }
             }
         },
         "common": {
             "delete": "Delete",
-            "cancel": "Cancel"
+            "cancel": "Cancel",
+            "content": "Content"
         }
     }
 }

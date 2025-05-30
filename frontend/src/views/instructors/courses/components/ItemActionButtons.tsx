@@ -6,20 +6,23 @@ import { ModuleItemProps, Module, Lecture } from '../types';
 
 type ItemActionButtonsProps<T extends Module | Lecture> = Pick<
     ModuleItemProps,
-    'isDeleting' | 'toggleDeleteMode' | 'onDeleteItem'
+    'isDeleting' | 'toggleDeleteMode' | 'onDeleteItem' | 'setEditingViewItem'
 > & {
     children?: ReactNode;
     item: T;
+    itemType: 'module' | 'lecture';
     setItems: React.Dispatch<React.SetStateAction<T[]>>;
 };
 
 const ItemActionButtons = <T extends Module | Lecture>({
     item,
+    itemType,
     isDeleting,
     toggleDeleteMode,
     onDeleteItem,
     children,
     setItems,
+    setEditingViewItem,
 }: ItemActionButtonsProps<T>) => {
     const { t } = useTranslation();
     return (
@@ -45,7 +48,10 @@ const ItemActionButtons = <T extends Module | Lecture>({
                     </>
                 ) : (
                     <>
-                        <BsPencilSquare role="button" />
+                        <BsPencilSquare
+                            role="button"
+                            onClick={() => setEditingViewItem({ id: item.id, type: itemType })}
+                        />
                         <BsTrash role="button" onClick={() => toggleDeleteMode(item.id, true)} />
                         {children}
                     </>
