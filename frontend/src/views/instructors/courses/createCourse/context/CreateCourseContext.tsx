@@ -1,30 +1,27 @@
 import React, { createContext, ReactNode, useState } from 'react';
-
-export interface Module {
-    id: string;
-    title: string;
-}
+import { Module, Lecture } from '../../types';
 
 type Props = {
     children: ReactNode;
 };
 
-type updateModuleFn = (updatedModule: Module) => void;
-
 type Setter<T> = React.Dispatch<React.SetStateAction<T>>;
+
+type updateItemFn = <T extends Module | Lecture>(updatedItem: T, setItems: Setter<T[]>) => void;
+type deleteItemFn = <T extends Module | Lecture>(id: string, setItems: Setter<T[]>) => void;
 
 type VoidStringFn = (t: string) => void;
 
 type ContextType = {
     courseTitle: string;
     setCourseTitle: Setter<string>;
-
     modules: Module[];
     setModules: Setter<Module[]>;
     addModule: () => Module;
-    updateModule: updateModuleFn;
-    deleteModule: (id: string) => void;
+    updateItem: updateItemFn;
+    deleteItem: deleteItemFn;
     changeCourseTitle: VoidStringFn;
+    idGenerator: () => string;
 };
 
 export const CreateCourseContext = createContext<ContextType | undefined>(undefined);
@@ -37,9 +34,9 @@ const CreateCourseContextBoundary = ({ children }: Props) => {
     };
 
     const [modules, setModules] = useState<Module[]>([
-        { id: '1', title: 'REST principles 01' },
-        { id: '2', title: 'REST principles 02' },
-        { id: '3', title: 'REST principles 03' },
+        { id: '1', title: 'REST principles 01', lectures: [] },
+        { id: '2', title: 'REST principles 02', lectures: [] },
+        { id: '3', title: 'REST principles 03', lectures: [] },
     ]);
 
     //Provisional function
@@ -52,40 +49,42 @@ const CreateCourseContextBoundary = ({ children }: Props) => {
         const newModule: Module = {
             id,
             title: 'Untitled',
+            lectures: [],
         };
         setModules((prev) => [...prev, newModule]);
         return newModule;
     };
 
-    const updateModule: updateModuleFn = (updatedModule) => {
-        if (updatedModule.title === '') {
-            updatedModule.title = 'Untitled';
+    const updateItem: updateItemFn = (updatedItem, setItems) => {
+        if (updatedItem.title === '') {
+            updatedItem.title = 'Untitled';
         }
-        setModules((prev) => {
-            const updatedModules = [...prev];
-            const index = updatedModules.findIndex((m) => m.id === updatedModule.id);
+        setItems((prev) => {
+            const updatedItems = [...prev];
+            const index = updatedItems.findIndex((m) => m.id === updatedItem.id);
             if (index !== -1) {
-                updatedModules.splice(index, 1, updatedModule);
+                updatedItems.splice(index, 1, updatedItem);
             }
-            return updatedModules;
+            return updatedItems;
         });
     };
 
     //Delete module
 
-    const deleteModule = (id: string) => {
-        setModules((prev) => prev.filter((m) => m.id !== id));
+    const deleteItem: deleteItemFn = (id, setItems) => {
+        setItems((prev) => prev.filter((m) => m.id !== id));
     };
 
     const data: ContextType = {
         modules,
         setModules,
         addModule,
-        updateModule,
-        deleteModule,
+        updateItem,
+        deleteItem,
         courseTitle,
         setCourseTitle,
         changeCourseTitle,
+        idGenerator,
     };
 
     return <CreateCourseContext.Provider value={data}>{children}</CreateCourseContext.Provider>;
