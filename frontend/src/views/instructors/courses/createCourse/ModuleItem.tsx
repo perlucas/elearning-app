@@ -13,21 +13,18 @@ import LectureItem from './LectureItem';
 const ModuleItem: React.FC<ModuleItemProps> = ({
     module,
     index,
-    isEditing,
-    toggleEditMode,
     onUpdateItem,
-    isDeleting,
-    toggleDeleteMode,
     onDeleteItem,
-    isDropDownOpen,
-    toggleDropDownMode,
     idGenerator,
-    editModeMap,
-    deleteModeMap,
     setModules,
+    isNewModule = false,
 }) => {
     const { t } = useTranslation();
     const [lectures, setLectures] = useState<Lecture[]>(module.lectures);
+    const [isEditing, setIsEditing] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [isDropDownOpen, setIsDropDownOpen] = useState(false);
+    const [newLectureId, setNewLectureId] = useState<string | null>(null);
 
     const addLecture = () => {
         const id = idGenerator();
@@ -41,12 +38,18 @@ const ModuleItem: React.FC<ModuleItemProps> = ({
 
     const handleAddLecture = () => {
         const newLecture = addLecture();
-        toggleEditMode(newLecture.id, true);
+        setNewLectureId(newLecture.id);
     };
 
     useEffect(() => {
         onUpdateItem({ ...module, lectures }, setModules);
     }, [lectures]);
+
+    useEffect(() => {
+        if (isNewModule) {
+            setIsEditing(true);
+        }
+    }, [isNewModule]);
 
     return (
         <>
@@ -55,21 +58,19 @@ const ModuleItem: React.FC<ModuleItemProps> = ({
                     item={module}
                     index={index}
                     isEditing={isEditing}
-                    toggleEditMode={toggleEditMode}
-                    onUpdateItem={onUpdateItem}
-                    setItems={setModules}
+                    toggleEditMode={setIsEditing}
+                    onUpdateItem={(updatedItem) => onUpdateItem(updatedItem, setModules)}
                 />
                 <ItemActionButtons<Module>
                     item={module}
                     isDeleting={isDeleting}
-                    toggleDeleteMode={toggleDeleteMode}
-                    onDeleteItem={onDeleteItem}
-                    setItems={setModules}
+                    toggleDeleteMode={setIsDeleting}
+                    onDeleteItem={(itemId) => onDeleteItem(itemId, setModules)}
                 >
                     {isDropDownOpen ? (
-                        <BsDash role="button" onClick={() => toggleDropDownMode(module.id, false)} />
+                        <BsDash role="button" onClick={() => setIsDropDownOpen(false)} />
                     ) : (
-                        <BsPlus role="button" onClick={() => toggleDropDownMode(module.id, true)} />
+                        <BsPlus role="button" onClick={() => setIsDropDownOpen(true)} />
                     )}
                 </ItemActionButtons>
             </DraggableItem>
@@ -82,13 +83,10 @@ const ModuleItem: React.FC<ModuleItemProps> = ({
                                     key={lect.id}
                                     lecture={lect}
                                     index={index}
-                                    isEditing={editModeMap[lect.id] || false}
-                                    toggleEditMode={toggleEditMode}
-                                    isDeleting={deleteModeMap[lect.id] || false}
-                                    toggleDeleteMode={toggleDeleteMode}
                                     onDeleteItem={onDeleteItem}
                                     onUpdateItem={onUpdateItem}
-                                    setItems={setLectures}
+                                    setLectures={setLectures}
+                                    isNewLecture={lect.id === newLectureId}
                                 />
                             ))
                         ) : (
