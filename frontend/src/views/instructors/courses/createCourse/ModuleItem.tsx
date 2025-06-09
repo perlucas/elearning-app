@@ -1,114 +1,113 @@
-import { Button, Col } from 'react-bootstrap';
-import { BsPencilSquare, BsPlus, BsTrash } from 'react-icons/bs';
 import DraggableItem from '@/components/draggable/DraggableItem';
-import { useLayoutEffect, useRef, useState } from 'react';
+import ItemTitle from '../components/ItemTitle';
+import ItemActionButtons from '../components/ItemActionButtons';
+import { BsDash, BsPlus, BsPlusCircle } from 'react-icons/bs';
+import { ModuleItemProps, Lecture, Module } from '../types';
+import DraggableZone from '@/components/draggable/DraggableZone';
+import { Button, Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-
-interface Module {
-    id: string;
-    title: string;
-}
-
-interface ModuleItemProps {
-    module: Module;
-    index: number;
-    isEditing: boolean;
-    toggleEditMode: (moduleId: string, isEditing: boolean) => void;
-    onUpdateModule: (updateModule: Module) => void;
-    isDeleting: boolean;
-    toggleDeleteMode: (moduleId: string, isEditing: boolean) => void;
-    onDeleteModule: (id: string) => void;
-}
+import { useEffect, useState } from 'react';
+import { Item } from '@/components/draggable/types';
+import LectureItem from './LectureItem';
 
 const ModuleItem: React.FC<ModuleItemProps> = ({
     module,
     index,
-    isEditing,
-    toggleEditMode,
-    onUpdateModule,
-    isDeleting,
-    toggleDeleteMode,
-    onDeleteModule,
+    onUpdateItem,
+    onDeleteItem,
+    idGenerator,
+    setModules,
+    isNewModule = false,
 }) => {
-    const inputRef = useRef<HTMLInputElement>(null);
-    const [titleValue, setTitleValue] = useState('');
     const { t } = useTranslation();
+    const [lectures, setLectures] = useState<Lecture[]>(module.lectures);
+    const [isEditing, setIsEditing] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [isDropDownOpen, setIsDropDownOpen] = useState(false);
+    const [newLectureId, setNewLectureId] = useState<string | null>(null);
 
-    useLayoutEffect(() => {
-        if (isEditing && inputRef.current) {
-            const newValue = module.title;
-            setTitleValue(newValue);
-            requestAnimationFrame(() => {
-                inputRef.current?.focus();
-                inputRef.current?.select();
-            });
-        }
-    }, [isEditing]);
-
-    const handleKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-            onUpdateModule({ ...module, title: titleValue });
-            toggleEditMode(module.id, false);
-        }
+    const addLecture = () => {
+        const id = idGenerator();
+        const newLecture: Lecture = {
+            id,
+            title: 'Untitled',
+        };
+        setLectures((prev) => [...prev, newLecture]);
+        return newLecture;
     };
 
-    return (
-        <DraggableItem item={module}>
-            <Col className="d-flex align-items-center px-1 flex-grow-1">
-                {isEditing ? (
-                    <>
-                        <span className="me-1">{index + 1}.</span>
-                        <input
-                            type="text"
-                            className="w-100 __module-item-input"
-                            ref={inputRef}
-                            value={titleValue}
-                            onChange={(e) => setTitleValue(e.target.value)}
-                            onKeyDown={handleKeydown}
-                            onBlur={() => {
-                                onUpdateModule({ ...module, title: titleValue });
-                                toggleEditMode(module.id, false);
-                            }}
-                        />
-                    </>
-                ) : (
-                    <span onDoubleClick={() => toggleEditMode(module.id, true)}>{`${index + 1}. ${module.title}`}</span>
-                )}
-            </Col>
+    const handleAddLecture = () => {
+        const newLecture = addLecture();
+        setNewLectureId(newLecture.id);
+    };
 
-            <Col xs="auto" className="d-flex gap-3 px-1 ">
-                {isDeleting ? (
-                    <>
-                        <div className="__module-item-deleteButton">
+    useEffect(() => {
+        onUpdateItem({ ...module, lectures }, setModules);
+    }, [lectures]);
+
+    useEffect(() => {
+        if (isNewModule) {
+            setIsEditing(true);
+        }
+    }, [isNewModule]);
+
+    return (
+        <>
+            <DraggableItem item={module} itemClass={'__draggable-item-darkGrey'}>
+                <ItemTitle<Module>
+                    item={module}
+                    index={index}
+                    isEditing={isEditing}
+                    toggleEditMode={setIsEditing}
+                    onUpdateItem={(updatedItem) => onUpdateItem(updatedItem, setModules)}
+                />
+                <ItemActionButtons<Module>
+                    item={module}
+                    isDeleting={isDeleting}
+                    toggleDeleteMode={setIsDeleting}
+                    onDeleteItem={(itemId) => onDeleteItem(itemId, setModules)}
+                >
+                    {isDropDownOpen ? (
+                        <BsDash role="button" onClick={() => setIsDropDownOpen(false)} />
+                    ) : (
+                        <BsPlus role="button" onClick={() => setIsDropDownOpen(true)} />
+                    )}
+                </ItemActionButtons>
+            </DraggableItem>
+            {isDropDownOpen && (
+                <div className="ms-5">
+                    <DraggableZone items={lectures} updateItems={(items: Item[]) => setLectures(items as Lecture[])}>
+                        {lectures.length > 0 ? (
+                            lectures.map((lect, index) => (
+                                <LectureItem
+                                    key={lect.id}
+                                    lecture={lect}
+                                    index={index}
+                                    onDeleteItem={onDeleteItem}
+                                    onUpdateItem={onUpdateItem}
+                                    setLectures={setLectures}
+                                    isNewLecture={lect.id === newLectureId}
+                                />
+                            ))
+                        ) : (
+                            <p>{t('views.instructors.courses.createCourse.noLectures')}</p>
+                        )}
+                    </DraggableZone>
+                    <Row className="p-0">
+                        <Col>
                             <Button
                                 size="sm"
-                                variant="link"
-                                className="p-0 m-0"
-                                onClick={() => onDeleteModule(module.id)}
+                                className="d-flex align-items-center gap-2 m-0"
+                                onClick={handleAddLecture}
                             >
-                                {t('views.common.delete')}
+                                <BsPlusCircle />
+                                {t('views.instructors.courses.createCourse.addLecture')}
                             </Button>
-                        </div>
-                        <div className="__module-item-cancelButton">
-                            <Button
-                                size="sm"
-                                variant="link"
-                                className="p-0 m-0"
-                                onClick={() => toggleDeleteMode(module.id, false)}
-                            >
-                                {t('views.common.cancel')}
-                            </Button>
-                        </div>
-                    </>
-                ) : (
-                    <>
-                        <BsPencilSquare role="button" />
-                        <BsTrash role="button" onClick={() => toggleDeleteMode(module.id, true)} />
-                        <BsPlus role="button" />
-                    </>
-                )}
-            </Col>
-        </DraggableItem>
+                        </Col>
+                    </Row>
+                </div>
+            )}
+        </>
     );
 };
 

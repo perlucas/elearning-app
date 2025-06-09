@@ -1,12 +1,13 @@
-import { BsPlusCircle } from 'react-icons/bs';
 import { FormControl, FormLabel, Button, Card, Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import ModuleItem from './ModuleItem';
-import { CreateCourseContext, Module } from './context/CreateCourseContext';
+import { CreateCourseContext } from './context/CreateCourseContext';
+import { Module } from '../types';
 import useSafeContext from '@/hooks/useSafeContext';
 import DraggableZone from '@/components/draggable/DraggableZone';
 import { Item } from '@/components/draggable/types';
 import { useEffect, useRef, useState } from 'react';
+import { BsPlusCircle } from 'react-icons/bs';
 
 const CourseDetails = () => {
     const { t } = useTranslation();
@@ -14,26 +15,19 @@ const CourseDetails = () => {
         modules,
         setModules,
         addModule,
-        updateModule,
-        deleteModule,
+        updateItem,
+        deleteItem,
         courseTitle,
         setCourseTitle,
         changeCourseTitle,
+        idGenerator,
     } = useSafeContext(CreateCourseContext);
-    const [editModeMap, setEditModeMap] = useState<Record<string, boolean>>({});
-    const [deleteModeMap, setDeleteModeMap] = useState<Record<string, boolean>>({});
 
-    const toggleEditMode = (moduleId: string, editMode: boolean) => {
-        setEditModeMap((prev) => ({ ...prev, [moduleId]: editMode }));
-    };
-
-    const toggleDeleteMode = (moduleId: string, editMode: boolean) => {
-        setDeleteModeMap((prev) => ({ ...prev, [moduleId]: editMode }));
-    };
+    const [newModuleId, setNewModuleId] = useState<string | null>(null);
 
     const handleAddModule = () => {
         const newModule = addModule();
-        toggleEditMode(newModule.id, true);
+        setNewModuleId(newModule.id);
     };
 
     const inputRef = useRef<HTMLInputElement>(null);
@@ -45,6 +39,12 @@ const CourseDetails = () => {
             });
         }
     }, [courseTitle]);
+
+    useEffect(() => {
+        if (newModuleId) {
+            setNewModuleId(null);
+        }
+    }, [modules]);
 
     const handleKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
@@ -78,19 +78,18 @@ const CourseDetails = () => {
                 </div>
                 <Card className="p-0">
                     <DraggableZone items={modules} updateItems={(items: Item[]) => setModules(items as Module[])}>
-                        <Container fluid>
+                        <Container fluid className="p-0">
                             {modules.length > 0 ? (
                                 modules.map((mod, index) => (
                                     <ModuleItem
                                         module={mod}
                                         index={index}
                                         key={mod.id}
-                                        isEditing={editModeMap[mod.id] || false}
-                                        toggleEditMode={toggleEditMode}
-                                        onUpdateModule={updateModule}
-                                        isDeleting={deleteModeMap[mod.id] || false}
-                                        toggleDeleteMode={toggleDeleteMode}
-                                        onDeleteModule={deleteModule}
+                                        onUpdateItem={updateItem}
+                                        onDeleteItem={deleteItem}
+                                        idGenerator={idGenerator}
+                                        setModules={setModules}
+                                        isNewModule={mod.id === newModuleId}
                                     />
                                 ))
                             ) : (
