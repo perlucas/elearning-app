@@ -14,7 +14,7 @@ const LectureDetails = () => {
             </div>
 
             <section>
-                <div className="d-flex flex-row justify-content-between">
+                <div className="d-flex flex-row justify-content-between border-bottom mb-3 pb-2">
                     <h3>{t('views.common.content')}</h3>
                 </div>
             </section>
