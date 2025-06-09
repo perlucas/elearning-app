@@ -1,4 +1,3 @@
-import { BsPlusCircle } from 'react-icons/bs';
 import { FormControl, FormLabel, Button, Card, Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import ModuleItem from './ModuleItem';
@@ -7,8 +6,8 @@ import { Module } from '../types';
 import useSafeContext from '@/hooks/useSafeContext';
 import DraggableZone from '@/components/draggable/DraggableZone';
 import { Item } from '@/components/draggable/types';
-import { useEffect, useRef } from 'react';
-import useModeMap from '@/hooks/useModeMap';
+import { useEffect, useRef, useState } from 'react';
+import { BsPlusCircle } from 'react-icons/bs';
 
 const CourseDetails = () => {
     const { t } = useTranslation();
@@ -24,13 +23,12 @@ const CourseDetails = () => {
         idGenerator,
         setEditingViewItem,
     } = useSafeContext(CreateCourseContext);
-    const { modeMap: editModeMap, toggleMode: toggleEditMode } = useModeMap();
-    const { modeMap: deleteModeMap, toggleMode: toggleDeleteMode } = useModeMap();
-    const { modeMap: dropDownModeMap, toggleMode: toggleDropDownMode } = useModeMap();
+
+    const [newModuleId, setNewModuleId] = useState<string | null>(null);
 
     const handleAddModule = () => {
         const newModule = addModule();
-        toggleEditMode(newModule.id, true);
+        setNewModuleId(newModule.id);
     };
 
     const inputRef = useRef<HTMLInputElement>(null);
@@ -42,6 +40,12 @@ const CourseDetails = () => {
             });
         }
     }, [courseTitle]);
+
+    useEffect(() => {
+        if (newModuleId) {
+            setNewModuleId(null);
+        }
+    }, [modules]);
 
     const handleKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
@@ -82,19 +86,12 @@ const CourseDetails = () => {
                                         module={mod}
                                         index={index}
                                         key={mod.id}
-                                        isEditing={editModeMap[mod.id] || false}
-                                        toggleEditMode={toggleEditMode}
                                         onUpdateItem={updateItem}
-                                        isDeleting={deleteModeMap[mod.id] || false}
-                                        toggleDeleteMode={toggleDeleteMode}
                                         onDeleteItem={deleteItem}
-                                        isDropDownOpen={dropDownModeMap[mod.id] || false}
-                                        toggleDropDownMode={toggleDropDownMode}
                                         idGenerator={idGenerator}
-                                        editModeMap={editModeMap}
-                                        deleteModeMap={deleteModeMap}
                                         setModules={setModules}
                                         setEditingViewItem={setEditingViewItem}
+                                        isNewModule={mod.id === newModuleId}
                                     />
                                 ))
                             ) : (

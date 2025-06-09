@@ -1,14 +1,6 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { Col } from 'react-bootstrap';
-import { Lecture, Module, ModuleItemProps } from '../types';
-
-type ItemTitleProps<T extends Module | Lecture> = Pick<
-    ModuleItemProps,
-    'index' | 'isEditing' | 'toggleEditMode' | 'onUpdateItem'
-> & {
-    item: T;
-    setItems: React.Dispatch<React.SetStateAction<T[]>>;
-};
+import { Lecture, Module, ItemTitleProps } from '../types';
 
 const ItemTitle = <T extends Module | Lecture>({
     item,
@@ -16,7 +8,6 @@ const ItemTitle = <T extends Module | Lecture>({
     isEditing,
     toggleEditMode,
     onUpdateItem,
-    setItems,
 }: ItemTitleProps<T>) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const [titleValue, setTitleValue] = useState('');
@@ -34,8 +25,8 @@ const ItemTitle = <T extends Module | Lecture>({
 
     const handleKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-            onUpdateItem({ ...item, title: titleValue }, setItems);
-            toggleEditMode(item.id, false);
+            onUpdateItem({ ...item, title: titleValue });
+            toggleEditMode(false);
         }
     };
     return (
@@ -52,13 +43,13 @@ const ItemTitle = <T extends Module | Lecture>({
                             onChange={(e) => setTitleValue(e.target.value)}
                             onKeyDown={handleKeydown}
                             onBlur={() => {
-                                onUpdateItem({ ...item, title: titleValue }, setItems);
-                                toggleEditMode(item.id, false);
+                                onUpdateItem({ ...item, title: titleValue });
+                                toggleEditMode(false);
                             }}
                         />
                     </>
                 ) : (
-                    <span onDoubleClick={() => toggleEditMode(item.id, true)}>{`${index + 1}. ${item.title}`}</span>
+                    <span onDoubleClick={() => toggleEditMode(true)}>{`${index + 1}. ${item.title}`}</span>
                 )}
             </Col>
         </>

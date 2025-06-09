@@ -2,34 +2,32 @@ import DraggableItem from '@/components/draggable/DraggableItem';
 import { ModuleItemProps, Lecture } from '../types';
 import ItemTitle from '../components/ItemTitle';
 import ItemActionButtons from '../components/ItemActionButtons';
+import { useEffect, useState } from 'react';
 
-type LectureItemProps = Pick<
-    ModuleItemProps,
-    | 'index'
-    | 'isEditing'
-    | 'toggleEditMode'
-    | 'isDeleting'
-    | 'toggleDeleteMode'
-    | 'onUpdateItem'
-    | 'onDeleteItem'
-    | 'setEditingViewItem'
-> & {
+type LectureItemProps = Pick<ModuleItemProps, 'index' | 'onUpdateItem' | 'onDeleteItem' | 'setEditingViewItem'> & {
     lecture: Lecture;
-    setItems: React.Dispatch<React.SetStateAction<Lecture[]>>;
+    setLectures: React.Dispatch<React.SetStateAction<Lecture[]>>;
+    isNewLecture?: boolean;
 };
 
 const LectureItem: React.FC<LectureItemProps> = ({
     lecture,
     index,
-    isEditing,
-    isDeleting,
-    toggleEditMode,
-    toggleDeleteMode,
     onUpdateItem,
-    setItems,
+    setLectures,
     onDeleteItem,
     setEditingViewItem,
+    isNewLecture,
 }) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    useEffect(() => {
+        if (isNewLecture) {
+            setIsEditing(true);
+        }
+    }, [isNewLecture]);
+
     return (
         <>
             <DraggableItem item={lecture} itemClass={'__draggable-item-lightGrey'}>
@@ -37,17 +35,15 @@ const LectureItem: React.FC<LectureItemProps> = ({
                     item={lecture}
                     index={index}
                     isEditing={isEditing}
-                    toggleEditMode={toggleEditMode}
-                    onUpdateItem={onUpdateItem}
-                    setItems={setItems}
+                    toggleEditMode={setIsEditing}
+                    onUpdateItem={(updatedItem) => onUpdateItem(updatedItem, setLectures)}
                 />
                 <ItemActionButtons<Lecture>
                     item={lecture}
                     itemType="lecture"
                     isDeleting={isDeleting}
-                    toggleDeleteMode={toggleDeleteMode}
-                    onDeleteItem={onDeleteItem}
-                    setItems={setItems}
+                    toggleDeleteMode={setIsDeleting}
+                    onDeleteItem={(itemId) => onDeleteItem(itemId, setLectures)}
                     setEditingViewItem={setEditingViewItem}
                 ></ItemActionButtons>
             </DraggableItem>

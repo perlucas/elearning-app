@@ -12,27 +12,35 @@ export type Module = {
 };
 
 export type Setter<T> = React.Dispatch<React.SetStateAction<T>>;
-
-export type ModeMap = Record<string, boolean>;
-
-type Toggle = (moduleId: string, editMode: boolean) => void;
+type Toggle = Setter<boolean>;
 
 export type EditTarget = { id: string; type: 'module' } | { id: string; type: 'lecture' } | null;
 
 export type ModuleItemProps = {
     module: Module;
     index: number;
+    onUpdateItem: <T extends Module | Lecture>(updatedItem: T, setItems: Setter<T[]>) => void;
+    onDeleteItem: <T extends Module | Lecture>(id: string, setItems: Setter<T[]>) => void;
+    idGenerator: () => string;
+    setModules: Setter<Module[]>;
+    isNewModule?: boolean;
+    setEditingViewItem: Setter<EditTarget>;
+};
+
+export type ItemTitleProps<T extends Module | Lecture> = {
+    item: T;
+    index: number;
     isEditing: boolean;
     toggleEditMode: Toggle;
-    onUpdateItem: <T extends Module | Lecture>(updatedItem: T, setItems: Setter<T[]>) => void;
+    onUpdateItem: (item: T) => void;
+};
+
+export type ItemActionButtonsProps<T extends Module | Lecture> = {
+    item: T;
+    itemType: 'module' | 'lecture';
+    children?: React.ReactNode;
     isDeleting: boolean;
     toggleDeleteMode: Toggle;
-    onDeleteItem: <T extends Module | Lecture>(id: string, setItems: Setter<T[]>) => void;
-    isDropDownOpen: boolean;
-    toggleDropDownMode: Toggle;
-    idGenerator: () => string;
-    editModeMap: ModeMap;
-    deleteModeMap: ModeMap;
-    setModules: Setter<Module[]>;
+    onDeleteItem: (itemId: string) => void;
     setEditingViewItem: Setter<EditTarget>;
 };
