@@ -14,7 +14,7 @@ export type Module = {
 export type Setter<T> = React.Dispatch<React.SetStateAction<T>>;
 type Toggle = Setter<boolean>;
 
-export type EditTarget = { id: string; type: 'module' } | { id: string; type: 'lecture' } | null;
+export type EditTarget = { id: string; type: 'module' | 'lecture' } | null;
 
 export type ModuleItemProps = {
     module: Module;
@@ -37,10 +37,9 @@ export type ItemTitleProps<T extends Module | Lecture> = {
 
 export type ItemActionButtonsProps<T extends Module | Lecture> = {
     item: T;
-    itemType: 'module' | 'lecture';
     children?: React.ReactNode;
     isDeleting: boolean;
     toggleDeleteMode: Toggle;
     onDeleteItem: (itemId: string) => void;
-    setEditingViewItem: Setter<EditTarget>;
+    onEditAction: (itemId: string) => void;
 };

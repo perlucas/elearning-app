@@ -18,7 +18,8 @@
                     "moduleDetails": "Module details",
                     "backToCourse": "Back to course",
                     "editLecture": "Edit Lecture",
-                    "lectureDetails": "Lecture details"
+                    "lectureDetails": "Lecture details",
+                    "backToModule": "Back to module"
                 }
             }
         },
