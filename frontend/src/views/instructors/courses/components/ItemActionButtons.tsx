@@ -9,6 +9,7 @@ const ItemActionButtons = <T extends Module | Lecture>({
     toggleDeleteMode,
     onDeleteItem,
     children,
+    onEditAction,
 }: ItemActionButtonsProps<T>) => {
     const { t } = useTranslation();
     return (
@@ -29,7 +30,7 @@ const ItemActionButtons = <T extends Module | Lecture>({
                     </>
                 ) : (
                     <>
-                        <BsPencilSquare role="button" />
+                        <BsPencilSquare role="button" onClick={() => onEditAction(item.id)} />
                         <BsTrash role="button" onClick={() => toggleDeleteMode(true)} />
                         {children}
                     </>

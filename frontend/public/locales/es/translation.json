@@ -9,16 +9,24 @@
                     "publishing": "Publicación",
                     "title": "Título",
                     "modules": "Módulos",
+                    "lectures": "Clases",
                     "addModule": "Agregar Módulo",
                     "noModules": "Aún no hay módulos",
                     "addLecture": "Agregar clase",
-                    "noLectures": "Aún no hay clases"
+                    "noLectures": "Aún no hay clases",
+                    "editModule": "Editar Módulo",
+                    "moduleDetails": "Detalles del módulo",
+                    "backToCourse": "Volver al curso",
+                    "editLecture": "Editar clase",
+                    "lectureDetails": "Detalles de la clase",
+                    "backToModule": "Volver al módulo"
                 }
             }
         },
         "common": {
             "delete": "Eliminar",
-            "cancel": "Cancelar"
+            "cancel": "Cancelar",
+            "content": "Contenido"
         }
     }
 }

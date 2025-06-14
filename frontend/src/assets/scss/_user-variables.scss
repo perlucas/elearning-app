@@ -7,27 +7,28 @@
 
 // $primary:     red; // This color will apply to light mode and dark mode. To add different types of dark mode primary color, go to _user.scss file and follow the instruction.
 
-// // theme colors map
-// $theme-colors: ();
-// $theme-colors: map-merge(
-//   (
-//     "primary":    $primary,
-//     "white":      $white,
-//     "secondary":  $secondary,
-//     "success":    $success,
-//     "info":       $info,
-//     "warning":    $warning,
-//     "danger":     $danger,
-//     "light":      $light,
-//     "dark":       $dark,
-//     "orange":     $orange,
-//     "purple":     $purple,
-//     "blue":       $blue
-//   ),
-//   $theme-colors
-// );
+// theme colors map
+$theme-colors: ();
+$theme-colors: map-merge(
+    (
+        'primary': $primary,
+        'white': $white,
+        'secondary': $secondary,
+        'success': $success,
+        'info': $info,
+        'warning': $warning,
+        'danger': $danger,
+        'light': $light,
+        'dark': $dark,
+        'orange': $orange,
+        'purple': $purple,
+        'blue': $blue,
+        'gray': $gray-400,
+    ),
+    $theme-colors
+);
 
-// $theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
+$theme-colors-rgb: map-loop($theme-colors, to-rgb, '$value');
 
 // $soft-alpha:          .1;
 

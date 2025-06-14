@@ -4,7 +4,7 @@ import ItemTitle from '../components/ItemTitle';
 import ItemActionButtons from '../components/ItemActionButtons';
 import { useEffect, useState } from 'react';
 
-type LectureItemProps = Pick<ModuleItemProps, 'index' | 'onUpdateItem' | 'onDeleteItem'> & {
+type LectureItemProps = Pick<ModuleItemProps, 'index' | 'onUpdateItem' | 'onDeleteItem' | 'setEditingViewItem'> & {
     lecture: Lecture;
     setLectures: React.Dispatch<React.SetStateAction<Lecture[]>>;
     isNewLecture?: boolean;
@@ -16,6 +16,7 @@ const LectureItem: React.FC<LectureItemProps> = ({
     onUpdateItem,
     setLectures,
     onDeleteItem,
+    setEditingViewItem,
     isNewLecture,
 }) => {
     const [isEditing, setIsEditing] = useState(false);
@@ -42,6 +43,7 @@ const LectureItem: React.FC<LectureItemProps> = ({
                     isDeleting={isDeleting}
                     toggleDeleteMode={setIsDeleting}
                     onDeleteItem={(itemId) => onDeleteItem(itemId, setLectures)}
+                    onEditAction={(itemId) => setEditingViewItem({ id: itemId, type: 'lecture' })}
                 ></ItemActionButtons>
             </DraggableItem>
         </>
