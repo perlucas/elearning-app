@@ -40,11 +40,10 @@ const LectureItem: React.FC<LectureItemProps> = ({
                 />
                 <ItemActionButtons<Lecture>
                     item={lecture}
-                    itemType="lecture"
                     isDeleting={isDeleting}
                     toggleDeleteMode={setIsDeleting}
                     onDeleteItem={(itemId) => onDeleteItem(itemId, setLectures)}
-                    setEditingViewItem={setEditingViewItem}
+                    onEditAction={(itemId) => setEditingViewItem({ id: itemId, type: 'lecture' })}
                 ></ItemActionButtons>
             </DraggableItem>
         </>

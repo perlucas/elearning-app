@@ -64,11 +64,10 @@ const ModuleItem: React.FC<ModuleItemProps> = ({
                 />
                 <ItemActionButtons<Module>
                     item={module}
-                    itemType="module"
                     isDeleting={isDeleting}
                     toggleDeleteMode={setIsDeleting}
                     onDeleteItem={(itemId) => onDeleteItem(itemId, setModules)}
-                    setEditingViewItem={setEditingViewItem}
+                    onEditAction={(itemId) => setEditingViewItem({ id: itemId, type: 'module' })}
                 >
                     {isDropDownOpen ? (
                         <BsDash role="button" onClick={() => setIsDropDownOpen(false)} />

@@ -18,7 +18,15 @@ const LectureDetails = () => {
                     <h3>{t('views.common.content')}</h3>
                 </div>
             </section>
-            <div className="d-flex justify-content-end mt-3">
+            <div className="d-flex justify-content-end mt-3 gap-2">
+                <Button
+                    size="sm"
+                    variant="gray"
+                    className="d-flex align-items-center gap-2"
+                    onClick={() => setEditingViewItem(null)}
+                >
+                    {t('views.instructors.courses.createCourse.backToModule')}
+                </Button>
                 <Button
                     size="sm"
                     variant="gray"

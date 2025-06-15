@@ -5,12 +5,11 @@ import { ItemActionButtonsProps, Module, Lecture } from '../types';
 
 const ItemActionButtons = <T extends Module | Lecture>({
     item,
-    itemType,
     isDeleting,
     toggleDeleteMode,
     onDeleteItem,
     children,
-    setEditingViewItem,
+    onEditAction,
 }: ItemActionButtonsProps<T>) => {
     const { t } = useTranslation();
     return (
@@ -31,10 +30,7 @@ const ItemActionButtons = <T extends Module | Lecture>({
                     </>
                 ) : (
                     <>
-                        <BsPencilSquare
-                            role="button"
-                            onClick={() => setEditingViewItem({ id: item.id, type: itemType })}
-                        />
+                        <BsPencilSquare role="button" onClick={() => onEditAction(item.id)} />
                         <BsTrash role="button" onClick={() => toggleDeleteMode(true)} />
                         {children}
                     </>
