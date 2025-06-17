@@ -21,6 +21,7 @@ const CourseDetails = () => {
         setCourseTitle,
         changeCourseTitle,
         idGenerator,
+        setEditingViewItem,
     } = useSafeContext(CreateCourseContext);
 
     const [newModuleId, setNewModuleId] = useState<string | null>(null);
@@ -89,6 +90,7 @@ const CourseDetails = () => {
                                         onDeleteItem={deleteItem}
                                         idGenerator={idGenerator}
                                         setModules={setModules}
+                                        setEditingViewItem={setEditingViewItem}
                                         isNewModule={mod.id === newModuleId}
                                     />
                                 ))

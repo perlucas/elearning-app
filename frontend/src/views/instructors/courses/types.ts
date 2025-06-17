@@ -11,19 +11,20 @@ export type Module = {
     lectures: Lecture[];
 };
 
-type Toggle = React.Dispatch<React.SetStateAction<boolean>>;
+export type Setter<T> = React.Dispatch<React.SetStateAction<T>>;
+type Toggle = Setter<boolean>;
+
+export type EditTarget = { id: string; type: 'module' | 'lecture' } | null;
 
 export type ModuleItemProps = {
     module: Module;
     index: number;
-    onUpdateItem: <T extends Module | Lecture>(
-        updatedItem: T,
-        setItems: React.Dispatch<React.SetStateAction<T[]>>,
-    ) => void;
-    onDeleteItem: <T extends Module | Lecture>(id: string, setItems: React.Dispatch<React.SetStateAction<T[]>>) => void;
+    onUpdateItem: <T extends Module | Lecture>(updatedItem: T, setItems: Setter<T[]>) => void;
+    onDeleteItem: <T extends Module | Lecture>(id: string, setItems: Setter<T[]>) => void;
     idGenerator: () => string;
-    setModules: React.Dispatch<React.SetStateAction<Module[]>>;
+    setModules: Setter<Module[]>;
     isNewModule?: boolean;
+    setEditingViewItem: Setter<EditTarget>;
 };
 
 export type ItemTitleProps<T extends Module | Lecture> = {
@@ -40,4 +41,5 @@ export type ItemActionButtonsProps<T extends Module | Lecture> = {
     isDeleting: boolean;
     toggleDeleteMode: Toggle;
     onDeleteItem: (itemId: string) => void;
+    onEditAction: (itemId: string) => void;
 };
