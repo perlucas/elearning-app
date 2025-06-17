@@ -17,9 +17,17 @@
                     "editModule": "Edit Module",
                     "moduleDetails": "Module details",
                     "backToCourse": "Back to course",
-                    "editLecture": "Edit Lecture",
-                    "lectureDetails": "Lecture details",
-                    "backToModule": "Back to module"
+                    "editLecture": {
+                        "editLecture": "Edit Lecture",
+                        "lectureDetails": "Lecture details",
+                        "backToModule": "Back to module",
+                        "pickALectureType": "Pick a lecture type",
+                        "uploadVideoFile": "Upload video file",
+                        "attatchments": "Attatchments",
+                        "attatchmentsText": "Add up to 3 additional downloadable attatchments to the lecture.",
+                        "uploadAttatchment": "Upload attatchment",
+                        "addFromLibrary": "Add from library"
+                    }
                 }
             }
         },
