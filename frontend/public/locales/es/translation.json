@@ -22,6 +22,8 @@
                         "lectureDetails": "Detalles de la clase",
                         "backToModule": "Volver al módulo",
                         "pickALectureType": "Elija el tipo de clase",
+                        "video": "video",
+                        "text": "texto",
                         "uploadVideoFile": "Subir archivo de video",
                         "attatchments": "Adjuntos",
                         "attatchmentsText": "Añade hasta 3 archivos adjuntos descargables adicionales a la clase.",

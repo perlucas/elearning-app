@@ -22,6 +22,8 @@
                         "lectureDetails": "Lecture details",
                         "backToModule": "Back to module",
                         "pickALectureType": "Pick a lecture type",
+                        "video": "video",
+                        "text": "text",
                         "uploadVideoFile": "Upload video file",
                         "attatchments": "Attatchments",
                         "attatchmentsText": "Add up to 3 additional downloadable attatchments to the lecture.",

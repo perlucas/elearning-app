@@ -49,6 +49,11 @@ const LectureDetails = () => {
         }
     };
 
+    const [lectureType, setLectureType] = useState('video');
+    const handleSelectLectureType = (eventKey: string | null) => {
+        eventKey && setLectureType(eventKey);
+    };
+
     return (
         <section className="p-0">
             <div>
@@ -73,34 +78,44 @@ const LectureDetails = () => {
                         {t('views.instructors.courses.createCourse.editLecture.pickALectureType')}:
                     </span>
 
-                    <Dropdown>
+                    <Dropdown onSelect={handleSelectLectureType}>
                         <DropdownToggle
                             as="input"
-                            value="Video"
+                            value={lectureType}
                             readOnly
-                            className="form-control __dropDown-input"
+                            className="form-control"
                             id="lectureTypeDropdown"
                             style={{ width: '15rem' }}
                         />
                         <DropdownMenu>
-                            <DropdownItem eventKey="video">Video</DropdownItem>
-                            <DropdownItem eventKey="pdf">PDF</DropdownItem>
+                            <DropdownItem eventKey="video">
+                                {t('views.instructors.courses.createCourse.editLecture.video')}
+                            </DropdownItem>
+                            <DropdownItem eventKey="text">
+                                {t('views.instructors.courses.createCourse.editLecture.text')}
+                            </DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                 </div>
-                <Card
-                    className="text-center border-2 mx-auto my-4 bg-body-secondary __lectureType-card"
-                    style={{ maxWidth: '100%', minHeight: '180px', borderStyle: 'dashed' }}
-                >
-                    <CardBody className=" d-flex flex-column justify-content-between align-items-center h-100">
-                        <div className="d-flex flex-row align-items-center justify-content-center gap-2 flex-grow-1">
-                            <Button>{t('views.instructors.courses.createCourse.editLecture.uploadVideoFile')}</Button>
-                            <span>or </span>
-                            <a className="text-primary text-decoration-none fw-semibold">Pick from library</a>
-                        </div>
-                        <p className="mb-0 mt-auto">Note: only MP4 files allowed, 1GB max.</p>
-                    </CardBody>
-                </Card>
+                {lectureType === 'video' ? (
+                    <Card
+                        className="text-center border-2 mx-auto my-4 bg-body-secondary __lectureType-card"
+                        style={{ maxWidth: '100%', minHeight: '180px', borderStyle: 'dashed' }}
+                    >
+                        <CardBody className=" d-flex flex-column justify-content-between align-items-center h-100">
+                            <div className="d-flex flex-row align-items-center justify-content-center gap-2 flex-grow-1">
+                                <Button>
+                                    {t('views.instructors.courses.createCourse.editLecture.uploadVideoFile')}
+                                </Button>
+                                <span>or </span>
+                                <a className="text-primary text-decoration-none fw-semibold">Pick from library</a>
+                            </div>
+                            <p className="mb-0 mt-auto">Note: only MP4 files allowed, 1GB max.</p>
+                        </CardBody>
+                    </Card>
+                ) : (
+                    <textarea name="" id="" style={{ maxWidth: '100%', minHeight: '180px' }}></textarea>
+                )}
             </section>
             <section className="p-1 my-2">
                 <div className="d-flex flex-row justify-content-between border-bottom mb-3 pb-2">
@@ -111,10 +126,6 @@ const LectureDetails = () => {
                     <Button size="sm" className="d-flex align-items-center gap-2">
                         <BsPlusCircle />
                         {t('views.instructors.courses.createCourse.editLecture.uploadAttatchment')}
-                    </Button>
-                    <Button size="sm" className="d-flex align-items-center gap-2">
-                        <BsPlusCircle />
-                        {t('views.instructors.courses.createCourse.editLecture.addFromLibrary')}
                     </Button>
                 </div>
             </section>
