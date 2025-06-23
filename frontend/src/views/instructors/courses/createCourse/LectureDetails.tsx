@@ -23,7 +23,7 @@ const LectureDetails = () => {
     const [module, setModule] = useState<Module>();
     const [lecture, setLecture] = useState<Lecture>();
     const [lectureTitle, setLectureTitle] = useState('');
-    const [lectures, setLectures] = useState<Lecture[]>([]);
+    const [lectureType, setLectureType] = useState('video');
 
     useEffect(() => {
         if (editingViewItem?.type === 'lecture')
@@ -34,22 +34,29 @@ const LectureDetails = () => {
                     setLecture(lect);
                 }
             }
-    }, [editingViewItem]);
+    }, [editingViewItem, modules]);
 
     useEffect(() => setLectureTitle(lecture?.title ?? 'Untitled'), [lecture]);
-    useEffect(() => setLectures(module?.lectures ?? []), [module]);
-    useEffect(() => {
-        module && updateItem({ ...module, lectures }, setModules);
-    }, [lectures]);
+
+    const updateLecture = (updatedLecture: Lecture) => {
+        if (module && lecture) {
+            const updatedLects = module.lectures.map((l) => (l.id === updatedLecture.id ? updatedLecture : l));
+            const updatedModule = { ...module, lectures: updatedLects };
+            updateItem(updatedModule, setModules);
+        }
+    };
+
+    const handleUpdateTitle = () => {
+        lecture && updateLecture({ ...lecture, title: lectureTitle });
+    };
 
     const handleKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            lecture && updateItem({ ...lecture, title: lectureTitle }, setLectures);
+            handleUpdateTitle();
         }
     };
 
-    const [lectureType, setLectureType] = useState('video');
     const handleSelectLectureType = (eventKey: string | null) => {
         eventKey && setLectureType(eventKey);
     };
@@ -63,7 +70,7 @@ const LectureDetails = () => {
                     value={lectureTitle}
                     onChange={(e) => setLectureTitle(e.target.value)}
                     onBlur={() => {
-                        lecture && updateItem({ ...lecture, title: lectureTitle }, setLectures);
+                        handleUpdateTitle;
                     }}
                     onKeyDown={handleKeydown}
                 />
