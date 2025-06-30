@@ -90,7 +90,7 @@ const LectureDetails = () => {
         const file = event.target.files?.[0];
         setFileValidationError(null);
         if (file) {
-            if (file.type !== 'video/avi') {
+            if (file.type !== 'video/mp4') {
                 const errorMessage = t('views.instructors.courses.createCourse.editLecture.videoFormatError');
                 setFileValidationError(new Error(errorMessage));
                 if (fileInputRef.current) {
