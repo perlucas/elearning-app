@@ -62,3 +62,14 @@ export type ItemActionButtonsProps<T extends Module | Lecture> = {
     onDeleteItem: (itemId: string) => void;
     onEditAction: (itemId: string) => void;
 };
+
+export type VideoLectureContentProps = {
+    currentVideoFile: VideoFileData | undefined;
+    isUploading: boolean;
+    progress: number;
+    openFilePicker: () => void;
+    uploadError: Error | null;
+    handleDeleteVideo: () => void;
+    isDeleting: boolean;
+    toggleDeleteMode: Toggle;
+};

@@ -1,16 +1,8 @@
 import { Button, Card, CardBody, Spinner } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { VideoFileData } from '../types';
-import React from 'react';
+import { VideoLectureContentProps } from '../types';
 import { BsTrash } from 'react-icons/bs';
-
-type VideoLectureContentProps = {
-    currentVideoFile: VideoFileData | undefined;
-    isUploading: boolean;
-    progress: number;
-    openFilePicker: () => void;
-    uploadError: Error | null;
-};
+import './VideoLectureContent.scss';
 
 const VideoLectureContent: React.FC<VideoLectureContentProps> = ({
     currentVideoFile,
@@ -18,6 +10,9 @@ const VideoLectureContent: React.FC<VideoLectureContentProps> = ({
     progress,
     openFilePicker,
     uploadError,
+    handleDeleteVideo,
+    isDeleting,
+    toggleDeleteMode,
 }) => {
     const { t } = useTranslation();
     return currentVideoFile ? (
@@ -39,9 +34,29 @@ const VideoLectureContent: React.FC<VideoLectureContentProps> = ({
                     </p>
                 )}
                 <div>
-                    <Button variant="danger" size="sm">
-                        Delete <BsTrash />
-                    </Button>
+                    {!isDeleting ? (
+                        <Button variant="danger" size="sm" onClick={() => toggleDeleteMode(true)}>
+                            {t('views.common.delete')} <BsTrash />
+                        </Button>
+                    ) : (
+                        <>
+                            <div className="__module-item-deleteButton">
+                                <Button size="sm" variant="link" className="p-0 m-0" onClick={handleDeleteVideo}>
+                                    {t('views.common.delete')}
+                                </Button>
+                            </div>
+                            <div className="__module-item-cancelButton">
+                                <Button
+                                    size="sm"
+                                    variant="link"
+                                    className="p-0 m-0"
+                                    onClick={() => toggleDeleteMode(false)}
+                                >
+                                    {t('views.common.cancel')}
+                                </Button>
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
         </div>
@@ -58,12 +73,10 @@ const VideoLectureContent: React.FC<VideoLectureContentProps> = ({
                     </div>
                 ) : (
                     <>
-                        <div className="d-flex flex-row align-items-center justify-content-center gap-2 flex-grow-1">
+                        <div className="d-flex flex-grow-1 align-items-center">
                             <Button onClick={openFilePicker}>
                                 {t('views.instructors.courses.createCourse.editLecture.uploadVideoFile')}
                             </Button>
-                            <span>or </span>
-                            <a className="text-primary text-decoration-none fw-semibold">Pick from library</a>
                         </div>
                         {uploadError && <p className="text-danger my-2">{uploadError.message}</p>}
                         <p className="mb-0 mt-auto">Note: only MP4 files allowed, 1GB max.</p>

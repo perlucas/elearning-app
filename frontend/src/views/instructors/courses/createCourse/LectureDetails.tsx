@@ -12,12 +12,13 @@ const LectureDetails = () => {
     const { t } = useTranslation();
     const { modules, setModules, updateItem, editingViewItem, setEditingViewItem } =
         useSafeContext(CreateCourseContext);
-    const { progress, data: uploadedFileData, error: uploadError, uploadFile } = useUploadFile();
+    const { progress, data: uploadedFileData, error: uploadError, uploadFile, reset: resetFileData } = useUploadFile();
     const [module, setModule] = useState<Module>();
     const [lecture, setLecture] = useState<Lecture>();
     const [lectureTitle, setLectureTitle] = useState('');
     const [lectureType, setLectureType] = useState<LectureType>(LectureType.VIDEO);
     const [fileValidationError, setFileValidationError] = useState<Error | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const combinedUploadError = fileValidationError || uploadError;
 
@@ -50,7 +51,7 @@ const LectureDetails = () => {
         if (lectureType !== newLectureType) {
             setLectureType(newLectureType);
         }
-    }, [editingViewItem, modules, module, lecture, lectureTitle, lectureType]);
+    }, [editingViewItem, modules, module, lecture, lectureType]);
 
     const updateLecture = (updatedLecture: Lecture) => {
         if (module && lecture) {
@@ -108,6 +109,22 @@ const LectureDetails = () => {
 
     const currentVideoFile = uploadedFileData || lecture?.content?.video;
 
+    const handleDeleteVideo = async () => {
+        if (currentVideoFile && lecture) {
+            const videoToDelete = currentVideoFile.id;
+            const updatedLect = { ...lecture, content: { ...lecture.content, video: undefined } };
+            updateLecture(updatedLect);
+            setIsDeleting(false);
+            resetFileData();
+            try {
+                await new Promise((resolve) => setTimeout(resolve, 500));
+                console.log('Solicitud de eliminación para el video' + videoToDelete);
+            } catch (err: any) {
+                console.error(err.message);
+            }
+        }
+    };
+
     return (
         <section className="p-0">
             <div>
@@ -116,9 +133,7 @@ const LectureDetails = () => {
                     type="text"
                     value={lectureTitle}
                     onChange={(e) => setLectureTitle(e.target.value)}
-                    onBlur={() => {
-                        handleUpdateTitle;
-                    }}
+                    onBlur={handleUpdateTitle}
                     onKeyDown={handleKeydown}
                 />
             </div>
@@ -161,6 +176,9 @@ const LectureDetails = () => {
                         progress={Math.round(progress * 100)}
                         openFilePicker={openFilePicker}
                         uploadError={combinedUploadError}
+                        handleDeleteVideo={handleDeleteVideo}
+                        isDeleting={isDeleting}
+                        toggleDeleteMode={setIsDeleting}
                     />
                 ) : (
                     <textarea name="" id="" style={{ maxWidth: '100%', minHeight: '180px' }}></textarea>

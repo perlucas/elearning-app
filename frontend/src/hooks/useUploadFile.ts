@@ -6,6 +6,7 @@ type UseUploadFileResult = {
     data: VideoFileData | null;
     error: Error | null;
     uploadFile: (file: File) => Promise<VideoFileData>;
+    reset: () => void;
 };
 
 export const useUploadFile = (): UseUploadFileResult => {
@@ -54,5 +55,11 @@ export const useUploadFile = (): UseUploadFileResult => {
         });
     }, []);
 
-    return { progress, data, error, uploadFile };
+    const reset = () => {
+        setProgress(0);
+        setData(null);
+        setError(null);
+    };
+
+    return { progress, data, error, uploadFile, reset };
 };
