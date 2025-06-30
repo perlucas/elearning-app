@@ -58,12 +58,10 @@ const VideoLectureContent: React.FC<VideoLectureContentProps> = ({
                     </div>
                 ) : (
                     <>
-                        <div className="d-flex flex-row align-items-center justify-content-center gap-2 flex-grow-1">
+                        <div>
                             <Button onClick={openFilePicker}>
                                 {t('views.instructors.courses.createCourse.editLecture.uploadVideoFile')}
                             </Button>
-                            <span>or </span>
-                            <a className="text-primary text-decoration-none fw-semibold">Pick from library</a>
                         </div>
                         {uploadError && <p className="text-danger my-2">{uploadError.message}</p>}
                         <p className="mb-0 mt-auto">Note: only MP4 files allowed, 1GB max.</p>
