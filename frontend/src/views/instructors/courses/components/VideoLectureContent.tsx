@@ -58,7 +58,7 @@ const VideoLectureContent: React.FC<VideoLectureContentProps> = ({
                     </div>
                 ) : (
                     <>
-                        <div>
+                        <div className="d-flex flex-grow-1 align-items-center">
                             <Button onClick={openFilePicker}>
                                 {t('views.instructors.courses.createCourse.editLecture.uploadVideoFile')}
                             </Button>
