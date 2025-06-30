@@ -1,42 +1,56 @@
 import useSafeContext from '@/hooks/useSafeContext';
-import {
-    Button,
-    Card,
-    CardBody,
-    Dropdown,
-    DropdownItem,
-    DropdownMenu,
-    DropdownToggle,
-    FormControl,
-    FormLabel,
-} from 'react-bootstrap';
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, FormControl, FormLabel } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { CreateCourseContext } from './context/CreateCourseContext';
 import { BsPlusCircle } from 'react-icons/bs';
-import { useEffect, useState } from 'react';
-import { Lecture, Module } from '../types';
+import React, { useEffect, useState, useRef } from 'react';
+import { Lecture, LectureType, Module } from '../types';
+import { useUploadFile } from '@/hooks/useUploadFile';
+import VideoLectureContent from '../components/VideoLectureContent';
 
 const LectureDetails = () => {
     const { t } = useTranslation();
     const { modules, setModules, updateItem, editingViewItem, setEditingViewItem } =
         useSafeContext(CreateCourseContext);
+    const { progress, data: uploadedFileData, error: uploadError, uploadFile } = useUploadFile();
     const [module, setModule] = useState<Module>();
     const [lecture, setLecture] = useState<Lecture>();
     const [lectureTitle, setLectureTitle] = useState('');
-    const [lectureType, setLectureType] = useState('video');
+    const [lectureType, setLectureType] = useState<LectureType>(LectureType.VIDEO);
+    const [fileValidationError, setFileValidationError] = useState<Error | null>(null);
+
+    const combinedUploadError = fileValidationError || uploadError;
+
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        if (editingViewItem?.type === 'lecture')
+        let foundModule: Module | undefined;
+        let foundLecture: Lecture | undefined;
+        if (editingViewItem?.type === 'lecture') {
             for (const mod of modules) {
                 const lect = mod.lectures.find((l) => l.id === editingViewItem.id);
                 if (lect) {
-                    setModule(mod);
-                    setLecture(lect);
+                    foundModule = mod;
+                    foundLecture = lect;
+                    break;
                 }
             }
-    }, [editingViewItem, modules]);
-
-    useEffect(() => setLectureTitle(lecture?.title ?? 'Untitled'), [lecture]);
+        }
+        if (module?.id !== foundModule?.id) {
+            setModule(foundModule);
+        }
+        if (lecture?.id !== foundLecture?.id) {
+            setLecture(foundLecture);
+        }
+        const newLectureTitle = foundLecture?.title ?? 'Untitled';
+        if (lectureTitle !== newLectureTitle) {
+            setLectureTitle(newLectureTitle);
+        }
+        const newLectureType = foundLecture?.type ?? LectureType.VIDEO;
+        if (lectureType !== newLectureType) {
+            setLectureType(newLectureType);
+        }
+    }, [editingViewItem, modules, module, lecture, lectureTitle, lectureType]);
 
     const updateLecture = (updatedLecture: Lecture) => {
         if (module && lecture) {
@@ -45,6 +59,17 @@ const LectureDetails = () => {
             updateItem(updatedModule, setModules);
         }
     };
+
+    useEffect(() => {
+        if (uploadedFileData && lecture && module) {
+            const updatedLecture: Lecture = {
+                ...lecture,
+                type: LectureType.VIDEO,
+                content: { ...lecture.content, video: uploadedFileData },
+            };
+            updateLecture(updatedLecture);
+        }
+    }, [uploadedFileData, lecture, module]);
 
     const handleUpdateTitle = () => {
         lecture && updateLecture({ ...lecture, title: lectureTitle });
@@ -58,8 +83,30 @@ const LectureDetails = () => {
     };
 
     const handleSelectLectureType = (eventKey: string | null) => {
-        eventKey && setLectureType(eventKey);
+        eventKey && setLectureType(eventKey as LectureType);
     };
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        setFileValidationError(null);
+        if (file) {
+            if (file.type !== 'video/avi') {
+                const errorMessage = t('views.instructors.courses.createCourse.editLecture.videoFormatError');
+                setFileValidationError(new Error(errorMessage));
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = '';
+                }
+                return;
+            }
+            uploadFile(file);
+        }
+    };
+
+    const openFilePicker = () => {
+        fileInputRef.current?.click();
+    };
+
+    const currentVideoFile = uploadedFileData || lecture?.content?.video;
 
     return (
         <section className="p-0">
@@ -88,42 +135,44 @@ const LectureDetails = () => {
                     <Dropdown onSelect={handleSelectLectureType}>
                         <DropdownToggle
                             as="input"
-                            value={lectureType}
+                            value={lecture?.type || lectureType}
                             readOnly
                             className="form-control"
                             id="lectureTypeDropdown"
                             style={{ width: '15rem' }}
                         />
                         <DropdownMenu>
-                            <DropdownItem eventKey="video">
+                            <DropdownItem eventKey={LectureType.VIDEO}>
                                 {t('views.instructors.courses.createCourse.editLecture.video')}
                             </DropdownItem>
-                            <DropdownItem eventKey="text">
+                            <DropdownItem eventKey={LectureType.TEXT}>
                                 {t('views.instructors.courses.createCourse.editLecture.text')}
                             </DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                 </div>
-                {lectureType === 'video' ? (
-                    <Card
-                        className="text-center border-2 mx-auto my-4 bg-body-secondary __lectureType-card"
-                        style={{ maxWidth: '100%', minHeight: '180px', borderStyle: 'dashed' }}
-                    >
-                        <CardBody className=" d-flex flex-column justify-content-between align-items-center h-100">
-                            <div className="d-flex flex-row align-items-center justify-content-center gap-2 flex-grow-1">
-                                <Button>
-                                    {t('views.instructors.courses.createCourse.editLecture.uploadVideoFile')}
-                                </Button>
-                                <span>or </span>
-                                <a className="text-primary text-decoration-none fw-semibold">Pick from library</a>
-                            </div>
-                            <p className="mb-0 mt-auto">Note: only MP4 files allowed, 1GB max.</p>
-                        </CardBody>
-                    </Card>
+                <p className="text-black my-3">
+                    {t('views.instructors.courses.createCourse.editLecture.videoLectureIndication')}
+                </p>
+                {(lecture?.type || lectureType) === LectureType.VIDEO ? (
+                    <VideoLectureContent
+                        currentVideoFile={currentVideoFile}
+                        isUploading={progress > 0 && progress < 1}
+                        progress={Math.round(progress * 100)}
+                        openFilePicker={openFilePicker}
+                        uploadError={combinedUploadError}
+                    />
                 ) : (
                     <textarea name="" id="" style={{ maxWidth: '100%', minHeight: '180px' }}></textarea>
                 )}
             </section>
+            <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                style={{ display: 'none' }}
+                accept="video/mp4"
+            />
             <section className="p-1 my-2">
                 <div className="d-flex flex-row justify-content-between border-bottom mb-3 pb-2">
                     <h3>{t('views.instructors.courses.createCourse.editLecture.attatchments')}</h3>

@@ -1,8 +1,27 @@
 import React from 'react';
 
+export type VideoFileData = {
+    id: string;
+    filename: string;
+    url: string;
+    previewUrl?: string;
+    duration?: number;
+};
+
+export type TextData = {
+    content: string;
+};
+
+export enum LectureType {
+    TEXT = 'text',
+    VIDEO = 'video',
+}
+
 export type Lecture = {
     id: string;
     title: string;
+    type?: LectureType;
+    content?: { video?: VideoFileData; text?: TextData };
 };
 
 export type Module = {
