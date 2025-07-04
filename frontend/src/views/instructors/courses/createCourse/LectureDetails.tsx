@@ -3,8 +3,8 @@ import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, FormContr
 import { useTranslation } from 'react-i18next';
 import { CreateCourseContext } from './context/CreateCourseContext';
 import { BsPlusCircle } from 'react-icons/bs';
-import React, { useEffect, useState, useRef } from 'react';
-import { Lecture, LectureType, Module } from '../types';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
+import { Lecture, LectureType } from '../types';
 import { useUploadFile } from '@/hooks/useUploadFile';
 import VideoLectureContent from '../components/VideoLectureContent';
 
@@ -12,9 +12,7 @@ const LectureDetails = () => {
     const { t } = useTranslation();
     const { modules, setModules, updateItem, editingViewItem, setEditingViewItem } =
         useSafeContext(CreateCourseContext);
-    const { progress, data: uploadedFileData, error: uploadError, uploadFile } = useUploadFile();
-    const [module, setModule] = useState<Module>();
-    const [lecture, setLecture] = useState<Lecture>();
+    const { progress, data: uploadedFileData, error: uploadError, uploadFile, reset: resetFileData } = useUploadFile();
     const [lectureTitle, setLectureTitle] = useState('');
     const [lectureType, setLectureType] = useState<LectureType>(LectureType.VIDEO);
     const [fileValidationError, setFileValidationError] = useState<Error | null>(null);
@@ -23,34 +21,24 @@ const LectureDetails = () => {
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
+    const lecture = useMemo(() => {
+        if (editingViewItem?.type !== 'lecture') return null;
+        for (const mod of modules) {
+            const lect = mod.lectures.find((l) => l.id === editingViewItem.id);
+            if (lect) return lect;
+        }
+        return null;
+    }, [editingViewItem, modules]);
+
+    const module = useMemo(() => {
+        if (editingViewItem?.type !== 'lecture') return null;
+        return modules.find((mod) => mod.lectures.some((l) => l.id === editingViewItem.id)) ?? null;
+    }, [editingViewItem, modules]);
+
     useEffect(() => {
-        let foundModule: Module | undefined;
-        let foundLecture: Lecture | undefined;
-        if (editingViewItem?.type === 'lecture') {
-            for (const mod of modules) {
-                const lect = mod.lectures.find((l) => l.id === editingViewItem.id);
-                if (lect) {
-                    foundModule = mod;
-                    foundLecture = lect;
-                    break;
-                }
-            }
-        }
-        if (module?.id !== foundModule?.id) {
-            setModule(foundModule);
-        }
-        if (lecture?.id !== foundLecture?.id) {
-            setLecture(foundLecture);
-        }
-        const newLectureTitle = foundLecture?.title ?? 'Untitled';
-        if (lectureTitle !== newLectureTitle) {
-            setLectureTitle(newLectureTitle);
-        }
-        const newLectureType = foundLecture?.type ?? LectureType.VIDEO;
-        if (lectureType !== newLectureType) {
-            setLectureType(newLectureType);
-        }
-    }, [editingViewItem, modules, module, lecture, lectureTitle, lectureType]);
+        setLectureTitle(lecture?.title ?? 'Untitled');
+        setLectureType(lecture?.type ?? LectureType.VIDEO);
+    }, [lecture]);
 
     const updateLecture = (updatedLecture: Lecture) => {
         if (module && lecture) {
@@ -61,18 +49,20 @@ const LectureDetails = () => {
     };
 
     useEffect(() => {
-        if (uploadedFileData && lecture && module) {
-            const updatedLecture: Lecture = {
-                ...lecture,
-                type: LectureType.VIDEO,
-                content: { ...lecture.content, video: uploadedFileData },
-            };
-            updateLecture(updatedLecture);
-        }
+        if (!uploadedFileData || !lecture || !module) return;
+        const videoData = uploadedFileData;
+        const updatedLecture: Lecture = {
+            ...lecture,
+            type: LectureType.VIDEO,
+            content: { ...lecture.content, video: videoData },
+        };
+        updateLecture(updatedLecture);
+        resetFileData();
+        fileInputRef.current && (fileInputRef.current.value = '');
     }, [uploadedFileData, lecture, module]);
 
     const handleUpdateTitle = () => {
-        lecture && updateLecture({ ...lecture, title: lectureTitle });
+        lecture && updateLecture({ ...lecture, title: lectureTitle !== '' ? lectureTitle : 'Untitled' });
     };
 
     const handleKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -93,9 +83,7 @@ const LectureDetails = () => {
             if (file.type !== 'video/mp4') {
                 const errorMessage = t('views.instructors.courses.createCourse.editLecture.videoFormatError');
                 setFileValidationError(new Error(errorMessage));
-                if (fileInputRef.current) {
-                    fileInputRef.current.value = '';
-                }
+                fileInputRef.current && (fileInputRef.current.value = '');
                 return;
             }
             uploadFile(file);
@@ -145,7 +133,11 @@ const LectureDetails = () => {
                             <DropdownItem eventKey={LectureType.VIDEO}>
                                 {t('views.instructors.courses.createCourse.editLecture.video')}
                             </DropdownItem>
-                            <DropdownItem eventKey={LectureType.TEXT}>
+                            <DropdownItem
+                                eventKey={LectureType.TEXT}
+                                disabled={Boolean(currentVideoFile)}
+                                className={currentVideoFile && 'text-muted'}
+                            >
                                 {t('views.instructors.courses.createCourse.editLecture.text')}
                             </DropdownItem>
                         </DropdownMenu>

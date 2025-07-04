@@ -1,16 +1,8 @@
 import { Button, Card, CardBody, Spinner } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { VideoFileData } from '../types';
+import { VideoLectureContentProps } from '../types';
 import React from 'react';
 import { BsTrash } from 'react-icons/bs';
-
-type VideoLectureContentProps = {
-    currentVideoFile: VideoFileData | undefined;
-    isUploading: boolean;
-    progress: number;
-    openFilePicker: () => void;
-    uploadError: Error | null;
-};
 
 const VideoLectureContent: React.FC<VideoLectureContentProps> = ({
     currentVideoFile,
@@ -47,7 +39,7 @@ const VideoLectureContent: React.FC<VideoLectureContentProps> = ({
         </div>
     ) : (
         <Card
-            className="text-center border-2 mx-auto mt-2 mb-4 bg-body-secondary __lectureType-card"
+            className="text-center border-2 mx-auto mt-2 mb-4 bg-body-secondary"
             style={{ maxWidth: '100%', minHeight: '180px', borderStyle: 'dashed' }}
         >
             <CardBody className=" d-flex flex-column justify-content-between align-items-center h-100">
