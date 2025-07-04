@@ -22,8 +22,13 @@ const ItemActionButtons = <T extends Module | Lecture>({
                                 {t('views.common.delete')}
                             </Button>
                         </div>
-                        <div className="__module-item-cancelButton" onClick={() => toggleDeleteMode(false)}>
-                            <Button size="sm" variant="link" className="p-0 m-0">
+                        <div className="__module-item-cancelButton">
+                            <Button
+                                size="sm"
+                                variant="link"
+                                className="p-0 m-0"
+                                onClick={() => toggleDeleteMode(false)}
+                            >
                                 {t('views.common.cancel')}
                             </Button>
                         </div>

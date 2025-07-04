@@ -70,7 +70,7 @@ const CourseDetails = () => {
             </div>
 
             <section>
-                <div className="d-flex flex-row justify-content-between">
+                <div className="d-flex flex-row justify-content-between border-bottom mb-3 pb-2">
                     <h3>{t('views.instructors.courses.createCourse.modules')}</h3>
                     <Button size="sm" className="d-flex align-items-center gap-2" onClick={handleAddModule}>
                         <BsPlusCircle />
