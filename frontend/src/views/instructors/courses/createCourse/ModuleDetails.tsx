@@ -41,10 +41,19 @@ const ModuleDetails = () => {
         }
     }, [lectures]);
 
+    useEffect(() => {
+        setModuleTitle(module?.title ?? '');
+    }, [module]);
+
+    const handleUpdateTitle = () => {
+        module && updateItem({ ...module, title: moduleTitle !== '' ? moduleTitle : 'Untitled' }, setModules);
+    };
+
     const handleKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            module && updateItem({ ...module, title: moduleTitle }, setModules);
+            handleUpdateTitle();
+            (e.target as HTMLInputElement).blur();
         }
     };
 
@@ -56,9 +65,7 @@ const ModuleDetails = () => {
                     type="text"
                     value={moduleTitle}
                     onChange={(e) => setModuleTitle(e.target.value)}
-                    onBlur={() => {
-                        module && updateItem({ ...module, title: moduleTitle }, setModules);
-                    }}
+                    onBlur={handleUpdateTitle}
                     onKeyDown={handleKeydown}
                 />
             </div>
