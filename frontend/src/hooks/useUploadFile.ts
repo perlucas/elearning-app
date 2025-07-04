@@ -14,10 +14,14 @@ export const useUploadFile = (): UseUploadFileResult => {
     const [data, setData] = useState<VideoFileData | null>(null);
     const [error, setError] = useState<Error | null>(null);
 
-    const uploadFile = useCallback(async (file: File): Promise<VideoFileData> => {
+    const reset = () => {
         setProgress(0);
         setData(null);
         setError(null);
+    };
+
+    const uploadFile = useCallback(async (file: File): Promise<VideoFileData> => {
+        reset();
 
         const simulatedResponse: VideoFileData = {
             id: `file-${Date.now()}`,
@@ -54,12 +58,6 @@ export const useUploadFile = (): UseUploadFileResult => {
             throw err;
         });
     }, []);
-
-    const reset = () => {
-        setProgress(0);
-        setData(null);
-        setError(null);
-    };
 
     return { progress, data, error, uploadFile, reset };
 };

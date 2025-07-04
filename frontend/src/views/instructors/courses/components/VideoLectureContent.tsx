@@ -15,10 +15,15 @@ const VideoLectureContent: React.FC<VideoLectureContentProps> = ({
     toggleDeleteMode,
 }) => {
     const { t } = useTranslation();
+    const placeholder = '/placeholder-image.jpg';
     return currentVideoFile ? (
         <div className="d-flex flex-row align-items-start justify-content-center gap-2 flex-grow-1">
             <img
-                src={currentVideoFile.url}
+                src={
+                    !currentVideoFile.previewUrl || currentVideoFile.previewUrl === ''
+                        ? placeholder
+                        : currentVideoFile.previewUrl
+                }
                 alt="video preview"
                 className="img-fluid"
                 style={{ maxWidth: '18rem', borderRadius: '10px' }}

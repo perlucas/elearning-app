@@ -64,7 +64,7 @@ export type ItemActionButtonsProps<T extends Module | Lecture> = {
 };
 
 export type VideoLectureContentProps = {
-    currentVideoFile: VideoFileData | undefined;
+    currentVideoFile: VideoFileData | undefined | null;
     isUploading: boolean;
     progress: number;
     openFilePicker: () => void;
