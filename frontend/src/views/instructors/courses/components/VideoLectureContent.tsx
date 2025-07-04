@@ -67,7 +67,7 @@ const VideoLectureContent: React.FC<VideoLectureContentProps> = ({
         </div>
     ) : (
         <Card
-            className="text-center border-2 mx-auto mt-2 mb-4 bg-body-secondary __lectureType-card"
+            className="text-center border-2 mx-auto mt-2 mb-4 bg-body-secondary"
             style={{ maxWidth: '100%', minHeight: '180px', borderStyle: 'dashed' }}
         >
             <CardBody className=" d-flex flex-column justify-content-between align-items-center h-100">
