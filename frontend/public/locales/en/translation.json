@@ -27,9 +27,9 @@
                         "videoLectureIndication": "Upload a video from the media gallery as the main resource for your lecture",
                         "uploadVideoFile": "Upload video file",
                         "videoFormatError": "Incompatible video format. Only MP4 files are allowed.",
-                        "attatchments": "Attatchments",
-                        "attatchmentsText": "Add up to 3 additional downloadable attatchments to the lecture.",
-                        "uploadAttatchment": "Upload attatchment",
+                        "attachments": "Attachments",
+                        "attachmentsText": "Add up to 3 additional downloadable attachments to the lecture.",
+                        "uploadAttachment": "Upload attachment",
                         "addFromLibrary": "Add from library"
                     }
                 }

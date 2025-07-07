@@ -27,9 +27,9 @@
                         "videoLectureIndication": "Sube un vídeo de la galería multimedia como recurso principal para tu clase",
                         "uploadVideoFile": "Subir archivo de video",
                         "videoFormatError": "Formato de video incompatible. Sólo son permitidos archivos .mp4.",
-                        "attatchments": "Adjuntos",
-                        "attatchmentsText": "Añade hasta 3 archivos adjuntos descargables adicionales a la clase.",
-                        "uploadAttatchment": "Subir adjunto",
+                        "attachments": "Adjuntos",
+                        "attachmentsText": "Añade hasta 3 archivos adjuntos descargables adicionales a la clase.",
+                        "uploadAttachment": "Subir adjunto",
                         "addFromLibrary": "Agregar desde la biblioteca"
                     }
                 }

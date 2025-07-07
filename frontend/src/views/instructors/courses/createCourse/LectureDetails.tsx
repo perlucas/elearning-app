@@ -187,13 +187,13 @@ const LectureDetails = () => {
             />
             <section className="p-1 my-2">
                 <div className="d-flex flex-row justify-content-between border-bottom mb-3 pb-2">
-                    <h3>{t('views.instructors.courses.createCourse.editLecture.attatchments')}</h3>
+                    <h3>{t('views.instructors.courses.createCourse.editLecture.attachments')}</h3>
                 </div>
-                <p className="text-black">{t('views.instructors.courses.createCourse.editLecture.attatchmentsText')}</p>
+                <p className="text-black">{t('views.instructors.courses.createCourse.editLecture.attachmentsText')}</p>
                 <div className="d-flex flex-row gap-2">
                     <Button size="sm" className="d-flex align-items-center gap-2">
                         <BsPlusCircle />
-                        {t('views.instructors.courses.createCourse.editLecture.uploadAttatchment')}
+                        {t('views.instructors.courses.createCourse.editLecture.uploadAttachment')}
                     </Button>
                 </div>
             </section>
