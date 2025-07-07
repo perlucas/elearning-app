@@ -7,7 +7,7 @@ const EditLecture = () => {
     const { t } = useTranslation();
     const tabs = [
         {
-            title: t('views.instructors.courses.createCourse.lectureDetails'),
+            title: t('views.instructors.courses.createCourse.editLecture.lectureDetails'),
             content: <LectureDetails />,
         },
         {
@@ -18,8 +18,11 @@ const EditLecture = () => {
 
     return (
         <article className="__create-course-container">
-            <h2>{t('views.instructors.courses.createCourse.editLecture')}</h2>
-            <CustomTabs tabs={tabs} defaultActiveKey={t('views.instructors.courses.createCourse.lectureDetails')} />
+            <h2>{t('views.instructors.courses.createCourse.editLecture.editLecture')}</h2>
+            <CustomTabs
+                tabs={tabs}
+                defaultActiveKey={t('views.instructors.courses.createCourse.editLecture.lectureDetails')}
+            />
         </article>
     );
 };

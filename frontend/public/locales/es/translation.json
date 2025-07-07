@@ -17,9 +17,19 @@
                     "editModule": "Editar Módulo",
                     "moduleDetails": "Detalles del módulo",
                     "backToCourse": "Volver al curso",
-                    "editLecture": "Editar clase",
-                    "lectureDetails": "Detalles de la clase",
-                    "backToModule": "Volver al módulo"
+                    "editLecture": {
+                        "editLecture": "Editar clase",
+                        "lectureDetails": "Detalles de la clase",
+                        "backToModule": "Volver al módulo",
+                        "pickALectureType": "Elija el tipo de clase",
+                        "video": "video",
+                        "text": "texto",
+                        "uploadVideoFile": "Subir archivo de video",
+                        "attachments": "Adjuntos",
+                        "attachmentsText": "Añade hasta 3 archivos adjuntos descargables adicionales a la clase.",
+                        "uploadAttachment": "Subir adjunto",
+                        "addFromLibrary": "Agregar desde la biblioteca"
+                    }
                 }
             }
         },
