@@ -25,9 +25,9 @@
                         "video": "video",
                         "text": "text",
                         "uploadVideoFile": "Upload video file",
-                        "attatchments": "Attatchments",
-                        "attatchmentsText": "Add up to 3 additional downloadable attatchments to the lecture.",
-                        "uploadAttatchment": "Upload attatchment",
+                        "attachments": "Attachments",
+                        "attachmentsText": "Add up to 3 additional downloadable attachments to the lecture.",
+                        "uploadAttachment": "Upload attachment",
                         "addFromLibrary": "Add from library"
                     }
                 }

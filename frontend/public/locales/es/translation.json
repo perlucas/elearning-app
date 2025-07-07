@@ -25,9 +25,9 @@
                         "video": "video",
                         "text": "texto",
                         "uploadVideoFile": "Subir archivo de video",
-                        "attatchments": "Adjuntos",
-                        "attatchmentsText": "Añade hasta 3 archivos adjuntos descargables adicionales a la clase.",
-                        "uploadAttatchment": "Subir adjunto",
+                        "attachments": "Adjuntos",
+                        "attachmentsText": "Añade hasta 3 archivos adjuntos descargables adicionales a la clase.",
+                        "uploadAttachment": "Subir adjunto",
                         "addFromLibrary": "Agregar desde la biblioteca"
                     }
                 }
