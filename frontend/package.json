@@ -24,6 +24,7 @@
         "@dnd-kit/utilities": "^3.2.2",
         "@react-router/node": "^7.2.0",
         "@react-router/serve": "^7.2.0",
+        "axios": "^1.10.0",
         "bootstrap": "^5.3.3",
         "choices.js": "^11.1.0",
         "cookies-next": "^5.1.0",
