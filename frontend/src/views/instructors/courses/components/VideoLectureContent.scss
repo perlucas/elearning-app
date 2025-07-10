@@ -1,15 +1,11 @@
 @use '@/assets/scss/style.scss' as *;
 @use '@/scss/_variables.scss' as *;
 
-.__module-item-input {
-    border: none;
-    background-color: $transparent;
-    padding: 0;
-    &:focus {
-        outline: none;
-        border-bottom: 1.5px solid $black;
-    }
+.__video-preview {
+    width: 18rem;
+    border-radius: 10px;
 }
+
 .__module-item-deleteButton {
     .btn-link {
         color: $red;
@@ -25,4 +21,9 @@
     Button {
         text-transform: uppercase;
     }
+}
+
+.__upload-video-card {
+    max-width: 100%;
+    min-height: 180px;
 }

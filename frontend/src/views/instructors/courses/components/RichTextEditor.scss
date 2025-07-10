@@ -1,0 +1,6 @@
+@use '@/assets/scss/style.scss' as *;
+@use '@/scss/_variables.scss' as *;
+
+.ql-tooltip.ql-editing {
+    left: auto !important;
+}
