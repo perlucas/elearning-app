@@ -15,7 +15,7 @@ const VideoLectureContent: React.FC<VideoLectureContentProps> = ({
     return currentVideoFile ? (
         <div className="d-flex flex-row align-items-start justify-content-center gap-2 flex-grow-1">
             <img
-                src={currentVideoFile.url}
+                src={currentVideoFile.previewUrl}
                 alt="video preview"
                 className="img-fluid"
                 style={{ maxWidth: '18rem', borderRadius: '10px' }}
@@ -56,7 +56,10 @@ const VideoLectureContent: React.FC<VideoLectureContentProps> = ({
                             </Button>
                         </div>
                         {uploadError && <p className="text-danger my-2">{uploadError.message}</p>}
-                        <p className="mb-0 mt-auto">Note: only MP4 files allowed, 1GB max.</p>
+                        <p className="mb-0 mt-auto">
+                            {' '}
+                            {t('views.instructors.courses.createCourse.editLecture.videoFormat')}
+                        </p>
                     </>
                 )}
             </CardBody>
