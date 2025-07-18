@@ -88,7 +88,10 @@ const VideoLectureContent: React.FC<VideoLectureContentProps> = ({
                             </Button>
                         </div>
                         {uploadError && <p className="text-danger my-2">{uploadError.message}</p>}
-                        <p className="mb-0 mt-auto">Note: only MP4 files allowed, 1GB max.</p>
+                        <p className="mb-0 mt-auto">
+                            {' '}
+                            {t('views.instructors.courses.createCourse.editLecture.videoFormat')}
+                        </p>
                     </>
                 )}
             </CardBody>
