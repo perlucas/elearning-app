@@ -1,8 +1,27 @@
 import React from 'react';
 
+export type VideoFileData = {
+    id: string;
+    filename: string;
+    url: string;
+    previewUrl?: string;
+    duration?: number;
+};
+
+export type TextData = {
+    content: string;
+};
+
+export enum LectureType {
+    TEXT = 'text',
+    VIDEO = 'video',
+}
+
 export type Lecture = {
     id: string;
     title: string;
+    type?: LectureType;
+    content?: { video?: VideoFileData; text?: TextData };
 };
 
 export type Module = {
@@ -42,4 +61,12 @@ export type ItemActionButtonsProps<T extends Module | Lecture> = {
     toggleDeleteMode: Toggle;
     onDeleteItem: (itemId: string) => void;
     onEditAction: (itemId: string) => void;
+};
+
+export type VideoLectureContentProps = {
+    currentVideoFile: VideoFileData | undefined | null;
+    isUploading: boolean;
+    progress: number;
+    openFilePicker: () => void;
+    uploadError: Error | null;
 };
