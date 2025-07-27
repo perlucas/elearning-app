@@ -39,7 +39,10 @@
         "common": {
             "delete": "Eliminar",
             "cancel": "Cancelar",
-            "content": "Contenido"
+            "content": "Contenido",
+            "file": "Archivo",
+            "duration": "Duración",
+            "uploading": "Cargando"
         }
     }
 }

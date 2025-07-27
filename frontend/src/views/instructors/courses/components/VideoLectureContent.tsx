@@ -29,11 +29,11 @@ const VideoLectureContent: React.FC<VideoLectureContentProps> = ({
             />
             <div className="d-flex flex-column text-black gap-2" style={{ width: '15rem' }}>
                 <p className="m-0">
-                    <span className="fw-bold">File:</span> {currentVideoFile.filename}
+                    <span className="fw-bold">{t('views.common.file')}:</span> {currentVideoFile.filename}
                 </p>
                 {currentVideoFile.duration && (
                     <p className="m-0">
-                        <span className="fw-bold">Duration: </span>
+                        <span className="fw-bold">{t('views.common.duration')}: </span>
                         {currentVideoFile.duration}
                     </p>
                 )}
@@ -78,7 +78,9 @@ const VideoLectureContent: React.FC<VideoLectureContentProps> = ({
                 {isUploading ? (
                     <div className="d-flex flex-column align-items-center justify-content-center gap-2 flex-grow-1">
                         <Spinner animation="border" role="status" variant="primary" />
-                        <span>Uploading: {progress}%</span>
+                        <span>
+                            {t('views.common.uploading')}: {progress}%
+                        </span>
                     </div>
                 ) : (
                     <>
