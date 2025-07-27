@@ -12,6 +12,12 @@ export type TextData = {
     content: string;
 };
 
+export type Resources = {
+    id: string;
+    title: string;
+    url: string;
+};
+
 export enum LectureType {
     TEXT = 'text',
     VIDEO = 'video',
@@ -22,6 +28,7 @@ export type Lecture = {
     title: string;
     type?: LectureType;
     content?: { video?: VideoFileData; text?: TextData };
+    resources?: Resources[];
 };
 
 export type Module = {
@@ -38,7 +45,7 @@ export type EditTarget = { id: string; type: 'module' | 'lecture' } | null;
 export type ModuleItemProps = {
     module: Module;
     index: number;
-    onUpdateItem: <T extends Module | Lecture>(updatedItem: T, setItems: Setter<T[]>) => void;
+    onUpdateItem: <T extends Module | Lecture | Resources>(updatedItem: T, setItems: Setter<T[]>) => void;
     onDeleteItem: <T extends Module | Lecture>(id: string, setItems: Setter<T[]>) => void;
     idGenerator: () => string;
     setModules: Setter<Module[]>;
@@ -72,4 +79,11 @@ export type VideoLectureContentProps = {
     handleDeleteVideo: () => void;
     isDeleting: boolean;
     toggleDeleteMode: Toggle;
+};
+
+export type LectureAttachmentSectionProps = {
+    lecture: Lecture | null;
+    module: Module | null;
+    updateLecture: (updatedLecture: Lecture) => void;
+    onUpdateItem: <T extends Module | Lecture | Resources>(updatedItem: T, setItems: Setter<T[]>) => void;
 };

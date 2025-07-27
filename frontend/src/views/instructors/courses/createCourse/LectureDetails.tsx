@@ -2,10 +2,10 @@ import useSafeContext from '@/hooks/useSafeContext';
 import { Button, FormControl, FormLabel } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { CreateCourseContext } from './context/CreateCourseContext';
-import { BsPlusCircle } from 'react-icons/bs';
 import React, { useEffect, useState, useMemo } from 'react';
 import { Lecture } from '../types';
 import LectureContentSection from '../components/LectureContentSection';
+import LectureAttachmentSection from '../components/LectureAttachmentSection';
 
 const LectureDetails = () => {
     const { t } = useTranslation();
@@ -66,18 +66,12 @@ const LectureDetails = () => {
 
             <LectureContentSection lecture={lecture} module={module} updateLecture={updateLecture} />
 
-            <section className="p-1 my-2">
-                <div className="d-flex flex-row justify-content-between border-bottom mb-3 pb-2">
-                    <h3>{t('views.instructors.courses.createCourse.editLecture.attachments')}</h3>
-                </div>
-                <p className="text-black">{t('views.instructors.courses.createCourse.editLecture.attachmentsText')}</p>
-                <div className="d-flex flex-row gap-2">
-                    <Button size="sm" className="d-flex align-items-center gap-2">
-                        <BsPlusCircle />
-                        {t('views.instructors.courses.createCourse.editLecture.uploadAttachment')}
-                    </Button>
-                </div>
-            </section>
+            <LectureAttachmentSection
+                lecture={lecture}
+                module={module}
+                updateLecture={updateLecture}
+                onUpdateItem={updateItem}
+            />
 
             <div className="d-flex justify-content-end mt-3 gap-2">
                 <Button

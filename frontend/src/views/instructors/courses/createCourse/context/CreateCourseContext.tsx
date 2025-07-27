@@ -1,11 +1,11 @@
 import { createContext, ReactNode, useState } from 'react';
-import { Module, Lecture, Setter, EditTarget } from '../../types';
+import { Module, Lecture, Setter, EditTarget, Resources } from '../../types';
 
 type Props = {
     children: ReactNode;
 };
 
-type updateItemFn = <T extends Module | Lecture>(updatedItem: T, setItems: Setter<T[]>) => void;
+type updateItemFn = <T extends Module | Lecture | Resources>(updatedItem: T, setItems: Setter<T[]>) => void;
 type deleteItemFn = <T extends Module | Lecture>(id: string, setItems: Setter<T[]>) => void;
 
 type VoidStringFn = (t: string) => void;
