@@ -69,4 +69,7 @@ export type VideoLectureContentProps = {
     progress: number;
     openFilePicker: () => void;
     uploadError: Error | null;
+    handleDeleteVideo: () => void;
+    isDeleting: boolean;
+    toggleDeleteMode: Toggle;
 };
