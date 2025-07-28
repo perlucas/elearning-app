@@ -53,7 +53,7 @@ export type ModuleItemProps = {
     setEditingViewItem: Setter<EditTarget>;
 };
 
-export type ItemTitleProps<T extends Module | Lecture> = {
+export type ItemTitleProps<T extends Module | Lecture | Resources> = {
     item: T;
     index: number;
     isEditing: boolean;

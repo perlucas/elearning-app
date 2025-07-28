@@ -4,8 +4,8 @@ import { Button, Col, Container, Placeholder, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { BsPlusCircle } from 'react-icons/bs';
 import { Lecture, LectureAttachmentSectionProps } from '../types';
-import ItemTitle from './ItemTitle';
 import './LectureAttachmentSection.scss';
+import LectureAttachmentItem from './LectureAttachmentItem';
 
 const acceptedTypes = [
     'application/pdf',
@@ -35,7 +35,6 @@ const LectureAttachmentSection = ({ lecture, module, updateLecture, onUpdateItem
     } = useUploadAttachment();
     const [attachments, setAttachments] = useState<any[]>([]);
     const [fileValidationError, setFileValidationError] = useState<string | null>(null);
-    const [isEditing, setIsEditing] = useState(false);
 
     const combinedUploadError = fileValidationError || uploadError?.message;
 
@@ -104,15 +103,12 @@ const LectureAttachmentSection = ({ lecture, module, updateLecture, onUpdateItem
             <Container>
                 {attachments.length > 0 &&
                     attachments.map((at, index) => (
-                        <Row key={at.id} className="d-flex align-items-center px-2 py-2 text-dark my-2 g-0 __item-row">
-                            <ItemTitle
-                                item={at}
-                                index={index}
-                                isEditing={isEditing}
-                                toggleEditMode={setIsEditing}
-                                onUpdateItem={(updatedItem) => onUpdateItem(updatedItem, setAttachments)}
-                            />
-                        </Row>
+                        <LectureAttachmentItem
+                            key={at.id}
+                            item={at}
+                            index={index}
+                            onUpdateItem={(updatedItem) => onUpdateItem(updatedItem, setAttachments)}
+                        />
                     ))}
                 {progress > 0 && progress < 1 && (
                     <Row className="px-2 py-2 my-2 g-0">

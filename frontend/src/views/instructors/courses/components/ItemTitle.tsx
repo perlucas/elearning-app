@@ -1,8 +1,8 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { Col } from 'react-bootstrap';
-import { Lecture, Module, ItemTitleProps } from '../types';
+import { Lecture, Module, Resources, ItemTitleProps } from '../types';
 
-const ItemTitle = <T extends Module | Lecture>({
+const ItemTitle = <T extends Module | Lecture | Resources>({
     item,
     index,
     isEditing,
