@@ -25,8 +25,7 @@ const VideoLectureContent: React.FC<VideoLectureContentProps> = ({
                         : currentVideoFile.previewUrl
                 }
                 alt="video preview"
-                className="img-fluid"
-                style={{ maxWidth: '18rem', borderRadius: '10px' }}
+                className="img-fluid __video-preview"
             />
             <div className="d-flex flex-column text-black gap-2" style={{ width: '15rem' }}>
                 <p className="m-0">
@@ -40,11 +39,16 @@ const VideoLectureContent: React.FC<VideoLectureContentProps> = ({
                 )}
                 <div>
                     {!isDeleting ? (
-                        <Button variant="danger" size="sm" onClick={() => toggleDeleteMode(true)}>
+                        <Button
+                            variant="danger"
+                            size="sm"
+                            onClick={() => toggleDeleteMode(true)}
+                            style={{ textTransform: 'uppercase' }}
+                        >
                             {t('views.common.delete')} <BsTrash />
                         </Button>
                     ) : (
-                        <>
+                        <div className="d-flex gap-3">
                             <div className="__module-item-deleteButton">
                                 <Button size="sm" variant="link" className="p-0 m-0" onClick={handleDeleteVideo}>
                                     {t('views.common.delete')}
@@ -60,15 +64,15 @@ const VideoLectureContent: React.FC<VideoLectureContentProps> = ({
                                     {t('views.common.cancel')}
                                 </Button>
                             </div>
-                        </>
+                        </div>
                     )}
                 </div>
             </div>
         </div>
     ) : (
         <Card
-            className="text-center border-2 mx-auto mt-2 mb-4 bg-body-secondary"
-            style={{ maxWidth: '100%', minHeight: '180px', borderStyle: 'dashed' }}
+            className="text-center border-2 mx-auto mt-2 mb-4 bg-body-secondary __upload-video-card"
+            style={{ borderStyle: 'dashed' }}
         >
             <CardBody className=" d-flex flex-column justify-content-between align-items-center h-100">
                 {isUploading ? (
