@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Button, Col, Container, Placeholder, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { BsPlusCircle } from 'react-icons/bs';
-import { Lecture, LectureAttachmentSectionProps } from '../types';
+import { Lecture, LectureAttachmentSectionProps, Resource } from '../types';
 import './LectureAttachmentSection.scss';
 import LectureAttachmentItem from './LectureAttachmentItem';
 
@@ -24,7 +24,7 @@ const acceptedTypes = [
 const maxFileSize = 1024 * 1024;
 const maxAttachments = 3;
 
-const LectureAttachmentSection = ({ lecture, module, updateLecture, onUpdateItem }: LectureAttachmentSectionProps) => {
+const LectureAttachmentSection = ({ lecture, module, updateLecture }: LectureAttachmentSectionProps) => {
     const { t } = useTranslation();
     const {
         progress,
@@ -33,7 +33,8 @@ const LectureAttachmentSection = ({ lecture, module, updateLecture, onUpdateItem
         uploadFile,
         reset: resetFileData,
     } = useUploadAttachment();
-    const [attachments, setAttachments] = useState<any[]>([]);
+    const attachments = lecture?.resources ?? [];
+
     const [fileValidationError, setFileValidationError] = useState<string | null>(null);
 
     const combinedUploadError = fileValidationError || uploadError?.message;
@@ -43,12 +44,6 @@ const LectureAttachmentSection = ({ lecture, module, updateLecture, onUpdateItem
     const openFilePicker = () => {
         fileInputRef.current?.click();
     };
-
-    useEffect(() => {
-        if (lecture?.resources) {
-            setAttachments(lecture.resources);
-        }
-    }, [lecture]);
 
     useEffect(() => {
         if (!uploadedFileData || !lecture || !module) return;
@@ -88,6 +83,12 @@ const LectureAttachmentSection = ({ lecture, module, updateLecture, onUpdateItem
         }
     };
 
+    const handleUpdateAttachment = (updatedItem: Resource) => {
+        if (!lecture) return;
+        const updatedResources = lecture.resources?.map((r) => (r.id === updatedItem.id ? updatedItem : r)) ?? [];
+        updateLecture({ ...lecture, resources: updatedResources });
+    };
+
     return (
         <section className="p-1 my-2">
             <div className="d-flex flex-row justify-content-between border-bottom mb-3 pb-2">
@@ -107,7 +108,7 @@ const LectureAttachmentSection = ({ lecture, module, updateLecture, onUpdateItem
                             key={at.id}
                             item={at}
                             index={index}
-                            onUpdateItem={(updatedItem) => onUpdateItem(updatedItem, setAttachments)}
+                            onUpdateItem={handleUpdateAttachment}
                         />
                     ))}
                 {progress > 0 && progress < 1 && (

@@ -12,7 +12,7 @@ export type TextData = {
     content: string;
 };
 
-export type Resources = {
+export type Resource = {
     id: string;
     title: string;
     url: string;
@@ -28,7 +28,7 @@ export type Lecture = {
     title: string;
     type?: LectureType;
     content?: { video?: VideoFileData; text?: TextData };
-    resources?: Resources[];
+    resources?: Resource[];
 };
 
 export type Module = {
@@ -45,7 +45,7 @@ export type EditTarget = { id: string; type: 'module' | 'lecture' } | null;
 export type ModuleItemProps = {
     module: Module;
     index: number;
-    onUpdateItem: <T extends Module | Lecture | Resources>(updatedItem: T, setItems: Setter<T[]>) => void;
+    onUpdateItem: <T extends Module | Lecture | Resource>(updatedItem: T, setItems: Setter<T[]>) => void;
     onDeleteItem: <T extends Module | Lecture>(id: string, setItems: Setter<T[]>) => void;
     idGenerator: () => string;
     setModules: Setter<Module[]>;
@@ -53,7 +53,7 @@ export type ModuleItemProps = {
     setEditingViewItem: Setter<EditTarget>;
 };
 
-export type ItemTitleProps<T extends Module | Lecture | Resources> = {
+export type ItemTitleProps<T extends Module | Lecture | Resource> = {
     item: T;
     index: number;
     isEditing: boolean;
@@ -85,5 +85,4 @@ export type LectureAttachmentSectionProps = {
     lecture: Lecture | null;
     module: Module | null;
     updateLecture: (updatedLecture: Lecture) => void;
-    onUpdateItem: <T extends Module | Lecture | Resources>(updatedItem: T, setItems: Setter<T[]>) => void;
 };
