@@ -66,12 +66,7 @@ const LectureDetails = () => {
 
             <LectureContentSection lecture={lecture} module={module} updateLecture={updateLecture} />
 
-            <LectureAttachmentSection
-                lecture={lecture}
-                module={module}
-                updateLecture={updateLecture}
-                onUpdateItem={updateItem}
-            />
+            <LectureAttachmentSection lecture={lecture} module={module} updateLecture={updateLecture} />
 
             <div className="d-flex justify-content-end mt-3 gap-2">
                 <Button
