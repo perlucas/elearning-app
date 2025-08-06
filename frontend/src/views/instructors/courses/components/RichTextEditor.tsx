@@ -1,24 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import 'quill/dist/quill.snow.css';
 import './RichTextEditor.scss';
+import DOMPurify from 'dompurify';
 
 interface RichTextEditorProps {
     value: string;
     onChange: (content: string) => void;
+    onIsEmptyChange?: (isEmpty: boolean) => void;
 }
 
-const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange }) => {
+const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange, onIsEmptyChange }) => {
     const editorRef = useRef<HTMLDivElement>(null);
     const toolbarRef = useRef<HTMLDivElement>(null);
     const quillRef = useRef<any>(null);
     const [isClient, setIsClient] = useState(false);
-
-    const sanitizeHtml = (html: string) => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        doc.querySelectorAll('script').forEach((script) => script.remove());
-        return doc.body.innerHTML;
-    };
 
     useEffect(() => {
         setIsClient(true);
@@ -39,12 +34,14 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange }) => {
                     },
                 });
 
-                quill.root.innerHTML = value;
+                quill.clipboard.dangerouslyPasteHTML(DOMPurify.sanitize(value));
 
                 quill.on('text-change', () => {
                     const html = editorRef.current?.querySelector('.ql-editor')?.innerHTML ?? '';
-                    const cleanHtml = sanitizeHtml(html);
+                    const cleanHtml = DOMPurify.sanitize(html);
                     onChange(cleanHtml);
+                    const isEmpty = quill.getLength() === 1;
+                    onIsEmptyChange?.(isEmpty);
                 });
 
                 quillRef.current = quill;

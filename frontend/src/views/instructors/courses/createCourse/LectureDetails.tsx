@@ -18,6 +18,7 @@ const LectureDetails = () => {
     const [fileValidationError, setFileValidationError] = useState<Error | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
     const [textContent, setTextContent] = useState<string>('');
+    const [isTextEmpty, setIsTextEmpty] = useState(true);
     const combinedUploadError = fileValidationError || uploadError;
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -123,10 +124,6 @@ const LectureDetails = () => {
     useEffect(() => {
         if (!lecture || !module) return;
         const handler = setTimeout(() => {
-            const isQuillContentEmpty = (html: string): boolean => {
-                return html.replace(/<\/?[^>]+(>|$)/g, '').trim() === '';
-            };
-            const isTextEmpty = isQuillContentEmpty(textContent);
             const updatedLecture: Lecture = {
                 ...lecture,
                 type: isTextEmpty ? undefined : LectureType.TEXT,
@@ -145,7 +142,7 @@ const LectureDetails = () => {
         return () => {
             clearTimeout(handler);
         };
-    }, [textContent]);
+    }, [textContent, isTextEmpty]);
 
     const currentText = lecture?.content?.text;
 
@@ -213,7 +210,12 @@ const LectureDetails = () => {
                         toggleDeleteMode={setIsDeleting}
                     />
                 ) : (
-                    <RichTextEditor key={lecture?.id} value={textContent} onChange={setTextContent} />
+                    <RichTextEditor
+                        key={lecture?.id}
+                        value={textContent}
+                        onChange={setTextContent}
+                        onIsEmptyChange={setIsTextEmpty}
+                    />
                 )}
             </section>
 
