@@ -26,8 +26,17 @@ const LectureDetails = () => {
         if (editingViewItem?.type !== 'lecture') return null;
         for (const mod of modules) {
             const lect = mod.lectures.find((l) => l.id === editingViewItem.id);
-            if (lect) return lect;
+            if (lect) {
+                console.log('🔍 LECTURE FOUND:', {
+                    id: lect.id,
+                    title: lect.title,
+                    type: lect.type,
+                    textContent: lect.content?.text?.content || 'NO TEXT CONTENT',
+                });
+                return lect;
+            }
         }
+        console.log('❌ LECTURE NOT FOUND for editingViewItem:', editingViewItem);
         return null;
     }, [editingViewItem, modules]);
 
@@ -39,8 +48,11 @@ const LectureDetails = () => {
     const [lectureType, setLectureType] = useState<LectureType>(lecture?.type ?? LectureType.VIDEO);
 
     useEffect(() => {
-        setLectureTitle(lecture?.title ?? 'Untitled');
-        setTextContent(lecture?.content?.text?.content ?? '');
+        const newTitle = lecture?.title ?? 'Untitled';
+        const newTextContent = lecture?.content?.text?.content ?? '';
+        setLectureTitle(newTitle);
+        setTextContent(newTextContent);
+        setIsTextEmpty(!newTextContent || newTextContent.trim() === '' || newTextContent === '<p><br></p>');
     }, [lecture]);
 
     const updateLecture = (updatedLecture: Lecture) => {
@@ -123,6 +135,14 @@ const LectureDetails = () => {
 
     useEffect(() => {
         if (!lecture || !module) return;
+        const currentTextContent = lecture.content?.text?.content ?? '';
+        const hasContentChanged = currentTextContent !== textContent;
+        const hasEmptyStateChanged =
+            (isTextEmpty && lecture.type === LectureType.TEXT) || (!isTextEmpty && !lecture.type);
+        if (!hasContentChanged && !hasEmptyStateChanged) {
+            return;
+        }
+
         const handler = setTimeout(() => {
             const updatedLecture: Lecture = {
                 ...lecture,
@@ -142,7 +162,17 @@ const LectureDetails = () => {
         return () => {
             clearTimeout(handler);
         };
-    }, [textContent, isTextEmpty]);
+    }, [textContent, isTextEmpty, lecture?.id]);
+
+    const handleTextChange = (content: string) => {
+        setTextContent(content);
+    };
+
+    const handleIsEmptyChange = (isEmpty: boolean) => {
+        if (isEmpty !== isTextEmpty) {
+            setIsTextEmpty(isEmpty);
+        }
+    };
 
     const currentText = lecture?.content?.text;
 
@@ -213,8 +243,8 @@ const LectureDetails = () => {
                     <RichTextEditor
                         key={lecture?.id}
                         value={textContent}
-                        onChange={setTextContent}
-                        onIsEmptyChange={setIsTextEmpty}
+                        onChange={handleTextChange}
+                        onIsEmptyChange={handleIsEmptyChange}
                     />
                 )}
             </section>
