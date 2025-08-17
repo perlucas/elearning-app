@@ -26,17 +26,8 @@ const LectureDetails = () => {
         if (editingViewItem?.type !== 'lecture') return null;
         for (const mod of modules) {
             const lect = mod.lectures.find((l) => l.id === editingViewItem.id);
-            if (lect) {
-                console.log('🔍 LECTURE FOUND:', {
-                    id: lect.id,
-                    title: lect.title,
-                    type: lect.type,
-                    textContent: lect.content?.text?.content || 'NO TEXT CONTENT',
-                });
-                return lect;
-            }
+            if (lect) return lect;
         }
-        console.log('❌ LECTURE NOT FOUND for editingViewItem:', editingViewItem);
         return null;
     }, [editingViewItem, modules]);
 

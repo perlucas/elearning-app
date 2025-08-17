@@ -16,11 +16,6 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange, onIsEm
     const [isClient, setIsClient] = useState(false);
     const isInitialized = useRef(false);
 
-    console.log('🎨 RICH TEXT EDITOR RENDER:', {
-        valueLength: value?.length || 0,
-        valuePreview: value?.substring(0, 50) + '...' || 'EMPTY VALUE',
-    });
-
     useEffect(() => {
         setIsClient(true);
     }, []);
