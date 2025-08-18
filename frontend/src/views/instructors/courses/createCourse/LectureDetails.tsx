@@ -29,7 +29,8 @@ const LectureDetails = () => {
     }, [editingViewItem, modules]);
 
     useEffect(() => {
-        setLectureTitle(lecture?.title ?? 'Untitled');
+        const newTitle = lecture?.title ?? 'Untitled';
+        setLectureTitle(newTitle);
     }, [lecture]);
 
     const updateLecture = (updatedLecture: Lecture) => {

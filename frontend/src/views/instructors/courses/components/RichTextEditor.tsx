@@ -1,24 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 import 'quill/dist/quill.snow.css';
 import './RichTextEditor.scss';
+import DOMPurify from 'dompurify';
 
 interface RichTextEditorProps {
     value: string;
     onChange: (content: string) => void;
+    onIsEmptyChange?: (isEmpty: boolean) => void;
 }
 
-const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange }) => {
+const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange, onIsEmptyChange }) => {
     const editorRef = useRef<HTMLDivElement>(null);
     const toolbarRef = useRef<HTMLDivElement>(null);
     const quillRef = useRef<any>(null);
     const [isClient, setIsClient] = useState(false);
-
-    const sanitizeHtml = (html: string) => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        doc.querySelectorAll('script').forEach((script) => script.remove());
-        return doc.body.innerHTML;
-    };
+    const isInitialized = useRef(false);
 
     useEffect(() => {
         setIsClient(true);
@@ -38,16 +34,25 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange }) => {
                         },
                     },
                 });
-
-                quill.root.innerHTML = value;
-
+                if (value) {
+                    quill.clipboard.dangerouslyPasteHTML(DOMPurify.sanitize(value));
+                }
                 quill.on('text-change', () => {
+                    if (!isInitialized.current) return;
                     const html = editorRef.current?.querySelector('.ql-editor')?.innerHTML ?? '';
-                    const cleanHtml = sanitizeHtml(html);
+                    const cleanHtml = DOMPurify.sanitize(html);
                     onChange(cleanHtml);
+                    const isEmpty = quill.getLength() === 1;
+                    onIsEmptyChange?.(isEmpty);
                 });
 
                 quillRef.current = quill;
+
+                setTimeout(() => {
+                    isInitialized.current = true;
+                    const isEmpty = quill.getLength() === 1;
+                    onIsEmptyChange?.(isEmpty);
+                }, 100);
             }
         };
 
@@ -55,13 +60,28 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange }) => {
 
         return () => {
             if (quillRef.current) {
+                isInitialized.current = false;
                 quillRef.current.off('text-change');
-                if (editorRef.current) editorRef.current.innerHTML = '';
-                if (toolbarRef.current) toolbarRef.current.innerHTML = '';
                 quillRef.current = null;
             }
         };
     }, [isClient]);
+
+    useEffect(() => {
+        if (quillRef.current && value !== undefined && isInitialized.current) {
+            const currentContent = quillRef.current.root.innerHTML;
+            const sanitizedValue = DOMPurify.sanitize(value || '');
+            if (sanitizedValue !== currentContent) {
+                isInitialized.current = false;
+                quillRef.current.clipboard.dangerouslyPasteHTML(sanitizedValue);
+                setTimeout(() => {
+                    isInitialized.current = true;
+                    const isEmpty = quillRef.current?.getLength() === 1;
+                    onIsEmptyChange?.(isEmpty);
+                }, 50);
+            }
+        }
+    }, [value]);
 
     return (
         <div className="mb-4">
