@@ -7,6 +7,7 @@ import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { Lecture, LectureType } from '../types';
 import { useUploadFile } from '@/hooks/useUploadFile';
 import VideoLectureContent from '../components/VideoLectureContent';
+import RichTextEditor from '../components/RichTextEditor';
 
 const LectureDetails = () => {
     const { t } = useTranslation();
@@ -14,12 +15,11 @@ const LectureDetails = () => {
         useSafeContext(CreateCourseContext);
     const { progress, data: uploadedFileData, error: uploadError, uploadFile, reset: resetFileData } = useUploadFile();
     const [lectureTitle, setLectureTitle] = useState('');
-    const [lectureType, setLectureType] = useState<LectureType>(LectureType.VIDEO);
     const [fileValidationError, setFileValidationError] = useState<Error | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
-
+    const [textContent, setTextContent] = useState<string>('');
+    const [isTextEmpty, setIsTextEmpty] = useState(true);
     const combinedUploadError = fileValidationError || uploadError;
-
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const lecture = useMemo(() => {
@@ -36,9 +36,14 @@ const LectureDetails = () => {
         return modules.find((mod) => mod.lectures.some((l) => l.id === editingViewItem.id)) ?? null;
     }, [editingViewItem, modules]);
 
+    const [lectureType, setLectureType] = useState<LectureType>(lecture?.type ?? LectureType.VIDEO);
+
     useEffect(() => {
-        setLectureTitle(lecture?.title ?? 'Untitled');
-        setLectureType(lecture?.type ?? LectureType.VIDEO);
+        const newTitle = lecture?.title ?? 'Untitled';
+        const newTextContent = lecture?.content?.text?.content ?? '';
+        setLectureTitle(newTitle);
+        setTextContent(newTextContent);
+        setIsTextEmpty(!newTextContent || newTextContent.trim() === '' || newTextContent === '<p><br></p>');
     }, [lecture]);
 
     const updateLecture = (updatedLecture: Lecture) => {
@@ -48,19 +53,6 @@ const LectureDetails = () => {
             updateItem(updatedModule, setModules);
         }
     };
-
-    useEffect(() => {
-        if (!uploadedFileData || !lecture || !module) return;
-        const videoData = uploadedFileData;
-        const updatedLecture: Lecture = {
-            ...lecture,
-            type: LectureType.VIDEO,
-            content: { ...lecture.content, video: videoData },
-        };
-        updateLecture(updatedLecture);
-        resetFileData();
-        fileInputRef.current && (fileInputRef.current.value = '');
-    }, [uploadedFileData, lecture, module]);
 
     const handleUpdateTitle = () => {
         lecture && updateLecture({ ...lecture, title: lectureTitle !== '' ? lectureTitle : 'Untitled' });
@@ -77,6 +69,21 @@ const LectureDetails = () => {
         eventKey && setLectureType(eventKey as LectureType);
     };
 
+    //Lecture type VIDEO
+
+    useEffect(() => {
+        if (!uploadedFileData || !lecture || !module) return;
+        const videoData = uploadedFileData;
+        const updatedLecture: Lecture = {
+            ...lecture,
+            type: LectureType.VIDEO,
+            content: { ...lecture.content, video: videoData },
+        };
+        updateLecture(updatedLecture);
+        resetFileData();
+        fileInputRef.current && (fileInputRef.current.value = '');
+    }, [uploadedFileData, lecture, module]);
+
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         setFileValidationError(null);
@@ -90,12 +97,6 @@ const LectureDetails = () => {
             uploadFile(file);
         }
     };
-
-    const openFilePicker = () => {
-        fileInputRef.current?.click();
-    };
-
-    const currentVideoFile = lecture?.content?.video;
 
     const handleDeleteVideo = () => {
         if (currentVideoFile && lecture) {
@@ -114,6 +115,57 @@ const LectureDetails = () => {
                 });
         }
     };
+
+    const openFilePicker = () => {
+        fileInputRef.current?.click();
+    };
+
+    const currentVideoFile = lecture?.content?.video;
+
+    //Lecture type TEXT
+
+    useEffect(() => {
+        if (!lecture || !module) return;
+        const currentTextContent = lecture.content?.text?.content ?? '';
+        const hasContentChanged = currentTextContent !== textContent;
+        const hasEmptyStateChanged =
+            (isTextEmpty && lecture.type === LectureType.TEXT) || (!isTextEmpty && !lecture.type);
+        if (!hasContentChanged && !hasEmptyStateChanged) {
+            return;
+        }
+
+        const handler = setTimeout(() => {
+            const updatedLecture: Lecture = {
+                ...lecture,
+                type: isTextEmpty ? undefined : LectureType.TEXT,
+                content: {
+                    ...lecture.content,
+                    text: isTextEmpty
+                        ? undefined
+                        : {
+                              content: textContent,
+                          },
+                },
+            };
+            updateLecture(updatedLecture);
+        }, 500);
+
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [textContent, isTextEmpty, lecture?.id]);
+
+    const handleTextChange = (content: string) => {
+        setTextContent(content);
+    };
+
+    const handleIsEmptyChange = (isEmpty: boolean) => {
+        if (isEmpty !== isTextEmpty) {
+            setIsTextEmpty(isEmpty);
+        }
+    };
+
+    const currentText = lecture?.content?.text;
 
     return (
         <section className="p-0">
@@ -140,14 +192,18 @@ const LectureDetails = () => {
                     <Dropdown onSelect={handleSelectLectureType}>
                         <DropdownToggle
                             as="input"
-                            value={lecture?.type || lectureType}
+                            value={lecture?.type ?? lectureType}
                             readOnly
                             className="form-control"
                             id="lectureTypeDropdown"
                             style={{ width: '15rem' }}
                         />
                         <DropdownMenu>
-                            <DropdownItem eventKey={LectureType.VIDEO}>
+                            <DropdownItem
+                                eventKey={LectureType.VIDEO}
+                                disabled={Boolean(currentText)}
+                                className={currentText && 'text-muted'}
+                            >
                                 {t('views.instructors.courses.createCourse.editLecture.video')}
                             </DropdownItem>
                             <DropdownItem
@@ -175,9 +231,15 @@ const LectureDetails = () => {
                         toggleDeleteMode={setIsDeleting}
                     />
                 ) : (
-                    <textarea name="" id="" style={{ maxWidth: '100%', minHeight: '180px' }}></textarea>
+                    <RichTextEditor
+                        key={lecture?.id}
+                        value={textContent}
+                        onChange={handleTextChange}
+                        onIsEmptyChange={handleIsEmptyChange}
+                    />
                 )}
             </section>
+
             <input
                 type="file"
                 ref={fileInputRef}
@@ -185,6 +247,7 @@ const LectureDetails = () => {
                 style={{ display: 'none' }}
                 accept="video/mp4"
             />
+
             <section className="p-1 my-2">
                 <div className="d-flex flex-row justify-content-between border-bottom mb-3 pb-2">
                     <h3>{t('views.instructors.courses.createCourse.editLecture.attachments')}</h3>
@@ -197,6 +260,7 @@ const LectureDetails = () => {
                     </Button>
                 </div>
             </section>
+
             <div className="d-flex justify-content-end mt-3 gap-2">
                 <Button
                     size="sm"
