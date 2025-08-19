@@ -31,7 +31,8 @@
                         "attachments": "Attachments",
                         "attachmentsText": "Add up to 3 additional downloadable attachments to the lecture.",
                         "uploadAttachment": "Upload attachment",
-                        "addFromLibrary": "Add from library"
+                        "addFromLibrary": "Add from library",
+                        "lectureTypeModal": "If you continue the current lecture's data will be deleted."
                     }
                 }
             }
@@ -40,6 +41,8 @@
             "delete": "Delete",
             "cancel": "Cancel",
             "content": "Content",
+            "continue": "Continue",
+            "areYouSure": "Are you sure?",
             "file": "File",
             "duration": "Duration",
             "uploading": "Uploading"

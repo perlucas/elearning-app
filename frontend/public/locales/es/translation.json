@@ -31,7 +31,8 @@
                         "attachments": "Adjuntos",
                         "attachmentsText": "Añade hasta 3 archivos adjuntos descargables adicionales a la clase.",
                         "uploadAttachment": "Subir adjunto",
-                        "addFromLibrary": "Agregar desde la biblioteca"
+                        "addFromLibrary": "Agregar desde la biblioteca",
+                        "lectureTypeModal": "Si continúas se eliminarán los datos de la clase actual."
                     }
                 }
             }
@@ -40,6 +41,8 @@
             "delete": "Eliminar",
             "cancel": "Cancelar",
             "content": "Contenido",
+            "continue": "Continuar",
+            "areYouSure": "¿Estás seguro?",
             "file": "Archivo",
             "duration": "Duración",
             "uploading": "Cargando"
