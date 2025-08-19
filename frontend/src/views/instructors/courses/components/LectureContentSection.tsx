@@ -19,6 +19,7 @@ const LectureContentSection = ({ lecture, module, updateLecture }: LectureConten
     const [fileValidationError, setFileValidationError] = useState<Error | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
     const [textContent, setTextContent] = useState<string>('');
+    const [isTextEmpty, setIsTextEmpty] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [pendingLectureType, setPendingLectureType] = useState<LectureType | null>(null);
     const [lectureType, setLectureType] = useState<LectureType>(lecture?.type ?? LectureType.VIDEO);
@@ -27,7 +28,9 @@ const LectureContentSection = ({ lecture, module, updateLecture }: LectureConten
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        setTextContent(lecture?.content?.text?.content ?? '');
+        const newTextContent = lecture?.content?.text?.content ?? '';
+        setTextContent(newTextContent);
+        setIsTextEmpty(!newTextContent || newTextContent.trim() === '' || newTextContent === '<p><br></p>');
     }, [lecture]);
 
     const handleSelectLectureType = (eventKey: string | null) => {
@@ -112,11 +115,14 @@ const LectureContentSection = ({ lecture, module, updateLecture }: LectureConten
 
     useEffect(() => {
         if (!lecture || !module) return;
+        const currentTextContent = lecture.content?.text?.content ?? '';
+        const hasContentChanged = currentTextContent !== textContent;
+        const hasEmptyStateChanged =
+            (isTextEmpty && lecture.type === LectureType.TEXT) || (!isTextEmpty && !lecture.type);
+        if (!hasContentChanged && !hasEmptyStateChanged) {
+            return;
+        }
         const handler = setTimeout(() => {
-            const isQuillContentEmpty = (html: string): boolean => {
-                return html.replace(/<\/?[^>]+(>|$)/g, '').trim() === '';
-            };
-            const isTextEmpty = isQuillContentEmpty(textContent);
             const updatedLecture: Lecture = {
                 ...lecture,
                 type: isTextEmpty ? undefined : LectureType.TEXT,
@@ -135,7 +141,17 @@ const LectureContentSection = ({ lecture, module, updateLecture }: LectureConten
         return () => {
             clearTimeout(handler);
         };
-    }, [textContent]);
+    }, [textContent, isTextEmpty, lecture?.id]);
+
+    const handleTextChange = (content: string) => {
+        setTextContent(content);
+    };
+
+    const handleIsEmptyChange = (isEmpty: boolean) => {
+        if (isEmpty !== isTextEmpty) {
+            setIsTextEmpty(isEmpty);
+        }
+    };
 
     const currentText = lecture?.content?.text;
 
@@ -184,7 +200,12 @@ const LectureContentSection = ({ lecture, module, updateLecture }: LectureConten
                         toggleDeleteMode={setIsDeleting}
                     />
                 ) : (
-                    <RichTextEditor key={lecture?.id} value={textContent} onChange={setTextContent} />
+                    <RichTextEditor
+                        key={lecture?.id}
+                        value={textContent}
+                        onChange={handleTextChange}
+                        onIsEmptyChange={handleIsEmptyChange}
+                    />
                 )}
             </section>
 
