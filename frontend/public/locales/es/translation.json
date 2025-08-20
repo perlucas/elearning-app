@@ -26,6 +26,7 @@
                         "text": "texto",
                         "videoLectureIndication": "Sube un vídeo de la galería multimedia como recurso principal para tu clase",
                         "uploadVideoFile": "Subir archivo de video",
+                        "videoFormat": "Nota: sólo se permiten archivos MP4, 1GB máximo.",
                         "videoFormatError": "Formato de video incompatible. Sólo son permitidos archivos .mp4.",
                         "attachments": "Adjuntos",
                         "attachmentsText": "Añade hasta 3 archivos adjuntos descargables adicionales a la clase.",
@@ -46,7 +47,10 @@
             "cancel": "Cancelar",
             "content": "Contenido",
             "continue": "Continuar",
-            "areYouSure": "¿Estás seguro?"
+            "areYouSure": "¿Estás seguro?",
+            "file": "Archivo",
+            "duration": "Duración",
+            "uploading": "Cargando"
         }
     }
 }

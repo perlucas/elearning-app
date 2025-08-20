@@ -26,6 +26,7 @@
                         "text": "text",
                         "videoLectureIndication": "Upload a video from the media gallery as the main resource for your lecture",
                         "uploadVideoFile": "Upload video file",
+                        "videoFormat": "Note: only MP4 files allowed, 1GB max.",
                         "videoFormatError": "Incompatible video format. Only MP4 files are allowed.",
                         "attachments": "Attachments",
                         "attachmentsText": "Add up to 3 additional downloadable attachments to the lecture.",
@@ -46,7 +47,10 @@
             "cancel": "Cancel",
             "content": "Content",
             "continue": "Continue",
-            "areYouSure": "Are you sure?"
+            "areYouSure": "Are you sure?",
+            "file": "File",
+            "duration": "Duration",
+            "uploading": "Uploading"
         }
     }
 }
