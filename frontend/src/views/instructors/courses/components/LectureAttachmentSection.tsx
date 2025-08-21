@@ -89,6 +89,12 @@ const LectureAttachmentSection = ({ lecture, module, updateLecture }: LectureAtt
         updateLecture({ ...lecture, resources: updatedResources });
     };
 
+    const handleDeleteAttachment = (itemId: string) => {
+        if (!lecture) return;
+        const updatedResources = lecture.resources?.filter((r) => r.id !== itemId) ?? [];
+        updateLecture({ ...lecture, resources: updatedResources });
+    };
+
     return (
         <section className="p-1 my-2">
             <div className="d-flex flex-row justify-content-between border-bottom mb-3 pb-2">
@@ -101,7 +107,7 @@ const LectureAttachmentSection = ({ lecture, module, updateLecture }: LectureAtt
                     {t('views.instructors.courses.createCourse.editLecture.uploadAttachment')}
                 </Button>
             </div>
-            <Container>
+            <Container className="m-0 g-0" style={{ maxWidth: '100%' }}>
                 {attachments.length > 0 &&
                     attachments.map((at, index) => (
                         <LectureAttachmentItem
@@ -109,17 +115,18 @@ const LectureAttachmentSection = ({ lecture, module, updateLecture }: LectureAtt
                             item={at}
                             index={index}
                             onUpdateItem={handleUpdateAttachment}
+                            onDeleteItem={handleDeleteAttachment}
                         />
                     ))}
                 {progress > 0 && progress < 1 && (
-                    <Row className="px-2 py-2 my-2 g-0">
+                    <Row className="py-2 my-2 g-0">
                         <Placeholder as={Col} animation="glow">
                             <Placeholder xs={12} size="lg" />
                         </Placeholder>
                     </Row>
                 )}
                 {combinedUploadError && (
-                    <Row className="px-2 py-2 text-danger my-2 g-0">
+                    <Row className="py-2 text-danger my-2 g-0">
                         <Col>{combinedUploadError}</Col>
                     </Row>
                 )}

@@ -32,9 +32,9 @@
                         "attachmentsText": "Add up to 3 additional downloadable attachments to the lecture.",
                         "uploadAttachment": "Upload attachment",
                         "attachmentErrors": {
-                            "invalidType": "Tipo de archivo no válido",
-                            "fileTooLarge": "El archivo excede el tamaño máximo permitido (1mb)",
-                            "tooManyFiles": "Se ha excedido el máximo de archivos adjuntos permitidos (3)"
+                            "invalidType": "Invalid file type",
+                            "fileTooLarge": "The file exceeds the maximum allowed size (1MB)",
+                            "tooManyFiles": "The maximum number of allowed attachments (3) has been exceeded"
                         },
                         "addFromLibrary": "Add from library",
                         "lectureTypeModal": "If you continue the current lecture's data will be deleted."

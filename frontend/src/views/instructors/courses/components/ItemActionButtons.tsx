@@ -1,9 +1,9 @@
 import { Button, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { BsPencilSquare, BsTrash } from 'react-icons/bs';
-import { ItemActionButtonsProps, Module, Lecture } from '../types';
+import { ItemActionButtonsProps, Module, Lecture, Resource } from '../types';
 
-const ItemActionButtons = <T extends Module | Lecture>({
+const ItemActionButtons = <T extends Module | Lecture | Resource>({
     item,
     isDeleting,
     toggleDeleteMode,

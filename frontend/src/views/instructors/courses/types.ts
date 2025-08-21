@@ -61,7 +61,7 @@ export type ItemTitleProps<T extends Module | Lecture | Resource> = {
     onUpdateItem: (item: T) => void;
 };
 
-export type ItemActionButtonsProps<T extends Module | Lecture> = {
+export type ItemActionButtonsProps<T extends Module | Lecture | Resource> = {
     item: T;
     children?: React.ReactNode;
     isDeleting: boolean;

@@ -32,9 +32,9 @@
                         "attachmentsText": "Añade hasta 3 archivos adjuntos descargables adicionales a la clase.",
                         "uploadAttachment": "Subir adjunto",
                         "attachmentErrors": {
-                            "invalidType": "Invalid file type",
-                            "fileTooLarge": "The file exceeds the maximum allowed size (1MB)",
-                            "tooManyFiles": "The maximum number of allowed attachments (3) has been exceeded"
+                            "invalidType": "Tipo de archivo no válido",
+                            "fileTooLarge": "El archivo excede el tamaño máximo permitido (1mb)",
+                            "tooManyFiles": "Se ha excedido el máximo de archivos adjuntos permitidos (3)"
                         },
                         "addFromLibrary": "Agregar desde la biblioteca",
                         "lectureTypeModal": "Si continúas se eliminarán los datos de la clase actual."
